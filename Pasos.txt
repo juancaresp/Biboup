@@ -1,0 +1,33 @@
+Creación de la base de datos:
+
+User: 
+ - id
+ - token
+ - username.
+ - nameU.
+ - email.
+ - password (encriptada).
+ - tlf.
+ - list deuda(a quien debes dinero y cuanto).
+ - list recibos(quien te debe dinero y cuanto)
+
+Deuda:
+ - user
+ - quantity.
+
+Recibo: 
+ - user
+ - cuanto. 
+
+Group:
+ - idgroup.
+ - namegroup.
+ - list user.
+
+gasto:
+ -id deuda.
+ -payer(user).
+ -list user 
+ -quantity.
+ - fecha
+
