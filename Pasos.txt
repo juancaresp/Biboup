@@ -15,9 +15,9 @@ Deuda:
  - user
  - quantity.
 
-Recibo: 
+Recibo:
  - user
- - cuanto. 
+ - cuanto
 
 Group:
  - idgroup.
