@@ -2,12 +2,20 @@ package com.boup.boup.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
@@ -17,16 +25,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 
-@Entity
+@Entity(name = "Boup_User")
 public class User {
 
+	@Id
+	@EqualsAndHashCode.Include
+	@NonNull
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	@Column(nullable = false)
 	private Integer id;
+	
+	@Column(length = 30)
 	private String token;
+	
+	@Column(length = 20)
 	private String username;
+	
+	@Column(length = 20)
 	private String nameU;
+	
+	@Column(length = 30)
 	private String email;
+	
+	@Column(length = 100)
 	private String password;
+	
+	@Column(length = 9)
 	private String telephone;
-	private List<Debt> debtlist;
-	private List<PDebt> pDebtList;
+	
 }

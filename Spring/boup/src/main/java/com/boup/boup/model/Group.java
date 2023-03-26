@@ -1,11 +1,14 @@
 package com.boup.boup.model;
 
-import jakarta.persistence.CascadeType;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,14 +24,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 
-@Entity
-public class Debt {
+@Entity(name = "Boup_Group")
+public class Group {
 	@Id
 	@EqualsAndHashCode.Include
 	@NonNull
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(nullable = false)
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private DebtPK idDebt;
+	private Integer id;
 	
-	private Double amount;
+	@Column(length = 20)
+	private String groupName;
+	
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<User> users;
 }
