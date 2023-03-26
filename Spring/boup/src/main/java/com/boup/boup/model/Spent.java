@@ -1,5 +1,6 @@
 package com.boup.boup.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -9,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 
-@Entity(name = "Boup_User")
-public class User {
+@Entity
+public class Spent {
 
 	@Id
 	@EqualsAndHashCode.Include
@@ -35,22 +37,13 @@ public class User {
 	@Column(nullable = false)
 	private Integer id;
 	
-	@Column(length = 30)
-	private String token;
+	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	private User payer;
 	
-	@Column(length = 20)
-	private String username;
+	@OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	private List<User> users;
 	
-	@Column(length = 20)
-	private String nameU;
+	private Double quantity;
 	
-	@Column(length = 30)
-	private String email;
-	
-	@Column(length = 100)
-	private String password;
-	
-	@Column(length = 9)
-	private String telephone;
-	
+	private LocalDate date;
 }

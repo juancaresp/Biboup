@@ -2,7 +2,6 @@ package com.boup.boup.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,9 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Builder
 
-@Entity(name = "Boup_User")
-public class User {
-
+@Entity(name = "Boup_Group")
+public class Group {
 	@Id
 	@EqualsAndHashCode.Include
 	@NonNull
@@ -35,22 +33,9 @@ public class User {
 	@Column(nullable = false)
 	private Integer id;
 	
-	@Column(length = 30)
-	private String token;
-	
 	@Column(length = 20)
-	private String username;
+	private String groupName;
 	
-	@Column(length = 20)
-	private String nameU;
-	
-	@Column(length = 30)
-	private String email;
-	
-	@Column(length = 100)
-	private String password;
-	
-	@Column(length = 9)
-	private String telephone;
-	
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<User> users;
 }
