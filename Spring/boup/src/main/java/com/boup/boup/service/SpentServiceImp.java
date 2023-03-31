@@ -6,14 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.boup.boup.model.Spent;
-import com.boup.boup.repository.DebtRepository;
 import com.boup.boup.repository.GroupRepository;
 import com.boup.boup.repository.SpentRepository;
 import com.boup.boup.repository.UserRepository;
 
 public class SpentServiceImp implements SpentService{
 
-	@Autowired DebtRepository debtR;
 	@Autowired GroupRepository groupR;
 	@Autowired SpentRepository spentR;
 	@Autowired UserRepository userR;
