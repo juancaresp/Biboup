@@ -1,6 +1,7 @@
 package com.boup.boup.model;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +34,6 @@ public class User {
 	@EqualsAndHashCode.Include
 	@NonNull
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@Column(nullable = false)
 	private Integer id;
 	
 	@Column(length = 30)
@@ -52,5 +53,13 @@ public class User {
 	
 	@Column(length = 9)
 	private String telephone;
+	
+	private Double wallet;
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Group> groups;
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<Spent> spents;
 	
 }
