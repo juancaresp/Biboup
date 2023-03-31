@@ -1,0 +1,3 @@
+https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
+
+https://www.baeldung.com/hibernate-many-to-many

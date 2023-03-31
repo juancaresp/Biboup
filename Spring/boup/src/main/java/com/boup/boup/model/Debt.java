@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +27,15 @@ public class Debt {
 	@Id
 	@EqualsAndHashCode.Include
 	@NonNull
-	@Column(nullable = false)
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private DebtPK idDebt;
+	private Integer idDebt;
+	
+	@EqualsAndHashCode.Include
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User reciver;
+	
+	@EqualsAndHashCode.Include
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User debtor;
 	
 	private Double amount;
 }

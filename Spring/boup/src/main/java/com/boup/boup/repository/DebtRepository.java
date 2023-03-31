@@ -1,10 +1,9 @@
 package com.boup.boup.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.boup.boup.model.Debt;
-import com.boup.boup.model.DebtPK;
 
-public interface DebtRepository extends CrudRepository<Debt, DebtPK>{
+public interface DebtRepository extends JpaRepository<Debt, Integer> {
 
 }
