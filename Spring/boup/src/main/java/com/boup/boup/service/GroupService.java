@@ -3,8 +3,11 @@ package com.boup.boup.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.boup.boup.model.Group;
 
+@Service
 public interface GroupService {
 	public boolean insert(Group g);
 	public boolean update(Group g);
