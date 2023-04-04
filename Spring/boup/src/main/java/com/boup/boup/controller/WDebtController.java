@@ -1,0 +1,107 @@
+package com.boup.boup.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.boup.boup.model.Debt;
+import com.boup.boup.model.User;
+import com.boup.boup.service.DebtService;
+import com.boup.boup.service.GroupService;
+import com.boup.boup.service.SpentService;
+import com.boup.boup.service.UserService;
+
+
+@Controller
+@RequestMapping("/web")
+public class WDebtController {
+	
+	@Autowired UserService userS;
+	@Autowired DebtService debtS;
+	@Autowired SpentService spentS;
+	@Autowired GroupService groupS;
+	
+	@GetMapping("/debts")
+	public ModelAndView getDebts() {
+		ModelAndView mav=new ModelAndView("debts");
+		List<Debt> debts=debtS.findAll();
+
+		mav.addObject("debts", debts);
+		
+		return mav;
+	}
+	
+	@GetMapping("/debt")
+	public ModelAndView getDebtW(@RequestParam("id") Integer id) {
+		
+		//Devuelve la pagina de un usuario
+		ModelAndView mav=new ModelAndView("seeDebt");
+		Debt debt= debtS.findById(id).orElse(new Debt());
+		
+		mav.addObject("debt",debt);
+		
+		return mav;
+	}
+	
+	//Crud
+	
+	@PostMapping("/debt/insert")
+	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor) {
+		
+		ModelAndView mav=new ModelAndView("redirect:/web/debts");
+		Optional<User> rec=userS.findByNick(receiver);
+		Optional<User> debto=userS.findByNick(debtor);
+		if(rec.isPresent()&&debto.isPresent()) {
+			d.setReceiver(rec.get());
+			d.setDebtor(debto.get());
+			debtS.insert(d);
+		}
+		
+		return mav;
+	}
+	
+	@PostMapping("/debt/delete")
+	public ModelAndView deleteDebtW(@ModelAttribute Debt d) {
+		
+		ModelAndView mav=new ModelAndView("redirect:/web/debts");
+		
+		debtS.delete(d.getId());
+
+		return mav;
+	}
+	
+	@PostMapping("/debt/update")
+	public ModelAndView updateDebtW(@ModelAttribute Debt d) {
+		
+		ModelAndView mav=new ModelAndView("redirect:/web/debts");
+		debtS.update(d);
+
+		return mav;
+	}
+	
+	//Formularios
+	
+	@GetMapping("/debtFormu")
+	public ModelAndView getDebtFormEmpty() {
+		//Devuelve debtForm vacio
+		ModelAndView mav=new ModelAndView("debtForm");
+		mav.addObject("debt", new Debt());
+		return mav;
+	}
+	
+	@GetMapping("/debtForm")
+	public ModelAndView getDebtForm(@RequestParam("id") Integer id) {
+		//Devuelve debtForm de algun usuario
+		ModelAndView mav=new ModelAndView("debtForm");
+		mav.addObject("debt", debtS.findById(id).orElse(new Debt()));
+		return mav;
+	}
+}

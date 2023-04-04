@@ -29,8 +29,10 @@ public class SpentController {
 	public ResponseEntity<Spent> insertSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
-
-		if (spentS.insert(spent)) {
+		
+		Optional<Spent> opS=spentS.insert(spent);
+		if (opS.isPresent()) {
+			spent=opS.get();
 			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
 		}
 
@@ -41,8 +43,10 @@ public class SpentController {
 	public ResponseEntity<Spent> updateSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
-
-		if (spentS.update(spent)) {
+		
+		Optional<Spent> opS=spentS.update(spent);
+		if (opS.isPresent()) {
+			spent=opS.get();
 			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
 		}
 

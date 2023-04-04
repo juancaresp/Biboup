@@ -10,8 +10,8 @@ import com.boup.boup.model.User;
 @Service
 public interface UserService {
 
-	public boolean insert(User u);
-	public boolean update(User u);
+	public Optional<User> insert(User u);
+	public Optional<User> update(User u);
 	public boolean delete(Integer id);
 	public List<User> findAll();
 	public Optional<User> findByNick(String nick);

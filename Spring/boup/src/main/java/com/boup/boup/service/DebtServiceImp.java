@@ -23,25 +23,20 @@ public class DebtServiceImp implements DebtService {
 	@Autowired DebtRepository debtR;
 	
 	@Override
-	public boolean insert(Debt d) {
+	public Optional<Debt> insert(Debt d) {
 		
-		boolean exit=false;
-		if (!debtR.existsById(d.getId())) {
-			debtR.save(d);
-			exit=true;
-		}
-		return exit;
+		Optional<Debt> op=Optional.of(debtR.save(d));
+		return op;
 	}
 
 	@Override
-	public boolean update(Debt d) {
+	public Optional<Debt> update(Debt d) {
 		
-		boolean exit=false;
+		Optional<Debt> op=Optional.empty();
 		if (debtR.existsById(d.getId())) {
-			debtR.save(d);
-			exit=true;
+			op=Optional.of(debtR.save(d));
 		}
-		return exit;
+		return op;
 	}
 
 	@Override

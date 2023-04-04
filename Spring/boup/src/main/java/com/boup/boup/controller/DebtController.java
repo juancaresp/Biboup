@@ -35,7 +35,9 @@ public class DebtController {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
 			
-			if(debtS.insert(debt)) {
+			Optional<Debt> opD=debtS.insert(debt);
+			if(opD.isPresent()) {
+				debt=opD.get();
 				rp=new ResponseEntity<Debt>(debt,HttpStatus.OK);
 			}
 			
@@ -47,7 +49,9 @@ public class DebtController {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
 			
-			if(debtS.update(debt)) {
+			Optional<Debt> opD=debtS.update(debt);
+			if(opD.isPresent()) {
+				debt=opD.get();
 				rp=new ResponseEntity<Debt>(debt,HttpStatus.OK);
 			}
 			

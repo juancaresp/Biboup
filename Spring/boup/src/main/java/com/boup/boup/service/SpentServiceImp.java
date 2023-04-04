@@ -22,22 +22,19 @@ public class SpentServiceImp implements SpentService{
 
 	
 	@Override
-	public boolean insert(Spent s) {
-		boolean exit=false;
-		if (!spentR.existsById(s.getId())) {
-			spentR.save(s);
-			exit=true;
-		}
-		return exit;
+	public Optional<Spent> insert(Spent s) {
+		Optional<Spent> op=Optional.of(spentR.save(s));
+		
+		return op;
 	}
 	@Override
-	public boolean update(Spent s) {
-		boolean exit=false;
+	public Optional<Spent> update(Spent s) {
+		Optional<Spent> op=Optional.empty();
+		
 		if (!spentR.existsById(s.getId())) {
-			spentR.save(s);
-			exit=true;
+			op=Optional.of(spentR.save(s));
 		}
-		return exit;
+		return op;
 	}
 	@Override
 	public boolean delete(Integer id) {

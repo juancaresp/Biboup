@@ -33,7 +33,9 @@ public class UserController {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		
-		if(userS.insert(user)) {
+		Optional<User> opU=userS.insert(user);
+		if(opU.isPresent()) {
+			user=opU.get();
 			rp=new ResponseEntity<User>(user,HttpStatus.OK);
 		}
 		
@@ -44,8 +46,9 @@ public class UserController {
 	public ResponseEntity<User> updateUser(@RequestBody User user) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		
-		if(userS.update(user)) {
+		Optional<User> opU=userS.update(user);
+		if(opU.isPresent()) {
+			user=opU.get();
 			rp=new ResponseEntity<User>(user,HttpStatus.OK);
 		}
 		

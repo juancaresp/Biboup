@@ -10,8 +10,8 @@ import com.boup.boup.model.User;
 
 @Service
 public interface DebtService {
-	public boolean insert(Debt d);
-	public boolean update(Debt d);
+	public Optional<Debt> insert(Debt d);
+	public Optional<Debt> update(Debt d);
 	public boolean delete(Integer id);
 	public List<Debt> findAll();
 	public List<Debt> findByReceiver(User u);
