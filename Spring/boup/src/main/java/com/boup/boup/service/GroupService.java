@@ -6,11 +6,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.boup.boup.model.Group;
+import com.boup.boup.model.User;
 
 @Service
 public interface GroupService {
-	public boolean insert(Group g);
-	public boolean update(Group g);
+	public Optional<Group> insert(Group g);
+	public Optional<Group> update(Group g);
 	public boolean delete(Integer id);
 	public List<Group> findAll();
 	public Optional<Group> findByGroupName(String name);

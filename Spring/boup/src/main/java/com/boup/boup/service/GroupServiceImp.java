@@ -23,24 +23,22 @@ public class GroupServiceImp implements GroupService{
 
 
 	@Override
-	public boolean insert(Group g) {
+	public Optional<Group> insert(Group g) {
 		
-		boolean exit=false;
-		if (!groupR.existsById(g.getId())) {
-			groupR.save(g);
-			exit=true;
-		}
-		return exit;
+		Optional<Group> op=Optional.of(groupR.save(g));
+		
+		return op;
 	}
 
 	@Override
-	public boolean update(Group g) {
-		boolean exit=false;
+	public Optional<Group> update(Group g) {
+		Optional<Group> op=Optional.empty();
+		
 		if (groupR.existsById(g.getId())) {
-			groupR.save(g);
-			exit=true;
+			op=Optional.of(groupR.save(g));
 		}
-		return exit;
+		
+		return op;
 	}
 
 	@Override

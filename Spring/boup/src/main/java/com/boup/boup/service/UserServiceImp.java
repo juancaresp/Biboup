@@ -22,23 +22,23 @@ public class UserServiceImp implements UserService{
 
 
 	@Override
-	public boolean insert(User u) {
-		boolean exit=false;
-		if (!userR.existsById(u.getId())) {
-			userR.save(u);
-			exit=true;
+	public Optional<User> insert(User u) {
+		Optional<User> op=Optional.empty();
+		
+		if (userR.findByUsername(u.getUsername()).isEmpty()) {
+			op=Optional.of(userR.save(u));
 		}
-		return exit;
+		
+		return op;
 	}
 
 	@Override
-	public boolean update(User u) {
-		boolean exit=false;
+	public Optional<User> update(User u) {
+		Optional<User> op=Optional.empty();
 		if (userR.existsById(u.getId())) {
-			userR.save(u);
-			exit=true;
+			op=Optional.of(userR.save(u));
 		}
-		return exit;
+		return op;
 	}
 
 	@Override

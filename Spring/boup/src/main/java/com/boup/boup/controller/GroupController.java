@@ -32,8 +32,10 @@ public class GroupController {
 	public ResponseEntity<Group> insertGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
-
-		if (groupS.insert(group)) {
+		
+		Optional<Group> opG=groupS.insert(group);
+		if (opG.isPresent()) {
+			group=opG.get();
 			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
 		}
 
@@ -44,8 +46,10 @@ public class GroupController {
 	public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
-
-		if (groupS.update(group)) {
+		
+		Optional<Group> opG=groupS.update(group);
+		if (opG.isPresent()) {
+			group=opG.get();
 			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
 		}
 
