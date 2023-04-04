@@ -53,11 +53,6 @@
                 android:hint="Contraseña"
                 android:inputType="textPersonName" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_weight="1" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -73,6 +68,11 @@
                     android:onClick="SignIn"
                     android:text="Sign In" />
 
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
                 <Button
                     android:id="@+id/btnLogOut"
                     android:layout_width="wrap_content"
@@ -83,6 +83,17 @@
                     android:text="Log In" />
 
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_weight="3" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/btnGoggle"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>
