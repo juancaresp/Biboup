@@ -1,12 +1,11 @@
 package com.boup.boup.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,11 +26,11 @@ public class Debt {
 	@Id
 	@EqualsAndHashCode.Include
 	@NonNull
-	private Integer idDebt;
+	private Integer id;
 	
 	@EqualsAndHashCode.Include
 	@ManyToOne(fetch = FetchType.EAGER)
-	private User reciver;
+	private User receiver;
 	
 	@EqualsAndHashCode.Include
 	@ManyToOne(fetch = FetchType.EAGER)
