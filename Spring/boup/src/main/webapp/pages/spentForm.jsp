@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Formulario de Usuario</title>
+<title>Formulario de Gasto</title>
 <link type="text/css" rel="stylesheet"
 	href="../resources/css/materialize.css" media="screen,proyection" />
 <script type="text/javascript" src="../resources/js/materialize.js"></script>
@@ -21,45 +21,40 @@
 	<%@include file="header.jsp"%>
 	<div class="container">
 		<div class="row">
-			<h2>Usuarios</h2>
+			<h2>Gasto</h2>
 		</div>
 		<div class="row">
-			<form:form id="formulario" modelAttribute="user" method="POST">
+			<form:form id="formulario" modelAttribute="spent" method="POST">
+
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/insert')">
+					onclick="enviarPeticion('/web/spent/insert')">
 				<input type="submit" value="Modificar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/update')">
+					onclick="enviarPeticion('/web/spent/update')">
 				<input type="submit" value="Borrar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/delete')">
+					onclick="enviarPeticion('/web/spent/delete')">
 
 				<form:hidden path="id" id="id" />
 				<div>
 					<div class="input-field col s12">
-						<label for="username">Username</label>
-						<form:input path="username" id="username" name="username" />
+						<label for="spentName">Nombre</label>
+						<form:input path="spentName" id="spentName" name="spentName" />
 					</div>
 					<div class="input-field col s12">
-						<label for="email">Email</label>
-						<form:input path="email" id="email" type="email" name="email"
-							class="validate" />
+						<label for="paye">Pagador</label> 
+						<input type="text" id="paye" name="paye" value="${spent.payer.username}">
 					</div>
 					<div class="input-field col s12">
-						<label for="nameU">Nombre de Usuario</label>
-						<form:input path="nameU" id="nameU" name="nameU" />
+						<label for="quantity">Quantity</label>
+						<form:input path="quantity" id="quantity" name="quantity" />
 					</div>
-					<div class="input-field col s6">
-						<label for="telephone">Teléfono</label>
-						<form:input path="telephone" id="telephone" name="telephone" />
-					</div>
-					<div class="input-field col s3">
-						<label for="wallet">Monedero</label>
-						<form:input path="wallet" id="wallet" name="wallet" />
+					<div class="input-field col s12">
+						<label for="dat">Fecha (YYYY-MM-DD)</label>
+						<input type="text" id="dat" name="dat" value="${spent.date}" />
 					</div>
 				</div>
-
 			</form:form>
 		</div>
 	</div>

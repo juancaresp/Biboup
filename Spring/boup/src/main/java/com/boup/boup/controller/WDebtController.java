@@ -57,13 +57,12 @@ public class WDebtController {
 	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
-		Optional<User> rec=userS.findByNick(receiver);
-		Optional<User> debto=userS.findByNick(debtor);
-		if(rec.isPresent()&&debto.isPresent()) {
-			d.setReceiver(rec.get());
-			d.setDebtor(debto.get());
-			debtS.insert(d);
-		}
+		userS.findByNick(receiver)
+			.ifPresent(rec -> userS.findByNick(debtor)
+					.ifPresent(debto-> {d.setReceiver(rec);
+										d.setDebtor(debto);
+										debtS.insert(d);}));
+		
 		
 		return mav;
 	}
@@ -79,10 +78,14 @@ public class WDebtController {
 	}
 	
 	@PostMapping("/debt/update")
-	public ModelAndView updateDebtW(@ModelAttribute Debt d) {
+	public ModelAndView updateDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
-		debtS.update(d);
+		userS.findByNick(receiver)
+			.ifPresent(rec -> userS.findByNick(debtor)
+					.ifPresent(debto-> {d.setReceiver(rec);
+										d.setDebtor(debto);
+										debtS.update(d);}));
 
 		return mav;
 	}

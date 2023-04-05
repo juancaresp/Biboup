@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,9 @@ public class Spent {
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer id;
+	
+	@Column(length = 30)
+	private String spentName;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
 	private User payer;

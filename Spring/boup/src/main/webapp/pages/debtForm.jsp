@@ -29,6 +29,12 @@
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
 					onclick="enviarPeticion('/web/debt/insert')">
+				<input type="submit" value="Modificar"
+					class="waves-effect waves-light btn-large"
+					onclick="enviarPeticion('/web/debt/update')">
+				<input type="submit" value="Borrar"
+					class="waves-effect waves-light btn-large"
+					onclick="enviarPeticion('/web/debt/delete')">
 
 				<form:hidden path="id" id="id" />
 				<div>
@@ -37,14 +43,12 @@
 						<form:input path="amount" id="amount" name="amount" />
 					</div>
 					<div class="input-field col s12">
-						<label for="rec">Recibidor-Username</label> <input
-							type="text" id="rec" name="rec"
-							value="${debt.receiver.username}">
+						<label for="rec">Recibidor-Username</label> 
+						<input type="text" id="rec" name="rec" value="${debt.receiver.username}">
 					</div>
 					<div class="input-field col s12">
-						<label for="debto">Endeudado-Username</label> <input type="text"
-							name="debto" id="debto" value="${debt.debtor.username}"
-							class="form-control" />
+						<label for="debto">Endeudado-Username</label> 
+						<input type="text" name="debto" id="debto" value="${debt.debtor.username}" />
 					</div>
 				</div>
 			</form:form>
