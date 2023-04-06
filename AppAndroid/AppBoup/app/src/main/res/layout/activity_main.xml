@@ -80,7 +80,8 @@
                     android:layout_weight="3"
                     android:backgroundTint="#2A41D1"
                     android:onClick="LogIn"
-                    android:text="Log In" />
+                    android:text="Log In"
+                    app:cornerRadius="20px" />
 
             </LinearLayout>
 
@@ -93,7 +94,10 @@
                 android:id="@+id/btnGoggle"
                 android:layout_width="match_parent"
 
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                app:cornerRadius="20px"
+                />
 
         </LinearLayout>
     </LinearLayout>
