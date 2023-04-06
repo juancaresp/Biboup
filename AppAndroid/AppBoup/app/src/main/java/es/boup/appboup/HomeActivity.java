@@ -1,9 +1,12 @@
 package es.boup.appboup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,5 +43,28 @@ public class HomeActivity extends AppCompatActivity {
     public void logOut(View view){
         FirebaseAuth.getInstance().signOut();
         onBackPressed();
+    }
+
+    //menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idOpcion = item.getItemId();
+
+        switch (idOpcion){
+            case R.id.itmLogOut:
+                FirebaseAuth.getInstance().signOut();
+                onBackPressed();
+                break;
+            default:
+                finishAffinity();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

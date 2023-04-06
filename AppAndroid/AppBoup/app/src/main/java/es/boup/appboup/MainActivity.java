@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -32,21 +34,30 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
 
+    //variables de google
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 1;
     private GoogleSignInClient mGoogleSignInClient;
+    //boton login google
     private SignInButton signInButtonGoogle;
 
-    private FrameLayout frLista,frCorreo;
+    //variable estadisticas
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    //variable autenticacion de usuario
     private FirebaseAuth mAuth;
+
+    //edit texts
+
     private EditText etCorreo, etContra;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Autentication");
 
+        //Obtener la sesion del ususario
         mAuth = FirebaseAuth.getInstance();
 
         //google
@@ -57,19 +68,24 @@ public class MainActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //mandar estadisticas
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
+
+
         etCorreo = findViewById(R.id.etCorreo);
         etContra = findViewById(R.id.etContra);
-        signInButtonGoogle = findViewById(R.id.btnGoggle);
 
+        //boton de de inicio de sesion de google
+        signInButtonGoogle = findViewById(R.id.btnGoggle);
         signInButtonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn();
             }
         });
+
     }
 
     @Override
