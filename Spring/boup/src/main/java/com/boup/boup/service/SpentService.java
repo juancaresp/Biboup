@@ -13,6 +13,10 @@ public interface SpentService {
 	public Optional<Spent> insert(Spent s);
 	public Optional<Spent> update(Spent s);
 	public boolean delete(Integer id);
+	
 	public List<Spent> findAll();
 	public Optional<Spent> findById(Integer id);
+	public List<Spent> findByGroup(Integer id);
+	
+	public Optional<Spent> addSpent(Spent spent);
 }

@@ -94,5 +94,20 @@ public class DebtController {
 			
 			return rp;
 		}
-	
+		
+		//Other
+		
+		@GetMapping("/userDebts")
+		public ResponseEntity<List<Debt>> getUserDebts(@RequestBody Integer id) {
+			
+			List<Debt> debts=debtS.findUserDebts(id);
+			
+			ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(debts,HttpStatus.OK);
+			
+			return rp;
+		}
+		
+		
+		
+		
 }

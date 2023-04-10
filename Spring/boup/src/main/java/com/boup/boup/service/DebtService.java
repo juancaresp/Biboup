@@ -16,5 +16,7 @@ public interface DebtService {
 	public List<Debt> findAll();
 	public List<Debt> findByReceiver(User u);
 	public List<Debt> findByDebtor(User u);
+	public List<Debt> findUserDebts(Integer id);
 	public Optional<Debt> findById(Integer id);
+	public Optional<Debt> addDebt(Debt d);
 }

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Formulario de Usuario</title>
+<title>Formulario de Grupos</title>
 <link type="text/css" rel="stylesheet" href="../resources/css/materialize.css" media="screen,proyection"/>
 <script type="text/javascript" src="../resources/js/materialize.js"></script>
 </head>
@@ -15,7 +15,7 @@
 	
 	<div class="container">
 		<div class="row">
-			<h2>Usuarios</h2>
+			<h2>Grupos</h2>
 		</div>
 		<div class="row">
 			<div class="col s2  offset-s4">

@@ -1,16 +1,20 @@
 package com.boup.boup.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,11 +39,14 @@ public class Group {
 	@Column(length = 20)
 	private String groupName;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
     @JoinTable(
         name = "group_User", 
         joinColumns = { @JoinColumn(name = "group_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-	private Set<User> users;
+	private List<User> users;
+	
+	@OneToMany(mappedBy="group",fetch = FetchType.EAGER)
+    private Set<Spent> spents;
 }
