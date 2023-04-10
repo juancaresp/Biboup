@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="#242739"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -12,94 +13,130 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/etCorreo"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start|center_horizontal"
-                android:layout_weight="3"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:gravity="center|start|center_vertical"
                 android:hint="Correo"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textColor="#0fc3e8"
+                android:textColorHighlight="#0fc3e8"
+                android:textColorHint="#0fc3e8"
+                android:textColorLink="#0fc3e8"
+                app:layout_constraintBottom_toTopOf="@+id/space2"
+                app:layout_constraintEnd_toEndOf="@+id/space2"
+                app:layout_constraintStart_toStartOf="@+id/space2"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Space
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_weight="3" />
+                android:id="@+id/space2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:background="#0fc3e8"
+                android:backgroundTint="#0fc3e8"
+                app:layout_constraintBottom_toTopOf="@+id/etContra"
+                app:layout_constraintEnd_toEndOf="@+id/etContra"
+                app:layout_constraintStart_toStartOf="@+id/etContra"
+                app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
 
             <EditText
                 android:id="@+id/etContra"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start|center_horizontal"
-                android:layout_weight="3"
+                android:layout_marginTop="10dp"
                 android:ems="10"
                 android:gravity="center|start|center_vertical"
                 android:hint="Contraseña"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:shadowColor="#0fc3e8"
+                android:textColor="#0fc3e8"
+                android:textColorHighlight="#0fc3e8"
+                android:textColorHint="#0fc3e8"
+                android:textColorLink="#0fc3e8"
+                app:layout_constraintBottom_toTopOf="@+id/btnLogOut"
+                app:layout_constraintEnd_toEndOf="@+id/space4"
+                app:layout_constraintStart_toStartOf="@+id/btnSign"
+                app:layout_constraintTop_toBottomOf="@+id/space2" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnSign"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:backgroundTint="#0A5E07"
-                    android:onClick="SignIn"
-                    android:text="Sign In" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/btnLogOut"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:backgroundTint="#2A41D1"
-                    android:onClick="LogIn"
-                    android:text="Log In"
-                    app:cornerRadius="20px" />
-
-            </LinearLayout>
+            <Button
+                android:id="@+id/btnSign"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="29dp"
+                android:backgroundTint="#069e8c"
+                android:onClick="SignIn"
+                android:text="Sign In"
+                app:layout_constraintEnd_toStartOf="@+id/btnLogOut"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etContra" />
 
             <Space
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:layout_weight="3" />
+                android:id="@+id/space3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="48dp"
+                app:layout_constraintBottom_toTopOf="@+id/space4"
+                app:layout_constraintEnd_toStartOf="@+id/btnLogOut"
+                app:layout_constraintStart_toEndOf="@+id/btnSign"
+                app:layout_constraintTop_toBottomOf="@+id/btnLogOut" />
+
+            <Button
+                android:id="@+id/btnLogOut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:backgroundTint="#0a516d"
+                android:onClick="LogIn"
+                android:text="Log In"
+                app:layout_constraintBottom_toTopOf="@+id/space3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnSign"
+                app:layout_constraintTop_toBottomOf="@+id/etContra" />
+
+
+            <Space
+                android:id="@+id/space4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                app:layout_constraintBottom_toTopOf="@+id/btnGoggle"
+                app:layout_constraintEnd_toEndOf="@+id/btnLogOut"
+                app:layout_constraintStart_toStartOf="@+id/btnSign"
+                app:layout_constraintTop_toBottomOf="@+id/space3" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/btnGoggle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
 
                 android:layout_height="wrap_content"
-                android:textAlignment="textStart"
-                app:cornerRadius="20px"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/space4"
+                app:layout_constraintStart_toStartOf="@+id/space4"
+                app:layout_constraintTop_toBottomOf="@+id/space4" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
