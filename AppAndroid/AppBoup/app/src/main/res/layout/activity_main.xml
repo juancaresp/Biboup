@@ -28,7 +28,7 @@
             android:layout_weight="1">
 
             <EditText
-                android:id="@+id/etCorreo"
+                android:id="@+id/fEtCorreo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -52,13 +52,13 @@
                 android:layout_marginTop="10dp"
                 android:background="#0fc3e8"
                 android:backgroundTint="#0fc3e8"
-                app:layout_constraintBottom_toTopOf="@+id/etContra"
-                app:layout_constraintEnd_toEndOf="@+id/etContra"
-                app:layout_constraintStart_toStartOf="@+id/etContra"
-                app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
+                app:layout_constraintBottom_toTopOf="@+id/fEtContra"
+                app:layout_constraintEnd_toEndOf="@+id/fEtContra"
+                app:layout_constraintStart_toStartOf="@+id/fEtContra"
+                app:layout_constraintTop_toBottomOf="@+id/fEtCorreo" />
 
             <EditText
-                android:id="@+id/etContra"
+                android:id="@+id/fEtContra"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -71,14 +71,14 @@
                 android:textColorHighlight="#0fc3e8"
                 android:textColorHint="#0fc3e8"
                 android:textColorLink="#0fc3e8"
-                app:layout_constraintBottom_toTopOf="@+id/btnLogOut"
+                app:layout_constraintBottom_toTopOf="@+id/fBtnLogIn"
                 app:layout_constraintEnd_toEndOf="@+id/space4"
-                app:layout_constraintStart_toStartOf="@+id/btnSign"
+                app:layout_constraintStart_toStartOf="@+id/fBtnSign"
                 app:layout_constraintTop_toBottomOf="@+id/space2" />
 
 
             <Button
-                android:id="@+id/btnSign"
+                android:id="@+id/fBtnSign"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -87,9 +87,9 @@
                 android:backgroundTint="#069e8c"
                 android:onClick="SignIn"
                 android:text="Sign In"
-                app:layout_constraintEnd_toStartOf="@+id/btnLogOut"
+                app:layout_constraintEnd_toStartOf="@+id/fBtnLogIn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etContra" />
+                app:layout_constraintTop_toBottomOf="@+id/fEtContra" />
 
             <Space
                 android:id="@+id/space3"
@@ -97,12 +97,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="48dp"
                 app:layout_constraintBottom_toTopOf="@+id/space4"
-                app:layout_constraintEnd_toStartOf="@+id/btnLogOut"
-                app:layout_constraintStart_toEndOf="@+id/btnSign"
-                app:layout_constraintTop_toBottomOf="@+id/btnLogOut" />
+                app:layout_constraintEnd_toStartOf="@+id/fBtnLogIn"
+                app:layout_constraintStart_toEndOf="@+id/fBtnSign"
+                app:layout_constraintTop_toBottomOf="@+id/fBtnLogIn" />
 
             <Button
-                android:id="@+id/btnLogOut"
+                android:id="@+id/fBtnLogIn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
@@ -111,8 +111,8 @@
                 android:text="Log In"
                 app:layout_constraintBottom_toTopOf="@+id/space3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnSign"
-                app:layout_constraintTop_toBottomOf="@+id/etContra" />
+                app:layout_constraintStart_toEndOf="@+id/fBtnSign"
+                app:layout_constraintTop_toBottomOf="@+id/fEtContra" />
 
 
             <Space
@@ -121,13 +121,13 @@
                 android:layout_height="0dp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"
-                app:layout_constraintBottom_toTopOf="@+id/btnGoggle"
-                app:layout_constraintEnd_toEndOf="@+id/btnLogOut"
-                app:layout_constraintStart_toStartOf="@+id/btnSign"
+                app:layout_constraintBottom_toTopOf="@+id/fBtnGoggle"
+                app:layout_constraintEnd_toEndOf="@+id/fBtnLogIn"
+                app:layout_constraintStart_toStartOf="@+id/fBtnSign"
                 app:layout_constraintTop_toBottomOf="@+id/space3" />
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/btnGoggle"
+                android:id="@+id/fBtnGoggle"
                 android:layout_width="0dp"
 
                 android:layout_height="wrap_content"

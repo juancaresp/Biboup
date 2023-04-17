@@ -35,9 +35,6 @@ public class HomeActivity extends AppCompatActivity {
             tvCorreo.setText(user.getEmail());
             tvProveedor.setText(user.getProviderId());
         }
-
-
-
     }
 
     public void logOut(View view){
