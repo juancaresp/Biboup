@@ -105,7 +105,7 @@ public class LoginFragment extends Fragment {
         contra = etContra.getText().toString();
         correo = etCorreo.getText().toString();
         mAuth.signInWithEmailAndPassword(correo, contra)
-                .addOnCompleteListener((Executor) this, task -> {
+                .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -147,7 +147,7 @@ public class LoginFragment extends Fragment {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener((Executor) this, task -> {
+                .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
@@ -172,7 +172,7 @@ public class LoginFragment extends Fragment {
         correo = etCorreo.getText().toString();
         if (!correo.isEmpty() && !contra.isEmpty()){
             mAuth.createUserWithEmailAndPassword(correo,contra).
-                    addOnCompleteListener((Executor) this, task -> {
+                    addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
