@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.boup.boup.model.Group;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -92,4 +93,18 @@ public class UserController {
 		return rp;
 	}
 	
+	//Other
+	
+	@GetMapping("/userGroups")
+	public ResponseEntity<List<Group>> getUserGroups(@RequestBody Integer userId) {
+
+		User user=userS.findById(userId).orElse(new User());
+
+		ResponseEntity<List<Group>> rp = new ResponseEntity<List<Group>>((List<Group>) user.getGroups(), HttpStatus.OK);
+
+		return rp;
+	}
+	
+	//@PostMapping("/user/deleteGroup")
+	//public 
 }

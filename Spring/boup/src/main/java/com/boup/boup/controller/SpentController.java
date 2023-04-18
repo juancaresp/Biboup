@@ -89,4 +89,16 @@ public class SpentController {
 
 		return rp;
 	}
+	
+	//Other
+	
+	@GetMapping("/groupSpents")
+	public ResponseEntity<List<Spent>> getGroupSpents(@RequestBody Integer groupId) {
+
+		List<Spent> spents = spentS.findByGroup(groupId);
+
+		ResponseEntity<List<Spent>> rp = new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+
+		return rp;
+	}
 }

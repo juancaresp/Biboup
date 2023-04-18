@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,7 +55,7 @@ public class WUserController {
 		User user= userS.findById(id).orElse(new User());
 		
 		mav.addObject("user",user);
-		
+		mav.addObject("groups",user.getGroups());
 		return mav;
 	}
 	
@@ -113,5 +114,32 @@ public class WUserController {
 		ModelAndView mav=new ModelAndView("userForm");
 		mav.addObject("user", userS.findById(id).orElse(new User()));
 		return mav;
+	}
+	
+	//other
+	
+	@PostMapping("/user/deleteGroup")
+	public ModelAndView deleteUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("userId") Integer userid) {
+		
+		ModelAndView mav=new ModelAndView("seeUser");
+		User u=userS.deleteUserGroup(groupid, userid).orElse(new User());
+		
+		mav.addObject("user", u);
+		mav.addObject("groups", u.getGroups());
+		return mav;
+		
+	}
+	
+	@PostMapping("/user/addGroup")
+	public ModelAndView addUserGroup(@RequestParam("groupName") String groupname,@RequestParam("userId") Integer userid) {
+		
+		ModelAndView mav=new ModelAndView("seeUser");
+		User u=userS.addUserGroup(groupname, userid).orElse(new User());
+		
+		mav.addObject("user", u);
+		mav.addObject("groups", u.getGroups());
+		
+		return mav;
+		
 	}
 }

@@ -21,42 +21,25 @@
 	<%@include file="header.jsp"%>
 	<div class="container">
 		<div class="row">
-			<h2>Usuarios</h2>
+			<h2>Grupo</h2>
 		</div>
 		<div class="row">
-			<form:form id="formulario" modelAttribute="user" method="POST">
+			<form:form id="formulario" modelAttribute="group" method="POST">
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/insert')">
+					onclick="enviarPeticion('/web/group/insert')">
 				<input type="submit" value="Modificar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/update')">
+					onclick="enviarPeticion('/web/group/update')">
 				<input type="submit" value="Borrar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/user/delete')">
+					onclick="enviarPeticion('/web/group/delete')">
 
 				<form:hidden path="id" id="id" />
 				<div>
 					<div class="input-field col s12">
-						<label for="username">Username</label>
-						<form:input path="username" id="username" name="username" />
-					</div>
-					<div class="input-field col s12">
-						<label for="email">Email</label>
-						<form:input path="email" id="email" type="email" name="email"
-							class="validate" />
-					</div>
-					<div class="input-field col s12">
-						<label for="nameU">Nombre de Usuario</label>
-						<form:input path="nameU" id="nameU" name="nameU" />
-					</div>
-					<div class="input-field col s6">
-						<label for="telephone">Teléfono</label>
-						<form:input path="telephone" id="telephone" name="telephone" />
-					</div>
-					<div class="input-field col s3">
-						<label for="wallet">Monedero</label>
-						<form:input path="wallet" id="wallet" name="wallet" />
+						<label for="groupName">Nombre del grupo</label>
+						<form:input path="groupName" id="groupName" name="groupName" />
 					</div>
 				</div>
 

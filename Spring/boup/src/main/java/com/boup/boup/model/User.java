@@ -1,11 +1,13 @@
 package com.boup.boup.model;
 
 
+import java.util.List;
 import java.util.Set;
 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,8 +53,8 @@ public class User {
 	
 	private Double wallet;
 	
-	@ManyToMany(mappedBy = "users")
-	private Set<Group> groups;
+	@ManyToMany(mappedBy = "users",fetch = FetchType.EAGER)
+	private List<Group> groups;
 	
 	@ManyToMany(mappedBy = "users")
 	private Set<Spent> spents;

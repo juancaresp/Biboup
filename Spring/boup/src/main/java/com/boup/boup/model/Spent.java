@@ -1,9 +1,10 @@
 package com.boup.boup.model;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,8 +20,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
@@ -36,6 +36,9 @@ public class Spent {
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer id;
 	
+	@Column(length = 30)
+	private String spentName;
+	
 	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
 	private User payer;
 	
@@ -45,9 +48,13 @@ public class Spent {
         joinColumns = { @JoinColumn(name = "spent_id") }, 
         inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
-	private Set<User> users;
+	private List<User> users;
 	
 	private Double quantity;
 	
 	private LocalDate date;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	private Group group;
+	
 }

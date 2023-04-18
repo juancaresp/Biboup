@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boup.boup.model.Group;
-
+import com.boup.boup.model.Spent;
+import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
@@ -93,4 +94,25 @@ public class GroupController {
 		return rp;
 	}
 
+	//Other
+	
+	@GetMapping("/groupUsers")
+	public ResponseEntity<List<User>> getGroupUsers(@RequestBody Integer groupId) {
+
+		Group group = groupS.findById(groupId).orElse(new Group());
+
+		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>((List<User>) group.getUsers(), HttpStatus.OK);
+
+		return rp;
+	}
+	
+	@PostMapping("/addSpent")
+	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
+
+		Spent spe=spentS.addSpent(spent).orElse(new Spent());
+
+		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(spe, HttpStatus.OK);
+
+		return rp;
+	}
 }
