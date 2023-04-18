@@ -1,13 +1,17 @@
 package es.boup.appboup;
 
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,13 +30,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.concurrent.Executor;
 
-    //variables de google
+
+public class LoginFragment extends Fragment {
+
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 1;
     private GoogleSignInClient mGoogleSignInClient;
-    //boton login google
     private SignInButton signInButtonGoogle;
     //variable estadisticas
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -41,14 +46,31 @@ public class MainActivity extends AppCompatActivity {
     //edit texts
 
     private EditText etCorreo, etContra;
+    private Button btnSign,btnLog;
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("Autentication");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
 
-        //Obtener la sesion del ususario
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //localizar variables
+        etContra = view.findViewById(R.id.fEtContra);
+        etCorreo = view.findViewById(R.id.fEtCorreo);
+        btnLog = view.findViewById(R.id.fBtnLogIn);
+        btnSign = view.findViewById(R.id.fBtnSign);
+        signInButtonGoogle = view.findViewById(R.id.fBtnGoggle);
+
+        //Obtener la instancia de google
         mAuth = FirebaseAuth.getInstance();
 
         //opciones de inicio de sesion google
@@ -59,30 +81,48 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //creacion del objeto que crea el cliente de inicio de sesion de google
+        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
         //mandar estadisticas
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         Bundle bundle = new Bundle();
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
 
+        //boton de inicio de sesion de google
+        signInButtonGoogle.setOnClickListener(view1 -> signInGoogle());
 
-        etCorreo = findViewById(R.id.fEtCorreo);
-        etContra = findViewById(R.id.fEtContra);
+        //boton sign In correo
+        btnSign.setOnClickListener(view1 -> signInCorreo());
 
-        //boton de de inicio de sesion de google
-        signInButtonGoogle = findViewById(R.id.fBtnGoggle);
-        signInButtonGoogle.setOnClickListener(view -> signIn());
+        //boton log In correo
+        btnLog.setOnClickListener(view1 -> logInCorreo());
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly
-        updateUI(mAuth.getCurrentUser());
+    private void logInCorreo() {
+        String contra, correo;
+        contra = etContra.getText().toString();
+        correo = etCorreo.getText().toString();
+        mAuth.signInWithEmailAndPassword(correo, contra)
+                .addOnCompleteListener(getActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(getActivity(), "Sesion iniciada correctamente "+ user.getEmail(), Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        Toast.makeText(getActivity(), "Error en el login", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
     }
 
+    private void signInGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -107,80 +147,42 @@ public class MainActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (task.getResult().getAdditionalUserInfo().isNewUser()) {
-                                Toast.makeText(MainActivity.this, "El usuario no existia en la base de datos", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(MainActivity.this, "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
-                            }
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
-    public void LogIn (View view){
-        String contra, correo;
-        contra = etContra.getText().toString();
-        correo = etCorreo.getText().toString();
-        mAuth.signInWithEmailAndPassword(correo, contra)
-                .addOnCompleteListener(this, task -> {
+                .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "signInWithEmail:success");
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
-                    } else {
+                        if (task.getResult().getAdditionalUserInfo().isNewUser()) {
+                            Toast.makeText(getActivity(), "El usuario no existia en la base de datos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
+                        }
 
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(MainActivity.this, "Error en el login", Toast.LENGTH_SHORT).show();
-                        updateUI(null);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+
                     }
                 });
     }
 
-    public void SignIn (View view){
+    private void signInCorreo() {
         String contra, correo;
         contra = etContra.getText().toString();
         correo = etCorreo.getText().toString();
         if (!correo.isEmpty() && !contra.isEmpty()){
             mAuth.createUserWithEmailAndPassword(correo,contra).
-                    addOnCompleteListener(this, task -> {
+                    addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
                         }else{
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Error registrando al usuario", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
 
-    private void updateUI (FirebaseUser user){
-        user = mAuth.getCurrentUser();
-        if (user != null){
-            Intent intent = new Intent(this,HomeActivity.class);
-            intent.putExtra("usuario", user);
-            startActivity(intent);
-        }
-
-    }
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-
-    }
 
 }
