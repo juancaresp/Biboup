@@ -72,12 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         //boton de de inicio de sesion de google
         signInButtonGoogle = findViewById(R.id.fBtnGoggle);
-        signInButtonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
+        signInButtonGoogle.setOnClickListener(view -> signIn());
 
     }
 
