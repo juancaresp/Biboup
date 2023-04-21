@@ -108,7 +108,7 @@ public class DebtController {
 		}
 		
 		//Add debt whit the logic
-		@PostMapping("/debt/insert")
+		@PostMapping("/debt/add")
 		public ResponseEntity<Debt> addDebt(@RequestBody Debt debt) {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
