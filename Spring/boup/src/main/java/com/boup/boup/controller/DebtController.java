@@ -107,6 +107,20 @@ public class DebtController {
 			return rp;
 		}
 		
+		//Add debt whit the logic
+		@PostMapping("/debt/insert")
+		public ResponseEntity<Debt> addDebt(@RequestBody Debt debt) {
+			
+			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
+			
+			Optional<Debt> opD=debtS.addDebt(debt);
+			if(opD.isPresent()) {
+				debt=opD.get();
+				rp=new ResponseEntity<Debt>(debt,HttpStatus.OK);
+			}
+			
+			return rp;
+		}
 		
 		
 		

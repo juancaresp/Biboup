@@ -14,81 +14,81 @@ import com.boup.boup.repository.SpentRepository;
 import com.boup.boup.repository.UserRepository;
 
 @Service
-public class SpentServiceImp implements SpentService{
+public class SpentServiceImp implements SpentService {
 
-	@Autowired GroupRepository groupR;
-	@Autowired SpentRepository spentR;
-	@Autowired UserRepository userR;
-	@Autowired DebtRepository debtR;
-	@Autowired DebtService debtS;
+	@Autowired
+	GroupRepository groupR;
+	@Autowired
+	SpentRepository spentR;
+	@Autowired
+	UserRepository userR;
+	@Autowired
+	DebtRepository debtR;
+	@Autowired
+	DebtService debtS;
 
-	
 	@Override
 	public Optional<Spent> insert(Spent s) {
-		Optional<Spent> op=Optional.of(spentR.save(s));
-		
+		Optional<Spent> op = Optional.of(spentR.save(s));
+
 		return op;
 	}
-	
+
 	@Override
 	public Optional<Spent> update(Spent s) {
-		Optional<Spent> op=Optional.empty();
-		
+		Optional<Spent> op = Optional.empty();
+
 		if (!spentR.existsById(s.getId())) {
-			op=Optional.of(spentR.save(s));
+			op = Optional.of(spentR.save(s));
 		}
 		return op;
 	}
-	
+
 	@Override
 	public boolean delete(Integer id) {
-		boolean exit=false;
+		boolean exit = false;
 		if (!spentR.existsById(id)) {
 			spentR.deleteById(id);
-			exit=true;
+			exit = true;
 		}
 		return exit;
 	}
-	
+
 	@Override
 	public List<Spent> findAll() {
 		// TODO Auto-generated method stub
 		return (List<Spent>) spentR.findAll();
 	}
-	
+
 	@Override
 	public Optional<Spent> findById(Integer id) {
 		// TODO Auto-generated method stub
 		return spentR.findById(id);
 	}
-	
+
 	@Override
 	public List<Spent> findByGroup(Integer id) {
 		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
 	}
-	
-	public Optional<Spent> addSpent(Spent spent){
-		Optional<Spent> spe=Optional.empty();
-		
-		//Each one part
-		Double part=spent.getQuantity()/spent.getUsers().size()+1;
-		
-		Debt deb;
-		
-		for(int i=0;i<spent.getUsers().size();i++) {
-			deb=Debt.builder()
-					.receiver(spent.getPayer())
-					.debtor(spent.getUsers().get(i))
-					.amount(part)
-					.build();
-			debtS.addDebt(deb);
-		}
-		
-		spe=insert(spent);
-		
+
+	public Optional<Spent> addSpent(Spent spent) {
+		Optional<Spent> spe = Optional.empty();
+		spe = insert(spent);
+		spe.ifPresent((sp) -> {
+			Double part = sp.getQuantity() / sp.getUsers().size() + 1;
+
+			Debt deb;
+
+			for (int i = 0; i < sp.getUsers().size(); i++) {
+				deb = Debt.builder().receiver(sp.getPayer()).debtor(sp.getUsers().get(i)).amount(part).build();
+				debtS.addDebt(deb);
+			}
+		});
+		// Each one part
+
 		return spe;
-		
+
 	}
-	
+
 }
