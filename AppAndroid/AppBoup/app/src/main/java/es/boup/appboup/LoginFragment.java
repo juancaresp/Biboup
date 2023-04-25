@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,8 +40,7 @@ public class LoginFragment extends Fragment {
     private static final int RC_SIGN_IN = 1;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButtonGoogle;
-    //variable estadisticas
-    private FirebaseAnalytics mFirebaseAnalytics;
+
     //variable autenticacion de usuario
     private FirebaseAuth mAuth;
     //edit texts
@@ -84,11 +84,6 @@ public class LoginFragment extends Fragment {
         //creacion del objeto que crea el cliente de inicio de sesion de google
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-        //mandar estadisticas
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-        Bundle bundle = new Bundle();
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
-
         //boton de inicio de sesion de google
         signInButtonGoogle.setOnClickListener(view1 -> signInGoogle());
 
@@ -110,6 +105,7 @@ public class LoginFragment extends Fragment {
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(getActivity(), "Sesion iniciada correctamente "+ user.getEmail(), Toast.LENGTH_SHORT).show();
+                        cambiarFragmento();
                     } else {
 
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -117,6 +113,18 @@ public class LoginFragment extends Fragment {
 
                     }
                 });
+    }
+
+    private void cambiarFragmento(){
+        // Crear instancia del nuevo fragmento
+        Fragment nextFragment = new listaInicio();
+
+        // Reemplazar el fragmento actual con el nuevo fragmento
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame, nextFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void signInGoogle() {
@@ -157,7 +165,7 @@ public class LoginFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
                         }
-
+                        cambiarFragmento();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -176,6 +184,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            cambiarFragmento();
                         }else{
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
