@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,8 +70,9 @@
                     android:ems="10"
                     android:gravity="center|start|center_vertical"
                     android:hint="Contraseña"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:shadowColor="#0fc3e8"
+                    android:soundEffectsEnabled="false"
                     android:textColor="#0fc3e8"
                     android:textColorHighlight="#0fc3e8"
                     android:textColorHint="#0fc3e8"
@@ -139,7 +140,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/space4"
                     app:layout_constraintStart_toStartOf="@+id/space4"
-                    app:layout_constraintTop_toBottomOf="@+id/space4" />
+                    app:layout_constraintTop_toBottomOf="@+id/space4">
+
+                </com.google.android.gms.common.SignInButton>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

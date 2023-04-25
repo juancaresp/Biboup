@@ -8,62 +8,17 @@
     android:orientation="vertical"
     tools:context=".listaInicio">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:textAlignment="textEnd">
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#009688"
-            android:text="Añadir participante"
-            android:visibility="visible"
-            app:cornerRadius="50dp" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            android:backgroundTint="#242739"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="right"
-            android:text="Crear un grupo "
-            android:textAlignment="textEnd"
-            android:textAllCaps="false"
-            android:textColor="#0fc3e8" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/editTextTextPersonName2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            android:visibility="visible" />
-
-        <Button
-            android:id="@+id/button12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#009688"
-            android:text="Añadir"
-            app:cornerRadius="50dp" />
-    </LinearLayout>
+        android:layout_gravity="right"
+        android:backgroundTint="#242739"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="right"
+        android:text="Crear un grupo "
+        android:textAllCaps="false"
+        android:textColor="#0fc3e8" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -128,15 +83,6 @@
             android:layout_weight="1"
             android:backgroundTint="#ab0768"
             android:text="deber"
-            app:cornerRadius="50dp" />
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#2196F3"
-            android:text="Ambas"
             app:cornerRadius="50dp" />
     </LinearLayout>
 
