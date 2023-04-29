@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.ListFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,10 +44,14 @@ public class LoginFragment extends Fragment {
 
     //variable autenticacion de usuario
     private FirebaseAuth mAuth;
+    //variable para saber si es la primera vez con el login de google
+    private boolean primera = false;
+
     //edit texts
 
     private EditText etCorreo, etContra;
     private Button btnSign,btnLog;
+    private Bundle bundle;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -93,44 +98,37 @@ public class LoginFragment extends Fragment {
         //boton log In correo
         btnLog.setOnClickListener(view1 -> logInCorreo());
 
-    }
+        //iniciarlizar bundle registro
+        bundle = new Bundle();
 
-    private void logInCorreo() {
-        String contra, correo;
-        contra = etContra.getText().toString();
-        correo = etCorreo.getText().toString();
-        mAuth.signInWithEmailAndPassword(correo, contra)
-                .addOnCompleteListener(getActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "signInWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(getActivity(), "Sesion iniciada correctamente "+ user.getEmail(), Toast.LENGTH_SHORT).show();
-                        cambiarFragmento();
-                    } else {
-
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(getActivity(), "Error en el login", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
     }
 
     private void cambiarFragmento(){
-        // Crear instancia del nuevo fragmento
-        Fragment nextFragment = new listaInicio();
 
         // Reemplazar el fragmento actual con el nuevo fragmento
         FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame, nextFragment)
-                .addToBackStack(null)
-                .commit();
+        //en este caso se habra pulsado el registro del correo o el de google no existiendo la cuenta en la base de datos
+        if (primera){
+            getParentFragmentManager().setFragmentResult("resultadoRegistro",bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame, new CredencialesFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }else{
+            //en este caso se habra pulsado el login del correo o el de google existiendo ya la cuenta en la base de datos
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame, new listaInicio())
+                    .addToBackStack(null)
+                    .commit();
+        }
+
     }
 
     private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,6 +160,9 @@ public class LoginFragment extends Fragment {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                             Toast.makeText(getActivity(), "El usuario no existia en la base de datos", Toast.LENGTH_SHORT).show();
+                            //Aqui introduzco en el bundle si el registro es con google o con correo
+                            bundle.putBoolean("correo",false);
+                            primera = true;
                         } else {
                             Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
                         }
@@ -174,6 +175,7 @@ public class LoginFragment extends Fragment {
                 });
     }
 
+    //función de registro con correo electronico
     private void signInCorreo() {
         String contra, correo;
         contra = etContra.getText().toString();
@@ -184,13 +186,40 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            //Aqui introduzco en el bundle si el registro es con google o con correo
+                            bundle.putBoolean("correo",true);
+                            primera = true;
                             cambiarFragmento();
                         }else{
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            if(etContra.getText().toString().length() < 6){
+                                Toast.makeText(getActivity(), "La contraseña debe ser de 6 caracteres o más", Toast.LENGTH_SHORT).show();
+                            }else
                             Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
+
                         }
                     });
         }
+    }
+
+    //función de login con correo electronico
+    private void logInCorreo() {
+        String contra, correo;
+        contra = etContra.getText().toString();
+        correo = etCorreo.getText().toString();
+        mAuth.signInWithEmailAndPassword(correo, contra)
+                .addOnCompleteListener(getActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(getActivity(), "Sesion iniciada correctamente "+ user.getEmail(), Toast.LENGTH_SHORT).show();
+                        cambiarFragmento();
+                    } else {
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        Toast.makeText(getActivity(), "Error en el login", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
     }
 
 

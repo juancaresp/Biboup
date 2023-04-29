@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if (user == null){
-            Intent intent = new Intent(this,MainActivity.class);
+            Intent intent = new Intent(this,CredencialesFragment.class);
             startActivity(intent);
         }else{
             tvCorreo = findViewById(R.id.tvCorreo);

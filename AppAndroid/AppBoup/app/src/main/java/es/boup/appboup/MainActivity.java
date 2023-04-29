@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //quitar la barra de accion de la parte superior
+        getSupportActionBar().hide();
+
         frameLayout = findViewById(R.id.frame);
 
         //Obtener la instancia de google
