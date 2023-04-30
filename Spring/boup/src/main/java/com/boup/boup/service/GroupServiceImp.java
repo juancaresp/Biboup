@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boup.boup.model.Group;
+import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
 import com.boup.boup.repository.GroupRepository;
 import com.boup.boup.repository.SpentRepository;
@@ -68,5 +69,24 @@ public class GroupServiceImp implements GroupService{
 		// TODO Auto-generated method stub
 		return groupR.findById(id);
 	}
-
+	@Override
+	public Optional<Group> addUserGroup(String groupname, Integer userid) {
+		Optional<User> op=userR.findById(userid);
+		Optional<Group> g= Optional.empty();
+		
+		if(op.isPresent()) {
+			User u=op.get();
+			g=findByGroupName(groupname);
+			if(g.isPresent()){
+				Group gr=g.get();
+				u.getGroups().add(gr);
+				gr.getUsers().add(u);
+				g=Optional.of(gr);
+				System.out.println(gr.getGroupName());
+				groupR.save(gr);
+			}
+		}
+		
+		return g;
+	}
 }

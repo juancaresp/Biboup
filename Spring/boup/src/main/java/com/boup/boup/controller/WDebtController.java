@@ -54,14 +54,17 @@ public class WDebtController {
 	//Crud
 	
 	@PostMapping("/debt/insert")
-	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor) {
+	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
 		userS.findByNick(receiver)
 			.ifPresent(rec -> userS.findByNick(debtor)
-					.ifPresent(debto-> {d.setReceiver(rec);
-										d.setDebtor(debto);
-										debtS.insert(d);}));
+					.ifPresent(debto-> groupS.findByGroupName(group)
+										.ifPresent(grou->{
+											d.setReceiver(rec);
+											d.setDebtor(debto);
+											d.setDebtGroup(grou);
+										debtS.insert(d);})));
 		
 		
 		return mav;
@@ -78,14 +81,17 @@ public class WDebtController {
 	}
 	
 	@PostMapping("/debt/update")
-	public ModelAndView updateDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor) {
+	public ModelAndView updateDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
 		userS.findByNick(receiver)
-			.ifPresent(rec -> userS.findByNick(debtor)
-					.ifPresent(debto-> {d.setReceiver(rec);
+		.ifPresent(rec -> userS.findByNick(debtor)
+				.ifPresent(debto-> groupS.findByGroupName(group)
+									.ifPresent(grou->{
+										d.setReceiver(rec);
 										d.setDebtor(debto);
-										debtS.update(d);}));
+										d.setDebtGroup(grou);
+									debtS.update(d);})));
 
 		return mav;
 	}

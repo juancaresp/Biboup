@@ -19,4 +19,5 @@ public interface SpentService {
 	public List<Spent> findByGroup(Integer id);
 	
 	public Optional<Spent> addSpent(Spent spent);
+	
 }

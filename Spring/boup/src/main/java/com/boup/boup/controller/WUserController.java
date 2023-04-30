@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.boup.boup.model.Group;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -133,11 +134,8 @@ public class WUserController {
 	@PostMapping("/user/addGroup")
 	public ModelAndView addUserGroup(@RequestParam("groupName") String groupname,@RequestParam("userId") Integer userid) {
 		
-		ModelAndView mav=new ModelAndView("seeUser");
-		User u=userS.addUserGroup(groupname, userid).orElse(new User());
-		
-		mav.addObject("user", u);
-		mav.addObject("groups", u.getGroups());
+		ModelAndView mav=new ModelAndView("redirect:/web/users");
+		groupS.addUserGroup(groupname, userid);
 		
 		return mav;
 		

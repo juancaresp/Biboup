@@ -47,7 +47,7 @@ public class UserServiceImp implements UserService{
 	public boolean delete(Integer id) {
 		boolean exit=false;
 		
-		if (!userR.existsById(id)) {
+		if (userR.existsById(id)) {
 			userR.deleteById(id);
 			exit=true;
 		}
@@ -88,22 +88,6 @@ public class UserServiceImp implements UserService{
 		return op;
 	}
 
-	@Override
-	public Optional<User> addUserGroup(String groupname, Integer userid) {
-		Optional<User> op=findById(userid);
-		
-		if(op.isPresent()) {
-			User u=op.get();
-			Optional<Group> g=groupS.findByGroupName(groupname);
-			if(g.isPresent()){
-				Group gr=g.get();
-				u.getGroups().add(gr);
-				op=Optional.of(u);
-				userR.save(u);
-			}
-		}
-		
-		return op;
-	}
+
 
 }
