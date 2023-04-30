@@ -29,8 +29,9 @@ public class SpentServiceImp implements SpentService {
 
 	@Override
 	public Optional<Spent> insert(Spent s) {
+		System.out.println(s);
 		Optional<Spent> op = Optional.of(spentR.save(s));
-
+		
 		return op;
 	}
 
@@ -47,7 +48,7 @@ public class SpentServiceImp implements SpentService {
 	@Override
 	public boolean delete(Integer id) {
 		boolean exit = false;
-		if (!spentR.existsById(id)) {
+		if (spentR.existsById(id)) {
 			spentR.deleteById(id);
 			exit = true;
 		}
@@ -71,17 +72,24 @@ public class SpentServiceImp implements SpentService {
 		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
 	}
-
+	@Override
 	public Optional<Spent> addSpent(Spent spent) {
+		
 		Optional<Spent> spe = Optional.empty();
 		spe = insert(spent);
+		System.out.println(spe.get());
 		spe.ifPresent((sp) -> {
-			Double part = sp.getQuantity() / sp.getUsers().size() + 1;
-
+			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
+			System.out.println(part);
 			Debt deb;
 
 			for (int i = 0; i < sp.getUsers().size(); i++) {
-				deb = Debt.builder().receiver(sp.getPayer()).debtor(sp.getUsers().get(i)).amount(part).build();
+				deb = Debt.builder()
+						.receiver(sp.getPayer())
+						.debtor(sp.getUsers().get(i))
+						.amount(part)
+						.debtGroup(sp.getGroup())
+						.build();
 				debtS.addDebt(deb);
 			}
 		});

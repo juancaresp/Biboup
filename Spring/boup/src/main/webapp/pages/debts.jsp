@@ -40,6 +40,7 @@
 							<th>Recibidor</th>
 							<th>Endeudado</th>
 							<th>Cantidad</th>
+							<th>Grupo</th>
 						</tr>	
 					</thead>
 					<tbody>
@@ -54,6 +55,7 @@
 								<td>${d.receiver.username}</td>
 								<td>${d.debtor.username}</td>
 								<td>${d.amount}</td>
+								<td>${d.debtGroup.groupName}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

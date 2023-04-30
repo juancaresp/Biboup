@@ -40,11 +40,11 @@ public class WGroupController {
 	}
 	
 	@GetMapping("/group")
-	public ModelAndView getGroupW(@RequestParam("id") Integer id) {
+	public ModelAndView getGroupW(@RequestParam("id") String id) {
 		
 		//Devuelve la pagina de un usuario
 		ModelAndView mav=new ModelAndView("seeGroup");
-		Group group= groupS.findById(id).orElse(new Group());
+		Group group= groupS.findById(Integer.parseInt(id)).orElse(new Group());
 		
 		mav.addObject("group",group);
 		

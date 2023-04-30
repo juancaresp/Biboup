@@ -1,5 +1,6 @@
 package com.boup.boup.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Builder
 
 @Entity
-public class Spent {
+public class Spent implements Serializable{
 
 	@Id
 	@EqualsAndHashCode.Include
@@ -39,10 +40,10 @@ public class Spent {
 	@Column(length = 30)
 	private String spentName;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User payer;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany
     @JoinTable(
         name = "spent_User", 
         joinColumns = { @JoinColumn(name = "spent_id") }, 
@@ -54,7 +55,13 @@ public class Spent {
 	
 	private LocalDate date;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Group group;
+
+	@Override
+	public String toString() {
+		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + users.stream().map(u-> u.getNameU()) + ", quantity="
+				+ quantity + ", date=" + date + ", group=" + group.getGroupName() + "]";
+	}
 	
 }

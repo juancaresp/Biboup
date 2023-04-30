@@ -50,6 +50,10 @@
 						<label for="debto">Endeudado-Username</label> 
 						<input type="text" name="debto" id="debto" value="${debt.debtor.username}" />
 					</div>
+					<div class="input-field col s12">
+						<label for="group">Nombre Grupo</label> 
+						<input type="text" name="group" id="group" value="${debt.debtGroup.groupName}" />
+					</div>
 				</div>
 			</form:form>
 		</div>

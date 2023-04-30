@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.boup.boup.model.Group;
 import com.boup.boup.model.Spent;
@@ -106,13 +108,15 @@ public class GroupController {
 		return rp;
 	}
 	
-	@PostMapping("/addSpent")
-	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
+	@PostMapping("/group/{groupName}/addUser")
+	public ResponseEntity<Group> addUser(@PathVariable String groupName,@RequestParam String userID) {
 
-		Spent spe=spentS.addSpent(spent).orElse(new Spent());
+		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(spe, HttpStatus.OK);
-
+		if(groupS.addUserGroup(groupName, Integer.parseInt(userID)).isPresent()){
+			rp = new ResponseEntity<Group>(HttpStatus.OK);
+		}
+		
 		return rp;
 	}
 }

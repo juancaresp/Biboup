@@ -17,5 +17,4 @@ public interface UserService {
 	public Optional<User> findByNick(String nick);
 	public Optional<User> findById(Integer id);
 	public Optional<User> deleteUserGroup(Integer groupid,Integer userid);
-	public Optional<User> addUserGroup(String groupname, Integer userid);
 }

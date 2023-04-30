@@ -1,5 +1,6 @@
 package com.boup.boup.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 
 @Entity(name = "Boup_Group")
-public class Group {
+public class Group implements Serializable{
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -39,7 +40,7 @@ public class Group {
 	@Column(length = 20)
 	private String groupName;
 	
-	@ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "group_User", 
         joinColumns = { @JoinColumn(name = "group_id") }, 
@@ -49,4 +50,15 @@ public class Group {
 	
 	@OneToMany(mappedBy="group",fetch = FetchType.EAGER)
     private Set<Spent> spents;
+	
+	@OneToMany(mappedBy="debtGroup",fetch = FetchType.EAGER)
+    private Set<Debt> debts;
+
+	@Override
+	public String toString() {
+		return "Group [id=" + id + ", groupName=" + groupName + ", users=" + users.stream().map(u -> u.getNameU()) + ", spents=" + spents.stream().map(sp-> sp.getSpentName()) + ", debts="
+				+ debts + "]";
+	}
+	
+	
 }

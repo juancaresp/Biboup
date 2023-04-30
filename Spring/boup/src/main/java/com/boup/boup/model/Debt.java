@@ -1,6 +1,8 @@
 package com.boup.boup.model;
 
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 
 @Entity
-public class Debt {
+public class Debt implements Serializable{
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -36,5 +38,15 @@ public class Debt {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User debtor;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Group debtGroup;
+	
 	private Double amount;
+
+	@Override
+	public String toString() {
+		return "Debt [id=" + id + ", receiver=" + receiver.getNameU() + ", debtor=" + debtor.getNameU() + ", debtGroup=" + debtGroup.getGroupName()
+				+ ", amount=" + amount + "]";
+	}
+	
 }
