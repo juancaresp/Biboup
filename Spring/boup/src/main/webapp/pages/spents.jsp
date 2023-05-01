@@ -34,6 +34,7 @@
 							<th>Pagador</th>
 							<th>Fecha</th>
 							<th>Cantidad</th>
+							<th>Grupo</th>
 						</tr>	
 					</thead>
 					<tbody>
@@ -48,6 +49,7 @@
 								<td>${s.payer.username}</td>
 								<td>${s.date}</td>
 								<td>${s.quantity}</td>
+								<td>${s.group.groupName}</td>
 							</tr>
 						</c:forEach>
 					</tbody>	

@@ -94,7 +94,7 @@ public class UserController {
 	}
 	
 	//Other
-	
+	/*
 	@GetMapping("/userGroups")
 	public ResponseEntity<List<Group>> getUserGroups(@RequestBody Integer userId) {
 
@@ -104,7 +104,7 @@ public class UserController {
 
 		return rp;
 	}
-	
+	*/
 	//@PostMapping("/user/deleteGroup")
 	//public 
 }

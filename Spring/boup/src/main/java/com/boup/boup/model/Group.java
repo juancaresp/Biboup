@@ -47,17 +47,10 @@ public class Group implements Serializable{
         inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
 	private List<User> users;
-	
-	@OneToMany(mappedBy="group",fetch = FetchType.EAGER)
-    private Set<Spent> spents;
-	
-	@OneToMany(mappedBy="debtGroup",fetch = FetchType.EAGER)
-    private Set<Debt> debts;
 
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", groupName=" + groupName + ", users=" + users.stream().map(u -> u.getNameU()) + ", spents=" + spents.stream().map(sp-> sp.getSpentName()) + ", debts="
-				+ debts + "]";
+		return "Group [id=" + id + ", groupName=" + groupName + ", users=" + users.stream().map(u -> u.getNameU()) + "]";
 	}
 	
 	

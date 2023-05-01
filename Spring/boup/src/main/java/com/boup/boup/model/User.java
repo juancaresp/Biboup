@@ -54,17 +54,10 @@ public class User  implements Serializable {
 	
 	private Double wallet;
 	
-	@ManyToMany(mappedBy = "users")
-	private List<Group> groups;
-	
-	@ManyToMany(mappedBy = "users")
-	private Set<Spent> spents;
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", token=" + token + ", username=" + username + ", nameU=" + nameU + ", email="
-				+ email + ", password=" + password + ", telephone=" + telephone + ", wallet=" + wallet + ", groups="
-				+ groups.stream().map(gr-> gr.getGroupName()) + ", spents=" + spents.stream().map(sp-> sp.getSpentName()) + "]";
+				+ email + ", password=" + password + ", telephone=" + telephone + ", wallet=" + wallet + "]";
 	}
 	
 }
