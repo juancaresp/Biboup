@@ -17,4 +17,5 @@ public interface GroupService {
 	public Optional<Group> findByGroupName(String name);
 	public Optional<Group> findById(Integer id);
 	Optional<Group> addUserGroup(String groupname, Integer userid);
+	public List<Group> findByUser(User u);
 }

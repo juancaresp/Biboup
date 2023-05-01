@@ -75,19 +75,8 @@ public class UserServiceImp implements UserService{
 
 	@Override
 	public Optional<User> deleteUserGroup(Integer groupid, Integer userid) {
-		// TODO Auto-generated method stub		
-		Optional<User> op=findById(userid);
-		
-		if(op.isPresent()) {
-			User u=op.get();
-			u.getGroups().remove(groupS.findById(groupid).orElse(new Group()));
-			update(u);
-		}
-		
-		op= findById(userid);
-		return op;
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
-
-
 
 }

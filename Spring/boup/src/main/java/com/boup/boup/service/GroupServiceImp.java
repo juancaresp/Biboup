@@ -79,7 +79,6 @@ public class GroupServiceImp implements GroupService{
 			g=findByGroupName(groupname);
 			if(g.isPresent()){
 				Group gr=g.get();
-				u.getGroups().add(gr);
 				gr.getUsers().add(u);
 				g=Optional.of(gr);
 				System.out.println(gr.getGroupName());
@@ -88,5 +87,11 @@ public class GroupServiceImp implements GroupService{
 		}
 		
 		return g;
+	}
+
+	@Override
+	public List<Group> findByUser(User u) {
+		// TODO Auto-generated method stub
+		return groupR.findByUsers(u);
 	}
 }

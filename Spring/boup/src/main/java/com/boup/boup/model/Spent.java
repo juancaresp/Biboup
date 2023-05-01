@@ -40,6 +40,9 @@ public class Spent implements Serializable{
 	@Column(length = 30)
 	private String spentName;
 	
+	@Column(length = 250)
+	private String spentDesc;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User payer;
 	
