@@ -19,5 +19,7 @@ public interface SpentService {
 	public List<Spent> findByGroup(Integer id);
 	
 	public Optional<Spent> addSpent(Spent spent);
+	public void deleteUserSpent(Integer spentId, Integer userid);
+	public void addUserSpent(Integer spentId, Integer userid);
 	
 }

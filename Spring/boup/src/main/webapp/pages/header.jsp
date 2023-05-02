@@ -1,6 +1,6 @@
 <nav>
 	<div class="nav-wrapper">
-		<a href="start" class="brand-logo">Boup</a>
+		<a href="/web/" class="brand-logo">Boup</a>
 		<ul id="nav-mobile" class="right hide-on-med-and-down">
 			<li><a href="users">Usuarios</a></li>
 			<li><a href="debts">Deudas</a></li>

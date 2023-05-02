@@ -109,11 +109,11 @@ public class GroupController {
 	}
 	
 	@PostMapping("/group/{groupName}/addUser")
-	public ResponseEntity<Group> addUser(@PathVariable String groupName,@RequestParam String userID) {
+	public ResponseEntity<Group> addUser(@PathVariable Integer groupid,@RequestParam String userID) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 
-		if(groupS.addUserGroup(groupName, Integer.parseInt(userID)).isPresent()){
+		if(groupS.addUserGroup(groupid, Integer.parseInt(userID)).isPresent()){
 			rp = new ResponseEntity<Group>(HttpStatus.OK);
 		}
 		

@@ -32,8 +32,7 @@ public class WUserController {
 	
 	@GetMapping("/")
 	public ModelAndView getInicio() {
-		ModelAndView mav=new ModelAndView("inicio");
-		
+		ModelAndView mav=new ModelAndView("start");
 		
 		return mav;
 	}
@@ -122,20 +121,18 @@ public class WUserController {
 	@PostMapping("/user/deleteGroup")
 	public ModelAndView deleteUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("userId") Integer userid) {
 		
-		ModelAndView mav=new ModelAndView("seeUser");
-		User u=userS.deleteUserGroup(groupid, userid).orElse(new User());
-		List<Group> groups= groupS.findByUser(u);
-		mav.addObject("user",u);
-		mav.addObject("groups",groups);
+		ModelAndView mav=new ModelAndView("redirect:/web/users");
+		groupS.deleteUserGroup(groupid, userid);
+		
 		return mav;
 		
 	}
 	
 	@PostMapping("/user/addGroup")
-	public ModelAndView addUserGroup(@RequestParam("groupName") String groupname,@RequestParam("userId") Integer userid) {
+	public ModelAndView addUserGroup(@RequestParam("groupid") Integer groupid,@RequestParam("userId") Integer userid) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/users");
-		groupS.addUserGroup(groupname, userid);
+		groupS.addUserGroup(groupid, userid);
 		
 		return mav;
 		

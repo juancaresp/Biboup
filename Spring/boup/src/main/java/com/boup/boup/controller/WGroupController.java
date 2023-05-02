@@ -47,7 +47,7 @@ public class WGroupController {
 		Group group= groupS.findById(Integer.parseInt(id)).orElse(new Group());
 		
 		mav.addObject("group",group);
-		
+		mav.addObject("users",group.getUsers());
 		return mav;
 	}
 	
