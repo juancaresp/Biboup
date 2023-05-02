@@ -36,9 +36,9 @@
 	<div>
 		<form method="POST" id="addGformulario" action='/web/user/addGroup'>
 			<div>
-				<div class="input-field col s12">
-					<label for="groupName">Nombre del grupo</label>
-					<input type="text" id="groupName" name="groupName" />
+				<div class="input-field col s2">
+					<label for="groupid">ID del grupo</label>
+					<input type="text" id="groupid" name="groupid" />
 				</div>
 			</div>
 			<input type="hidden" name="userId" value="${user.id}" /> 
@@ -47,11 +47,12 @@
 	</div>
 
 	<div class="row">
-		<table class="striped">
+		<table class="striped col s6 offset-s3">
 
 			<thead>
 				<tr>
 					<th>Groupname</th>
+					<th>Accion</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -60,8 +61,6 @@
 						<td><c:url var="url" value="group">
 								<c:param name="id" value="${g.id}"></c:param>
 							</c:url> <a href="${url}">${g.groupName}</a></td>
-					</tr>
-					<tr>
 						<td>
 							<form method="POST" id="deleteGformulario"
 								action='/web/user/deleteGroup'>

@@ -48,18 +48,30 @@ public class WSpentController {
 		Spent spent= spentS.findById(id).orElse(new Spent());
 		
 		mav.addObject("spent",spent);
-		
+		mav.addObject("users",spent.getUsers());
 		return mav;
 	}
 	
 	//Crud
 	
 	@PostMapping("/spent/insert")
-	public ModelAndView insertSpentW(@ModelAttribute Spent s,@RequestParam("paye")String paye) {
+	public ModelAndView insertSpentW(@ModelAttribute Spent s,@RequestParam("paye")String paye,@RequestParam("dat")String dat,@RequestParam("groupId")Integer groupId) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/spents");
-		userS.findByNick(paye)
-			.ifPresent(payer -> {s.setPayer(payer);spentS.insert(s);});
+		try {
+			LocalDate date=LocalDate.parse(dat);
+			s.setDate(date);
+			userS.findByNick(paye)
+				.ifPresent(payer -> {
+					groupS.findById(groupId).ifPresent(g ->{
+						s.setPayer(payer);
+						s.setGroup(g);
+						spentS.insert(s);
+					});
+				});
+		}catch (Exception e) {
+			System.out.println(e.getStackTrace());
+		}
 		
 		return mav;
 	}
@@ -75,14 +87,20 @@ public class WSpentController {
 	}
 	
 	@PostMapping("/spent/update")
-	public ModelAndView updateSpentW(@ModelAttribute Spent s,@RequestParam("paye")String paye,@RequestParam("dat")String dat) {
+	public ModelAndView updateSpentW(@ModelAttribute Spent s,@RequestParam("paye")String paye,@RequestParam("dat")String dat,@RequestParam("groupId")Integer groupId) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/spents");
 		try {
 			LocalDate date=LocalDate.parse(dat);
 			s.setDate(date);
 			userS.findByNick(paye)
-				.ifPresent(payer -> {s.setPayer(payer);spentS.update(s);});
+				.ifPresent(payer -> {
+					groupS.findById(groupId).ifPresent(g ->{
+						s.setPayer(payer);
+						s.setGroup(g);
+						spentS.update(s);
+					});
+				});
 			
 		}catch (Exception e) {
 			System.out.println(e.getStackTrace());
@@ -108,5 +126,26 @@ public class WSpentController {
 		ModelAndView mav=new ModelAndView("spentForm");
 		mav.addObject("spent", spentS.findById(id).orElse(new Spent()));
 		return mav;
+	}
+	
+	//ADD Y DELETE USERS
+	@PostMapping("/spent/deleteUser")
+	public ModelAndView deleteUserGroup(@RequestParam("spentId") Integer spentId,@RequestParam("userId") Integer userid) {
+		
+		ModelAndView mav=new ModelAndView("redirect:/web/spents");
+		spentS.deleteUserSpent(spentId, userid);
+		
+		return mav;
+		
+	}
+	
+	@PostMapping("/spent/addUser")
+	public ModelAndView addUserGroup(@RequestParam("spentId") Integer spentId,@RequestParam("userId") Integer userid) {
+		
+		ModelAndView mav=new ModelAndView("redirect:/web/spents");
+		spentS.addUserSpent(spentId, userid);
+		
+		return mav;
+		
 	}
 }

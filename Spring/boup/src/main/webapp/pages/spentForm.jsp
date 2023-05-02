@@ -54,6 +54,10 @@
 						<label for="dat">Fecha (YYYY-MM-DD)</label>
 						<input type="text" id="dat" name="dat" value="${spent.date}" />
 					</div>
+					<div class="input-field col s12">
+						<label for="groupId">ID del Grupo</label>
+						<input type="text" id="groupId" name="groupId" value="${spent.group.groupName}" />
+					</div>
 				</div>
 			</form:form>
 		</div>

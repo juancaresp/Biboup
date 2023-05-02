@@ -73,10 +73,5 @@ public class UserServiceImp implements UserService{
 		return userR.findById(id);
 	}
 
-	@Override
-	public Optional<User> deleteUserGroup(Integer groupid, Integer userid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
 
 }

@@ -65,23 +65,42 @@ public class GroupServiceImp implements GroupService{
 	}
 
 	@Override
-	public Optional<Group> findById(Integer id) {
+	public Optional<Group> findById(Integer groupID) {
 		// TODO Auto-generated method stub
-		return groupR.findById(id);
+		return groupR.findById(groupID);
 	}
 	@Override
-	public Optional<Group> addUserGroup(String groupname, Integer userid) {
+	public Optional<Group> addUserGroup(Integer groupID, Integer userid) {
 		Optional<User> op=userR.findById(userid);
 		Optional<Group> g= Optional.empty();
 		
 		if(op.isPresent()) {
 			User u=op.get();
-			g=findByGroupName(groupname);
+			g=findById(groupID);
 			if(g.isPresent()){
 				Group gr=g.get();
 				gr.getUsers().add(u);
 				g=Optional.of(gr);
 				System.out.println(gr.getGroupName());
+				groupR.save(gr);
+			}
+		}
+		
+		return g;
+	}
+	
+	@Override
+	public Optional<Group> deleteUserGroup(Integer groupid, Integer userid) {
+		Optional<User> op=userR.findById(userid);
+		Optional<Group> g= Optional.empty();
+		
+		if(op.isPresent()) {
+			User u=op.get();
+			g=findById(groupid);
+			if(g.isPresent()){
+				Group gr=g.get();
+				gr.getUsers().remove(u);
+				g=Optional.of(gr);
 				groupR.save(gr);
 			}
 		}
@@ -94,4 +113,6 @@ public class GroupServiceImp implements GroupService{
 		// TODO Auto-generated method stub
 		return groupR.findByUsers(u);
 	}
+
+
 }

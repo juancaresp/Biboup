@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.boup.boup.model.Debt;
 import com.boup.boup.model.Spent;
+import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
 import com.boup.boup.repository.GroupRepository;
 import com.boup.boup.repository.SpentRepository;
@@ -72,6 +73,7 @@ public class SpentServiceImp implements SpentService {
 		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
 	}
+	
 	@Override
 	public Optional<Spent> addSpent(Spent spent) {
 		
@@ -96,7 +98,28 @@ public class SpentServiceImp implements SpentService {
 		// Each one part
 
 		return spe;
+	}
+	
+	@Override
+	public void deleteUserSpent(Integer spentId, Integer userid) {
+		// TODO Auto-generated method stub
+		spentR.findById(spentId).ifPresent(s ->{
+			User u= userR.findById(userid).orElse(new User());
+			s.getUsers().remove(u);
+			spentR.save(s);
+		});;
+		
+	}
 
+	@Override
+	public void addUserSpent(Integer spentId, Integer userid) {
+		// TODO Auto-generated method stub
+		spentR.findById(spentId).ifPresent(s ->{
+			User u= userR.findById(userid).orElse(new User());
+			s.getUsers().add(u);
+			spentR.save(s);
+		});;
+		
 	}
 
 }
