@@ -1,5 +1,6 @@
 package es.boup.appboup;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -176,6 +177,7 @@ public class LoginFragment extends Fragment {
     }
 
     //función de registro con correo electronico
+    @SuppressLint("SuspiciousIndentation")
     private void signInCorreo() {
         String contra, correo;
         contra = etContra.getText().toString();
@@ -194,8 +196,10 @@ public class LoginFragment extends Fragment {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             if(etContra.getText().toString().length() < 6){
                                 Toast.makeText(getActivity(), "La contraseña debe ser de 6 caracteres o más", Toast.LENGTH_SHORT).show();
-                            }else
-                            Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         }
                     });
