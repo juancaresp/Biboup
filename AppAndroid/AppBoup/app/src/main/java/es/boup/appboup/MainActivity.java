@@ -76,10 +76,14 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (mAuth.getCurrentUser() != null){
             fragmentTransaction.add(R.id.frame,new listaInicio());
+            Log.w("token","el token del usuario es" + mAuth.getCurrentUser().getIdToken(false).getResult().getToken());
+
+
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
         }
         fragmentTransaction.commit();
     }
+
 
 }
