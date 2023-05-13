@@ -107,48 +107,13 @@ public class DebtServiceImp implements DebtService {
 		return debts;
 	}
 
-	//El bonito
-	/*
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
-
-		Optional<Debt> op = Optional.empty();
-		
-		if(userR.existsById(d.getDebtor().getId())&&userR.existsById(d.getReceiver().getId())) {
-			//Caso en el ambos usuarios existen
-			Debt debt;
-			List<Debt> debts=findByDebtor(d.getDebtor());
-			Optional<Debt> deb=debts.stream().filter(de -> de.getReceiver().equals(d.getReceiver())).findFirst();
-			if(deb.isPresent()) {
-				//Caso en el que se le suma la deuda a una ya existente
-				debt=deb.get();
-				debt.setAmount(debt.getAmount()+d.getAmount());
-			}else {
-				//se reduce una deuda ya existente
-				debts=findByDebtor(d.getReceiver());
-				deb=debts.stream().filter(de -> de.getReceiver().equals(d.getDebtor())).findFirst();
-				if(deb.isPresent()) {
-					debt=deb.get();
-					if(debt.getAmount()-d.getAmount()<0) {
-						debt.setDebtor(d.getDebtor());
-						debt.setReceiver(d.getReceiver());
-						debt.setAmount(d.getAmount()-debt.getAmount());
-					}else {
-						debt.setAmount(debt.getAmount()-d.getAmount());
-					}
-				}else {
-					//El caso en el que no exista deuda entre ellos dos
-					debt=d;
-				}
-			}
-			
-			//Se guarda la deuda
-			op=Optional.of(debtR.save(debt));
-		
-		}
-		return op;
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
-	*/
+
+	/*
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
 
@@ -200,5 +165,5 @@ public class DebtServiceImp implements DebtService {
 		
 		}
 		return op;
-	}
+	}*/
 }

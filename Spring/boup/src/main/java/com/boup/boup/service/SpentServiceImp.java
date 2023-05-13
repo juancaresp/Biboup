@@ -86,13 +86,13 @@ public class SpentServiceImp implements SpentService {
 			Debt deb;
 
 			for (int i = 0; i < sp.getUsers().size(); i++) {
-				deb = Debt.builder()
+				/*deb = Debt.builder()
 						.receiver(sp.getPayer())
 						.debtor(sp.getUsers().get(i))
 						.amount(part)
 						.debtGroup(sp.getGroup())
 						.build();
-				debtS.addDebt(deb);
+				debtS.addDebt(deb);*/
 			}
 		});
 		// Each one part

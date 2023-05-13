@@ -15,8 +15,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 
 @Data
@@ -27,25 +25,25 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 public class Debt implements Serializable{
+
+	private static final long serialVersionUID = 1867490433167988556L;
+
 	@Id
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private User receiver;
+	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private User debtor;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Group debtGroup;
+	private Group group;
 	
 	private Double amount;
 
 	@Override
 	public String toString() {
-		return "Debt [id=" + id + ", receiver=" + receiver.getNameU() + ", debtor=" + debtor.getNameU() + ", debtGroup=" + debtGroup.getGroupName()
+		return "Debt [id=" + id + ", receiver=" + user + ", debtGroup=" + group.getGroupName()
 				+ ", amount=" + amount + "]";
 	}
 	
