@@ -53,9 +53,9 @@ public class WUserController {
 		//Devuelve la pagina de un usuario
 		ModelAndView mav=new ModelAndView("seeUser");
 		User user= userS.findById(id).orElse(new User());
-		List<Group> groups= groupS.findByUser(user);
+		//List<Group> groups= groupS.findByUser(user);
 		mav.addObject("user",user);
-		mav.addObject("groups",groups);
+		//mav.addObject("groups",groups);
 		return mav;
 	}
 	

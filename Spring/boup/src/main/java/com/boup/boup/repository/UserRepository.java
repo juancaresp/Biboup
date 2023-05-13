@@ -9,5 +9,5 @@ import com.boup.boup.model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	public Optional<User> findByUsername(String nick);
-
+	public Optional<User> findByEmail(String email);
 }

@@ -1,8 +1,6 @@
 package com.boup.boup.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,29 +61,17 @@ public class DebtServiceImp implements DebtService {
 	}
 
 	@Override
-	public List<Debt> findByReceiver(User u) {
+	public List<Debt> findByUser(User u) {
 
-		return debtR.findByReceiver(u);
+		return debtR.findByUser(u);
 	}
 
-	@Override
-	public List<Debt> findByDebtor(User u) {
-
-		return debtR.findByDebtor(u);
-	}
 	
 	@Override
-	public List<Debt> findByReceiverAndGroup(User u, Group g) {
+	public List<Debt> findByUserAndGroup(User u, Group g) {
 
-		return debtR.findByReceiverAndDebtGroup(u,g);
+		return debtR.findByUserAndGroup(u,g);
 	}
-
-	@Override
-	public List<Debt> findByDebtorAndGroup(User u, Group g) {
-
-		return debtR.findByDebtorAndDebtGroup(u,g);
-	}
-
 
 	@Override
 	public Optional<Debt> findById(Integer id) {
@@ -93,19 +79,6 @@ public class DebtServiceImp implements DebtService {
 		return debtR.findById(id);
 	}
 
-	@Override
-	public List<Debt> findUserDebts(Integer id) {
-		// TODO Auto-generated method stub
-		List<Debt> debts = new ArrayList<>();
-		Optional<User> us = userR.findById(id);
-
-		us.ifPresent(u -> {
-			debts.addAll(findByDebtor(u));
-			debts.addAll(findByReceiver(u));
-		});
-
-		return debts;
-	}
 
 	@Override
 	public Optional<Debt> addDebt(Debt d) {

@@ -97,7 +97,7 @@ public class GroupController {
 	}
 
 	//Other
-	
+	/*
 	@GetMapping("/groupUsers")
 	public ResponseEntity<List<User>> getGroupUsers(@RequestBody Integer groupId) {
 
@@ -106,7 +106,7 @@ public class GroupController {
 		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>((List<User>) group.getUsers(), HttpStatus.OK);
 
 		return rp;
-	}
+	}*/
 	
 	@PostMapping("/group/{groupName}/addUser")
 	public ResponseEntity<Group> addUser(@PathVariable Integer groupid,@RequestParam String userID) {
