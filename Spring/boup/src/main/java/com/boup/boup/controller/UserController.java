@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.boup.boup.model.Group;
+import com.boup.boup.dto.UserReg;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -19,6 +21,7 @@ import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
 	@Autowired UserService userS;
@@ -29,7 +32,7 @@ public class UserController {
 	
 	//CRUD
 		
-	@PostMapping("/user/insert")
+	@PostMapping("/insert")
 	public ResponseEntity<User> insertUser(@RequestBody User user) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -43,7 +46,7 @@ public class UserController {
 		return rp;
 	}
 	
-	@PostMapping("/user/update")
+	@PostMapping("/update")
 	public ResponseEntity<User> updateUser(@RequestBody User user) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -56,7 +59,7 @@ public class UserController {
 		return rp;
 	}
 	
-	@PostMapping("/user/delete")
+	@PostMapping("/delete")
 	public ResponseEntity<User> deleteUser(@RequestBody User user) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -70,7 +73,7 @@ public class UserController {
 	
 	//List,getUser
 	
-	@GetMapping("/users")
+	@GetMapping("")
 	public ResponseEntity<List<User>> getUsers() {
 		
 		List<User> users=userS.findAll();
@@ -80,8 +83,10 @@ public class UserController {
 		return rp;
 	}
 	
-	@GetMapping("/user")
-	public ResponseEntity<User> getUser(@RequestBody Integer id) {
+	//LLamadas pedidas
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<User> getUser(@PathVariable Integer id) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		
@@ -93,18 +98,31 @@ public class UserController {
 		return rp;
 	}
 	
-	//Other
-	/*
-	@GetMapping("/userGroups")
-	public ResponseEntity<List<Group>> getUserGroups(@RequestBody Integer userId) {
-
-		User user=userS.findById(userId).orElse(new User());
-
-		ResponseEntity<List<Group>> rp = new ResponseEntity<List<Group>>((List<Group>) user.getGroups(), HttpStatus.OK);
-
+	@GetMapping("/{username}")
+	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByNick(username);
+		if(user.isPresent()) {
+			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+		}
+		
 		return rp;
 	}
-	*/
-	//@PostMapping("/user/deleteGroup")
-	//public 
+	
+	@GetMapping("/add")
+	public ResponseEntity<User> registerUser(@RequestBody UserReg userReg) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		
+		
+		Optional<User> user=userS.register(userReg);
+		if(user.isPresent()) {
+			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
 }

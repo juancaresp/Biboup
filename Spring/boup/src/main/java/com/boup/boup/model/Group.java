@@ -32,23 +32,16 @@ public class Group implements Serializable{
 
 	@Id
 	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@Column(length = 20)
 	private String groupName;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "debt", 
-        joinColumns = { @JoinColumn(name = "group") }, 
-        inverseJoinColumns = { @JoinColumn(name = "user") }
-    )
-	private List<User> users;
 
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", groupName=" + groupName + ", users=" + users.stream().map(u -> u.getNameU()) + "]";
+		return "Group [id=" + id + ", groupName=" + groupName + "]";
 	}
 	
 	

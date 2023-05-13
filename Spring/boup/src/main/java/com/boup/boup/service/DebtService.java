@@ -15,11 +15,8 @@ public interface DebtService {
 	public Optional<Debt> update(Debt d);
 	public boolean delete(Integer id);
 	public List<Debt> findAll();
-	public List<Debt> findByReceiver(User u);
-	public List<Debt> findByDebtor(User u);
-	public List<Debt> findByReceiverAndGroup(User u,Group g);
-	public List<Debt> findByDebtorAndGroup(User u, Group g);
-	public List<Debt> findUserDebts(Integer id);
+	public List<Debt> findByUser(User u);
+	public List<Debt> findByUserAndGroup(User u,Group g);
 	public Optional<Debt> findById(Integer id);
 	public Optional<Debt> addDebt(Debt d);
 }

@@ -30,7 +30,7 @@ public class Debt implements Serializable{
 
 	@Id
 	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
