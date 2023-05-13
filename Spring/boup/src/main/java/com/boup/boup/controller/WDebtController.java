@@ -57,7 +57,7 @@ public class WDebtController {
 	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
-		userS.findByNick(receiver)
+		/*userS.findByNick(receiver)
 			.ifPresent(rec -> userS.findByNick(debtor)
 					.ifPresent(debto-> groupS.findByGroupName(group)
 										.ifPresent(grou->{
@@ -66,7 +66,7 @@ public class WDebtController {
 											d.setDebtGroup(grou);
 										debtS.insert(d);})));
 		
-		
+		*/
 		return mav;
 	}
 	
@@ -84,6 +84,7 @@ public class WDebtController {
 	public ModelAndView updateDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/debts");
+		/*
 		userS.findByNick(receiver)
 		.ifPresent(rec -> userS.findByNick(debtor)
 				.ifPresent(debto-> groupS.findByGroupName(group)
@@ -92,7 +93,7 @@ public class WDebtController {
 										d.setDebtor(debto);
 										d.setDebtGroup(grou);
 									debtS.update(d);})));
-
+		*/
 		return mav;
 	}
 	

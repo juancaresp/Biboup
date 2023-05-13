@@ -2,17 +2,12 @@ package com.boup.boup.model;
 
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +23,8 @@ import lombok.NoArgsConstructor;
 
 @Entity(name = "Boup_User")
 public class User  implements Serializable {
+
+	private static final long serialVersionUID = -1311989204087085838L;
 
 	@Id
 	@EqualsAndHashCode.Include
@@ -46,9 +43,6 @@ public class User  implements Serializable {
 	@Column(length = 30)
 	private String email;
 	
-	@Column(length = 100)
-	private String password;
-	
 	@Column(length = 9)
 	private String telephone;
 	
@@ -57,7 +51,7 @@ public class User  implements Serializable {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", token=" + token + ", username=" + username + ", nameU=" + nameU + ", email="
-				+ email + ", password=" + password + ", telephone=" + telephone + ", wallet=" + wallet + "]";
+				+ email + ", telephone=" + telephone + ", wallet=" + wallet + "]";
 	}
 	
 }
