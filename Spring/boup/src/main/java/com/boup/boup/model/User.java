@@ -40,7 +40,7 @@ public class User  implements Serializable {
 	@Column(length = 20)
 	private String nameU;
 	
-	@Column(length = 30)
+	@Column(length = 30,unique = true)
 	private String email;
 	
 	@Column(length = 9)

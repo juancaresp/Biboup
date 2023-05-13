@@ -72,6 +72,12 @@ public class UserServiceImp implements UserService{
 		
 		return userR.findById(id);
 	}
+	
+	@Override
+	public Optional<User> findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userR.findByEmail(email);
+	}
 
 	@Override
 	public Optional<User> register(UserReg reg) {
@@ -89,6 +95,8 @@ public class UserServiceImp implements UserService{
 
 		return op;
 	}
+
+
 
 
 }

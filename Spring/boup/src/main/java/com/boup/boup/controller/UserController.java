@@ -85,7 +85,7 @@ public class UserController {
 	
 	//LLamadas pedidas
 	
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<User> getUser(@PathVariable Integer id) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -98,12 +98,25 @@ public class UserController {
 		return rp;
 	}
 	
-	@GetMapping("/{username}")
+	@GetMapping("/username/{username}")
 	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
+		if(user.isPresent()) {
+			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
+	@GetMapping("/email/{mail}")
+	public ResponseEntity<User> getUserByMail(@PathVariable String mail) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByEmail(mail);
 		if(user.isPresent()) {
 			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
 		}

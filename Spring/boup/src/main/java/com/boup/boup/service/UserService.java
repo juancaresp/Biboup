@@ -17,6 +17,7 @@ public interface UserService {
 	public List<User> findAll();
 	public Optional<User> findByNick(String nick);
 	public Optional<User> findById(Integer id);
+	public Optional<User> findByEmail(String email);
 	public Optional<User> register(UserReg reg);
-
+	
 }
