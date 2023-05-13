@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_color"
     android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingTop="10dp"
+    android:paddingRight="15dp"
     tools:context=".listaInicio">
 
     <Button

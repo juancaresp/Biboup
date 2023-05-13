@@ -32,6 +32,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -76,13 +77,11 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (mAuth.getCurrentUser() != null){
             fragmentTransaction.add(R.id.frame,new listaInicio());
-            Log.w("token","el token del usuario es" + mAuth.getCurrentUser().getIdToken(false).getResult().getToken());
-
-
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
         }
         fragmentTransaction.commit();
+
     }
 
 
