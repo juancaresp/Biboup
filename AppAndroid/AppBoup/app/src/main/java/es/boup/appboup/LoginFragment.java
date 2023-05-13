@@ -78,7 +78,6 @@ public class LoginFragment extends Fragment {
 
         //Obtener la instancia de google
         mAuth = FirebaseAuth.getInstance();
-
         //opciones de inicio de sesion google
         //le pasamos el token de identificacion que obtenemos desde la consola de firebase en el apartado de autenticacion
         //sign-in method google configuracion del SDK web
