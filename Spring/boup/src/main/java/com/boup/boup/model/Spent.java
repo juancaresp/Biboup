@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,9 +31,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Spent implements Serializable{
 
+
+	private static final long serialVersionUID = 8084600636335782429L;
+
 	@Id
 	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@Column(length = 30)

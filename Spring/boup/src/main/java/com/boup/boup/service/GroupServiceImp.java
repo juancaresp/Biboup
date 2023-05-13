@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.boup.boup.model.Group;
-import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
 import com.boup.boup.repository.GroupRepository;
 import com.boup.boup.repository.SpentRepository;
@@ -69,6 +68,7 @@ public class GroupServiceImp implements GroupService{
 		// TODO Auto-generated method stub
 		return groupR.findById(groupID);
 	}
+	/*
 	@Override
 	public Optional<Group> addUserGroup(Integer groupID, Integer userid) {
 		Optional<User> op=userR.findById(userid);
@@ -107,11 +107,19 @@ public class GroupServiceImp implements GroupService{
 		
 		return g;
 	}
+	*/
+	
 
 	@Override
-	public List<Group> findByUser(User u) {
+	public Optional<Group> addUserGroup(Integer groupID, Integer userid) {
 		// TODO Auto-generated method stub
-		return groupR.findByUsers(u);
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<Group> deleteUserGroup(Integer groupid, Integer userid) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 

@@ -8,11 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boup.boup.model.Debt;
-
+import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
@@ -97,10 +98,10 @@ public class DebtController {
 		
 		//Other
 		
-		@GetMapping("/userDebts")
-		public ResponseEntity<List<Debt>> getUserDebts(@RequestBody Integer id) {
+		@GetMapping("/userDebts/{id}")
+		public ResponseEntity<List<Debt>> getUserDebts(@PathVariable String id) {
 			
-			List<Debt> debts=debtS.findUserDebts(id);
+			List<Debt> debts=debtS.findByUser(userS.findById(Integer.parseInt(id)).orElse(new User()));
 			
 			ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(debts,HttpStatus.OK);
 			

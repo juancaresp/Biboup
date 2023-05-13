@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.boup.boup.model.Group;
-import com.boup.boup.model.User;
 
 @Service
 public interface GroupService {
@@ -18,5 +17,4 @@ public interface GroupService {
 	public Optional<Group> findById(Integer id);
 	Optional<Group> addUserGroup(Integer groupID, Integer userid);
 	public Optional<Group> deleteUserGroup(Integer groupid,Integer userid);
-	public List<Group> findByUser(User u);
 }

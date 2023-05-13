@@ -1,8 +1,6 @@
 package com.boup.boup.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,29 +61,17 @@ public class DebtServiceImp implements DebtService {
 	}
 
 	@Override
-	public List<Debt> findByReceiver(User u) {
+	public List<Debt> findByUser(User u) {
 
-		return debtR.findByReceiver(u);
+		return debtR.findByUser(u);
 	}
 
-	@Override
-	public List<Debt> findByDebtor(User u) {
-
-		return debtR.findByDebtor(u);
-	}
 	
 	@Override
-	public List<Debt> findByReceiverAndGroup(User u, Group g) {
+	public List<Debt> findByUserAndGroup(User u, Group g) {
 
-		return debtR.findByReceiverAndDebtGroup(u,g);
+		return debtR.findByUserAndGroup(u,g);
 	}
-
-	@Override
-	public List<Debt> findByDebtorAndGroup(User u, Group g) {
-
-		return debtR.findByDebtorAndDebtGroup(u,g);
-	}
-
 
 	@Override
 	public Optional<Debt> findById(Integer id) {
@@ -93,62 +79,14 @@ public class DebtServiceImp implements DebtService {
 		return debtR.findById(id);
 	}
 
-	@Override
-	public List<Debt> findUserDebts(Integer id) {
-		// TODO Auto-generated method stub
-		List<Debt> debts = new ArrayList<>();
-		Optional<User> us = userR.findById(id);
 
-		us.ifPresent(u -> {
-			debts.addAll(findByDebtor(u));
-			debts.addAll(findByReceiver(u));
-		});
-
-		return debts;
-	}
-
-	//El bonito
-	/*
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
-
-		Optional<Debt> op = Optional.empty();
-		
-		if(userR.existsById(d.getDebtor().getId())&&userR.existsById(d.getReceiver().getId())) {
-			//Caso en el ambos usuarios existen
-			Debt debt;
-			List<Debt> debts=findByDebtor(d.getDebtor());
-			Optional<Debt> deb=debts.stream().filter(de -> de.getReceiver().equals(d.getReceiver())).findFirst();
-			if(deb.isPresent()) {
-				//Caso en el que se le suma la deuda a una ya existente
-				debt=deb.get();
-				debt.setAmount(debt.getAmount()+d.getAmount());
-			}else {
-				//se reduce una deuda ya existente
-				debts=findByDebtor(d.getReceiver());
-				deb=debts.stream().filter(de -> de.getReceiver().equals(d.getDebtor())).findFirst();
-				if(deb.isPresent()) {
-					debt=deb.get();
-					if(debt.getAmount()-d.getAmount()<0) {
-						debt.setDebtor(d.getDebtor());
-						debt.setReceiver(d.getReceiver());
-						debt.setAmount(d.getAmount()-debt.getAmount());
-					}else {
-						debt.setAmount(debt.getAmount()-d.getAmount());
-					}
-				}else {
-					//El caso en el que no exista deuda entre ellos dos
-					debt=d;
-				}
-			}
-			
-			//Se guarda la deuda
-			op=Optional.of(debtR.save(debt));
-		
-		}
-		return op;
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
-	*/
+
+	/*
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
 
@@ -200,5 +138,5 @@ public class DebtServiceImp implements DebtService {
 		
 		}
 		return op;
-	}
+	}*/
 }
