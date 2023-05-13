@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.boup.boup.dto.AddWallet;
 import com.boup.boup.dto.UserReg;
+import com.boup.boup.dto.UserUpd;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -45,20 +47,7 @@ public class UserController {
 		
 		return rp;
 	}
-	
-	@PostMapping("/update")
-	public ResponseEntity<User> updateUser(@RequestBody User user) {
-		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		Optional<User> opU=userS.update(user);
-		if(opU.isPresent()) {
-			user=opU.get();
-			rp=new ResponseEntity<User>(user,HttpStatus.OK);
-		}
-		
-		return rp;
-	}
-	
+
 	@PostMapping("/delete")
 	public ResponseEntity<User> deleteUser(@RequestBody User user) {
 		
@@ -124,7 +113,7 @@ public class UserController {
 		return rp;
 	}
 	
-	@GetMapping("/add")
+	@PostMapping("/add")
 	public ResponseEntity<User> registerUser(@RequestBody UserReg userReg) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
@@ -133,6 +122,34 @@ public class UserController {
 		Optional<User> user=userS.register(userReg);
 		if(user.isPresent()) {
 			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
+	@PostMapping("/{email}/update")
+	public ResponseEntity<User> updateUser(@RequestBody UserUpd reg,@PathVariable String email) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		Optional<User> opU=userS.updateU(reg,email);
+		
+		if(opU.isPresent()) {
+			User u =opU.get();
+			rp=new ResponseEntity<User>(u,HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
+	@PostMapping("/wallet/add")
+	public ResponseEntity<User> addWallet(@RequestBody AddWallet add) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		Optional<User> opU=userS.addWallet(add);
+		
+		if(opU.isPresent()) {
+			User u =opU.get();
+			rp=new ResponseEntity<User>(u,HttpStatus.OK);
 		}
 		
 		return rp;
