@@ -1,5 +1,6 @@
 package com.boup.boup.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,8 +83,40 @@ public class DebtServiceImp implements DebtService {
 
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
-		// TODO Auto-generated method stub
+		
 		return Optional.empty();
+	}
+
+	@Override
+	public List<User> findGroupUsers(Group g) {
+		
+		List<Debt> debts=debtR.findByGroup(g);
+		List<User> users=new ArrayList<>();
+		debts.forEach(d-> users.add(d.getUser()));
+		
+		return users;
+	}
+
+	@Override
+	public List<Group> findUserGroups(User user) {
+		
+		List<Debt> debts=debtR.findByUser(user);
+		List<Group> groups=new ArrayList<>();
+		debts.forEach(d-> groups.add(d.getGroup()));
+		
+		return groups;
+	}
+
+	@Override
+	public List<Debt> findGroupDebts(Group group) {
+		
+		return debtR.findByGroup(group);
+	}
+
+	@Override
+	public List<Debt> findUserDebts(User user) {
+		// TODO Auto-generated method stub
+		return debtR.findByUser(user);
 	}
 
 	/*

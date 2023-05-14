@@ -10,15 +10,15 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/Cabecera"
@@ -76,52 +76,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/linea_horizontal" />
-
-            <TextView
-                android:id="@+id/tvDatosPersonales2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/baloo_da"
-                android:paddingBottom="10dp"
-                android:text="Datos Personales"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:id="@+id/btPoliticas"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="100dp"
-                android:paddingRight="40dp">
-
-                <TextView
-                    android:id="@+id/tvPrivacidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo_da"
-                    android:text="Politicas de privacidad"
-                    android:textColor="#000000" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btTerminos"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="100dp"
-                android:paddingTop="10dp"
-                android:paddingRight="40dp">
-
-                <TextView
-                    android:id="@+id/tvPoliticas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/baloo_da"
-                    android:text="Terminos de servicio"
-                    android:textColor="#000000" />
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvPoliticasCondiciones"

@@ -2,6 +2,7 @@ package es.boup.appboup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,8 +33,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.Executor;
+
+import es.boup.appboup.Model.CreateUserDTO;
 
 
 public class LoginFragment extends Fragment {
@@ -45,14 +49,14 @@ public class LoginFragment extends Fragment {
 
     //variable autenticacion de usuario
     private FirebaseAuth mAuth;
+
     //variable para saber si es la primera vez con el login de google
-    private boolean primera = false;
+    private boolean registrarse = false;
 
     //edit texts
 
     private EditText etCorreo, etContra;
-    private Button btnSign,btnLog;
-    private Bundle bundle;
+    private Button btnSign, btnLog;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -78,6 +82,7 @@ public class LoginFragment extends Fragment {
 
         //Obtener la instancia de google
         mAuth = FirebaseAuth.getInstance();
+
         //opciones de inicio de sesion google
         //le pasamos el token de identificacion que obtenemos desde la consola de firebase en el apartado de autenticacion
         //sign-in method google configuracion del SDK web
@@ -98,30 +103,23 @@ public class LoginFragment extends Fragment {
         //boton log In correo
         btnLog.setOnClickListener(view1 -> logInCorreo());
 
-        //iniciarlizar bundle registro
-        bundle = new Bundle();
-
     }
 
-    private void cambiarFragmento(){
+    private void cambiarFragmento() {
 
         // Reemplazar el fragmento actual con el nuevo fragmento
         FragmentManager fragmentManager = getParentFragmentManager();
-        //en este caso se habra pulsado el registro del correo o el de google no existiendo la cuenta en la base de datos
-        if (primera){
-            getParentFragmentManager().setFragmentResult("resultadoRegistro",bundle);
+        if (registrarse) {
             fragmentManager.beginTransaction()
                     .replace(R.id.frame, new CredencialesFragment())
                     .addToBackStack(null)
                     .commit();
         }else{
-            //en este caso se habra pulsado el login del correo o el de google existiendo ya la cuenta en la base de datos
             fragmentManager.beginTransaction()
                     .replace(R.id.frame, new listaInicio())
                     .addToBackStack(null)
                     .commit();
         }
-
     }
 
     private void signInGoogle() {
@@ -160,9 +158,10 @@ public class LoginFragment extends Fragment {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (task.getResult().getAdditionalUserInfo().isNewUser()) {
                             Toast.makeText(getActivity(), "El usuario no existia en la base de datos", Toast.LENGTH_SHORT).show();
-                            //Aqui introduzco en el bundle si el registro es con google o con correo
-                            bundle.putBoolean("correo",false);
-                            primera = true;
+                            //Colocar username default para gmail (usuario de gmail sin @gmail.com)
+                            //hacer llamada a la api para registrar al usuario
+                            introducirUsuario();
+
                         } else {
                             Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
                         }
@@ -176,54 +175,98 @@ public class LoginFragment extends Fragment {
     }
 
     //función de registro con correo electronico
-    @SuppressLint("SuspiciousIndentation")
     private void signInCorreo() {
-        String contra, correo;
-        contra = etContra.getText().toString();
-        correo = etCorreo.getText().toString();
-        if (!correo.isEmpty() && !contra.isEmpty()){
-            mAuth.createUserWithEmailAndPassword(correo,contra).
-                    addOnCompleteListener(getActivity(), task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //Aqui introduzco en el bundle si el registro es con google o con correo
-                            bundle.putBoolean("correo",true);
-                            primera = true;
-                            cambiarFragmento();
-                        }else{
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            if(etContra.getText().toString().length() < 6){
-                                Toast.makeText(getActivity(), "La contraseña debe ser de 6 caracteres o más", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        }
-                    });
-        }
+        registrarse = true;
+        cambiarFragmento();
     }
+
 
     //función de login con correo electronico
     private void logInCorreo() {
         String contra, correo;
         contra = etContra.getText().toString();
         correo = etCorreo.getText().toString();
-        mAuth.signInWithEmailAndPassword(correo, contra)
-                .addOnCompleteListener(getActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "signInWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(getActivity(), "Sesion iniciada correctamente "+ user.getEmail(), Toast.LENGTH_SHORT).show();
-                        cambiarFragmento();
-                    } else {
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(getActivity(), "Error en el login", Toast.LENGTH_SHORT).show();
+        if (!contra.isEmpty() && !correo.isEmpty()) {
+            mAuth.signInWithEmailAndPassword(correo, contra)
+                    .addOnCompleteListener(getActivity(), task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(getActivity(), "Sesion iniciada correctamente " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                            cambiarFragmento();
+                        } else {
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getActivity(), "Error en el login", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+                        }
+                    });
+        } else {
+            Toast.makeText(getActivity(), "Por favor rellene los campos vacios", Toast.LENGTH_SHORT).show();
+            mostrarCamposMal();
+        }
+
     }
 
+    private void mostrarCamposMal(){
+        if (etCorreo.getText().toString().isEmpty()) {
+            etCorreo.setHintTextColor(getResources().getColor(R.color.error));
+        } else {
+            etCorreo.setHintTextColor(getResources().getColor(R.color.hints));
+        }
+        if (etContra.getText().toString().isEmpty()) {
+            etContra.setHintTextColor(getResources().getColor(R.color.error));
+        } else {
+            etContra.setHintTextColor(getResources().getColor(R.color.hints));
+        }
+    }
+
+    private void introducirUsuario() {
+        String username,email,nombre,telefono;
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+        username = firebaseUser.getEmail();
+        int index = username.indexOf("@");
+        username = username.substring(0,index);
+
+        nombre = firebaseUser.getDisplayName();
+        telefono = firebaseUser.getPhoneNumber();
+        email = mAuth.getCurrentUser().getEmail();
+
+        CreateUserDTO createUserDTO = new CreateUserDTO(username,email,nombre,telefono);
+
+        //obtener el token para las notificaciones
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("tokenNotis", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    createUserDTO.setToken(token);
+                });
+
+        //llamada a la api
+        /*
+        Retrofit retrofit = new Retrofit.Builder().
+        baseUrl(URLBASE).addConverterFactory(GsonConverterFactory.create()).build();
+        IUserService userService = retrofit.create(IUserService.class);
+        Call<Void> peticionInsertarUsuario = userService.insertarUsuario(createUserDTO);
+        peticionInsertarUsuario.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK){
+                    Toast.makeText(getActivity(),"usuario introducido con exito",Toast.LENGTH_SHORT);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getActivity(), "error introdiendo el usuario", Toast.LENGTH_SHORT).show();
+            }
+        });
+         */
+
+    }
 
 }
