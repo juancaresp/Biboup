@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.boup.boup.dto.AddWallet;
 import com.boup.boup.dto.UserReg;
 import com.boup.boup.dto.UserUpd;
+import com.boup.boup.model.Group;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -155,4 +156,18 @@ public class UserController {
 		return rp;
 	}
 	
+	@GetMapping("/{username}/groups")
+	public ResponseEntity<List<Group>> getUserGroups(@PathVariable String username) {
+		
+		ResponseEntity<List<Group>> rp=new ResponseEntity<List<Group>>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByNick(username);
+		if(user.isPresent()) {
+			List<Group> groups=debtS.findUserGroups(user.get());
+			
+			rp=new ResponseEntity<List<Group>>(groups,HttpStatus.OK);
+		}
+		
+		return rp;
+	}
 }

@@ -2,7 +2,6 @@ package com.boup.boup.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.Spent;
-import com.boup.boup.model.User;
-import com.boup.boup.service.SpentService;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
+import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 

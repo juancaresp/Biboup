@@ -8,12 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.boup.boup.model.Debt;
-import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
@@ -21,6 +20,7 @@ import com.boup.boup.service.UserService;
 
 
 @Controller
+@RequestMapping("/debts")
 public class DebtController {
 
 	@Autowired UserService userS;
@@ -31,7 +31,7 @@ public class DebtController {
 	
 	//CRUD
 	
-		@PostMapping("/debt/insert")
+		@PostMapping("/insert")
 		public ResponseEntity<Debt> insertDebt(@RequestBody Debt debt) {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
@@ -45,7 +45,7 @@ public class DebtController {
 			return rp;
 		}
 		
-		@PostMapping("/debt/update")
+		@PostMapping("/update")
 		public ResponseEntity<Debt> updateDebt(@RequestBody Debt debt) {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
@@ -59,7 +59,7 @@ public class DebtController {
 			return rp;
 		}
 		
-		@PostMapping("/debt/delete")
+		@PostMapping("/delete")
 		public ResponseEntity<Debt> deleteDebt(@RequestBody Debt debt) {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
@@ -73,7 +73,7 @@ public class DebtController {
 		
 		//List,getdebt
 		
-		@GetMapping("/debts")
+		@GetMapping("")
 		public ResponseEntity<List<Debt>> getDebts() {
 			
 			List<Debt> debts=debtS.findAll();
@@ -83,7 +83,7 @@ public class DebtController {
 			return rp;
 		}
 		
-		@GetMapping("/debt")
+		@GetMapping("/{id}")
 		public ResponseEntity<Debt> getDebtById(@RequestBody Integer id) {
 			
 			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
@@ -95,34 +95,5 @@ public class DebtController {
 			
 			return rp;
 		}
-		
-		//Other
-		
-		@GetMapping("/userDebts/{id}")
-		public ResponseEntity<List<Debt>> getUserDebts(@PathVariable String id) {
-			
-			List<Debt> debts=debtS.findByUser(userS.findById(Integer.parseInt(id)).orElse(new User()));
-			
-			ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(debts,HttpStatus.OK);
-			
-			return rp;
-		}
-		
-		//Add debt whit the logic
-		@PostMapping("/debt/add")
-		public ResponseEntity<Debt> addDebt(@RequestBody Debt debt) {
-			
-			ResponseEntity<Debt> rp=new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);
-			
-			Optional<Debt> opD=debtS.addDebt(debt);
-			if(opD.isPresent()) {
-				debt=opD.get();
-				rp=new ResponseEntity<Debt>(debt,HttpStatus.OK);
-			}
-			
-			return rp;
-		}
-		
-		
 		
 }
