@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.boup.boup.dto.AddWallet;
 import com.boup.boup.dto.UserReg;
 import com.boup.boup.dto.UserUpd;
+import com.boup.boup.model.Debt;
 import com.boup.boup.model.Group;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
@@ -170,4 +171,20 @@ public class UserController {
 		
 		return rp;
 	}
+	
+	@GetMapping("/{username}/debts")
+	public ResponseEntity<List<Debt>> getUserDebts(@PathVariable String username) {
+		
+		ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByNick(username);
+		if(user.isPresent()) {
+			List<Debt> groups=debtS.findUserDebts(user.get());
+			
+			rp=new ResponseEntity<List<Debt>>(groups,HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
 }

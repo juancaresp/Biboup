@@ -132,7 +132,7 @@ public class GroupController {
 	}
 	
 	@PostMapping("/{idgroup}/addUser/{username}")
-	public ResponseEntity<Group> addGroup(@PathVariable("idgroup") Integer idgroup, @PathVariable("username") String username){
+	public ResponseEntity<Group> addUserToGroup(@PathVariable("idgroup") Integer idgroup, @PathVariable("username") String username){
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Group> opG=groupS.findById(idgroup);
@@ -157,5 +157,19 @@ public class GroupController {
 		return rp;
 	}
 	
-	
+	@GetMapping("/{groupid}/debts")
+	public ResponseEntity<List<Debt>> getGroupDebts(@PathVariable Integer groupid) {
+
+		ResponseEntity<List<Debt>> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		Optional<Group> op=groupS.findById(groupid);
+		
+		if(op.isPresent()) {
+			
+			List<Debt> debts=debtS.findGroupDebts(op.get());	
+			rp= new ResponseEntity<List<Debt>>(debts,HttpStatus.OK);
+		}
+
+		return rp;
+	}
 }
