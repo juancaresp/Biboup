@@ -107,6 +107,18 @@ public class DebtServiceImp implements DebtService {
 		return groups;
 	}
 
+	@Override
+	public List<Debt> findGroupDebts(Group group) {
+		
+		return debtR.findByGroup(group);
+	}
+
+	@Override
+	public List<Debt> findUserDebts(User user) {
+		// TODO Auto-generated method stub
+		return debtR.findByUser(user);
+	}
+
 	/*
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
