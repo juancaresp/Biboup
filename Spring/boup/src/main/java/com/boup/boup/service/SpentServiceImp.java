@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.boup.boup.model.Debt;
 import com.boup.boup.model.Spent;
 import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
@@ -83,7 +82,7 @@ public class SpentServiceImp implements SpentService {
 		spe.ifPresent((sp) -> {
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
 			System.out.println(part);
-			Debt deb;
+			//Debt deb;
 
 			for (int i = 0; i < sp.getUsers().size(); i++) {
 				/*deb = Debt.builder()

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.boup.boup.model.Debt;
 import com.boup.boup.model.Group;
-import com.boup.boup.model.Spent;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
@@ -22,6 +22,7 @@ import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 @Controller
+@RequestMapping("/groups")
 public class GroupController {
 	
 	@Autowired UserService userS;
@@ -31,7 +32,7 @@ public class GroupController {
 	
 	// CRUD
 
-	@PostMapping("/group/insert")
+	@PostMapping("/insert")
 	public ResponseEntity<Group> insertGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
@@ -45,7 +46,7 @@ public class GroupController {
 		return rp;
 	}
 
-	@PostMapping("/group/update")
+	@PostMapping("/update")
 	public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
@@ -59,7 +60,7 @@ public class GroupController {
 		return rp;
 	}
 
-	@PostMapping("/group/delete")
+	@PostMapping("/delete")
 	public ResponseEntity<Group> deleteGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
@@ -73,7 +74,7 @@ public class GroupController {
 
 	// List,getgroup
 
-	@GetMapping("/groups")
+	@GetMapping("")
 	public ResponseEntity<List<Group>> getGroups() {
 
 		List<Group> groups = groupS.findAll();
@@ -83,8 +84,8 @@ public class GroupController {
 		return rp;
 	}
 
-	@GetMapping("/group")
-	public ResponseEntity<Group> getGroupById(@RequestBody Integer id) {
+	@GetMapping("/{id}")
+	public ResponseEntity<Group> getGroupById(@PathVariable Integer id) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 
@@ -96,27 +97,65 @@ public class GroupController {
 		return rp;
 	}
 
-	//Other
-	/*
-	@GetMapping("/groupUsers")
-	public ResponseEntity<List<User>> getGroupUsers(@RequestBody Integer groupId) {
+	//Llamadas pedidas
+	
+	@GetMapping("/{id}/users")
+	public ResponseEntity<List<User>> getGroupUsers(@PathVariable Integer groupid) {
 
-		Group group = groupS.findById(groupId).orElse(new Group());
-
-		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>((List<User>) group.getUsers(), HttpStatus.OK);
+		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>(HttpStatus.BAD_REQUEST);
+		
+		Optional<Group> op=groupS.findById(groupid);
+		
+		if(op.isPresent()) {
+			
+			List<User> users=debtS.findGroupUsers(op.get());	
+			rp= new ResponseEntity<List<User>>(users,HttpStatus.OK);
+		}
 
 		return rp;
-	}*/
+	}
 	
-	@PostMapping("/group/{groupName}/addUser")
-	public ResponseEntity<Group> addUser(@PathVariable Integer groupid,@RequestParam String userID) {
-
+	@PostMapping("/add/{groupname}")
+	public ResponseEntity<Group> addGroup(@PathVariable String groupname){
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
-
-		if(groupS.addUserGroup(groupid, Integer.parseInt(userID)).isPresent()){
-			rp = new ResponseEntity<Group>(HttpStatus.OK);
+		
+		Group group=new Group();
+		group.setGroupName(groupname);
+		
+		Optional<Group> opG=groupS.insert(group);
+		if (opG.isPresent()) {
+			group=opG.get();
+			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
 		}
 		
 		return rp;
 	}
+	
+	@PostMapping("/{idgroup}/addUser/{username}")
+	public ResponseEntity<Group> addGroup(@PathVariable("idgroup") Integer idgroup, @PathVariable("username") String username){
+		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		
+		Optional<Group> opG=groupS.findById(idgroup);
+		Optional<User> opU=userS.findByNick(username);
+		
+		if (opG.isPresent() && opU.isPresent()) {
+			
+			List<User> users=debtS.findGroupUsers(opG.get());
+			
+			if(!users.contains(opU.get())) {
+				Debt d=new Debt();
+				d.setGroup(opG.get());
+				d.setUser(opU.get());
+				d.setAmount(0.0);
+				
+				debtS.insert(d);
+				
+				rp = new ResponseEntity<Group>(opG.get(), HttpStatus.OK);
+			}
+		}
+		
+		return rp;
+	}
+	
+	
 }
