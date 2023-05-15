@@ -7,6 +7,48 @@
     android:orientation="vertical"
     tools:context=".CaracteristicasGrupo">
 
+    <Button
+        android:id="@+id/btnAniadir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:backgroundTint="#069e8c"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="right"
+        android:onClick="visibilizarGrupo"
+        android:text="Añadir participante"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/layoutAniadirParticipante"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/etAniadir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Nombre del grupo"
+            android:inputType="textPersonName"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnAniadirParticipante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#069e8c"
+            android:backgroundTint="#069e8c"
+            android:text="Añadir"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
