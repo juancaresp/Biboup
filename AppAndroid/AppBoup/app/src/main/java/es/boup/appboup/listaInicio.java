@@ -6,13 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
 public class listaInicio extends Fragment {
@@ -38,9 +36,9 @@ public class listaInicio extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        etCrearGrupo=view.findViewById(R.id.etCrearGrupo);
+        etCrearGrupo=view.findViewById(R.id.etAniadir);
         btnCrearGrupo=view.findViewById(R.id.btnCrearGrupo);
-        btnVisibilizar=view.findViewById(R.id.btnVisibilizar);
+        btnVisibilizar=view.findViewById(R.id.btnAniadir);
         btnVisibilizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
