@@ -1,15 +1,13 @@
 package es.boup.appboup;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,19 +23,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.concurrent.Executor;
-
 import es.boup.appboup.Model.CreateUserDTO;
+import es.boup.appboup.Model.User;
+import es.boup.appboup.Model.AppViewModel;
 
 
 public class LoginFragment extends Fragment {
@@ -53,10 +48,15 @@ public class LoginFragment extends Fragment {
     //variable para saber si es la primera vez con el login de google
     private boolean registrarse = false;
 
-    //edit texts
+    //variable para cerrar la app
+    private boolean cerrar = true;
 
+    //edit texts
     private EditText etCorreo, etContra;
     private Button btnSign, btnLog;
+
+    //View model aplicacion (datos que se pasan entre los fragmentos)
+    private AppViewModel appViewModel;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -79,6 +79,9 @@ public class LoginFragment extends Fragment {
         btnLog = view.findViewById(R.id.fBtnLogIn);
         btnSign = view.findViewById(R.id.fBtnSign);
         signInButtonGoogle = view.findViewById(R.id.fBtnGoggle);
+
+        //establecer el viewModel
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         //Obtener la instancia de google
         mAuth = FirebaseAuth.getInstance();
@@ -114,12 +117,24 @@ public class LoginFragment extends Fragment {
                     .replace(R.id.frame, new CredencialesFragment())
                     .addToBackStack(null)
                     .commit();
+
         }else{
+            //aqui guardo el usuario que se va a pasar por los fragmento
+            mandarUsuario();
+            appViewModel.setCerrar(true);
             fragmentManager.beginTransaction()
-                    .replace(R.id.frame, new listaInicio())
+                    .replace(R.id.frame, new SettingsFragment())
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    private void mandarUsuario() {
+        User user;
+        //aqui habria que hacer la llamada a la api
+        //user = userViewModel.getUserApi(mAuth);
+        user = new User(1,"token",mAuth.getCurrentUser().getDisplayName(),"Enrique",mAuth.getCurrentUser().getEmail(),"999999999",99d);
+        appViewModel.setUser(user);
     }
 
     private void signInGoogle() {
@@ -164,6 +179,7 @@ public class LoginFragment extends Fragment {
 
                         } else {
                             Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
+                            registrarse =false;
                         }
                         cambiarFragmento();
                     } else {

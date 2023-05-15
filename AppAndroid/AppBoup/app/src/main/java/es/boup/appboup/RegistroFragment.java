@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +16,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
 
+import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.CreateUserDTO;
+import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +49,9 @@ public class RegistroFragment extends Fragment {
     //bundle fragmento credenciales
     private String nombre,telefono;
 
+    //View model aplicacion (datos que se pasan entre los fragmentos)
+    private AppViewModel appViewModel;
+
     public RegistroFragment() {
         // Required empty public constructor
     }
@@ -63,6 +72,7 @@ public class RegistroFragment extends Fragment {
         etCorreo = view.findViewById(R.id.etCorreoR);
         etUsername = view.findViewById(R.id.etUsernameR);
         btnSign = view.findViewById(R.id.btnRegistrar);
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         //obtener instancia de google
         mAuth = FirebaseAuth.getInstance();
@@ -78,6 +88,7 @@ public class RegistroFragment extends Fragment {
             nombre = result.getString("nombre");
             telefono = result.getString("telefono");
         });
+
     }
 
 
@@ -92,6 +103,7 @@ public class RegistroFragment extends Fragment {
         if (!correo.isEmpty() && !contra.isEmpty() && !username.isEmpty()) {
             Log.d("prueba","hola");
             //hacer llamada para comprobar si el username existe antes de registrar
+
             mAuth.createUserWithEmailAndPassword(correo, contra).
                     addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
@@ -121,6 +133,18 @@ public class RegistroFragment extends Fragment {
         String username,email;
         username = etUsername.getText().toString();
         email = etCorreo.getText().toString();
+        //añadir el username al usuario de firebase
+        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().
+                setDisplayName(username).build();
+        mAuth.getCurrentUser().updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("pruieba", "Email sent.");
+                }
+            }
+        });
+
         CreateUserDTO createUserDTO = new CreateUserDTO(username,email,nombre,telefono);
 
         //obtener el token para las notificaciones
@@ -181,10 +205,22 @@ public class RegistroFragment extends Fragment {
     private void cambiarFragmento() {
         // Reemplazar el fragmento actual con el nuevo fragmento
         FragmentManager fragmentManager = getParentFragmentManager();
+        //mandar el usuario
+        mandarUsuario();
+        //hacer que se cierre la app cuando pulsan atras
+        appViewModel.setCerrar(true);
         fragmentManager.beginTransaction()
-                .replace(R.id.frame, new listaInicio())
+                .replace(R.id.frame, new SettingsFragment())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void mandarUsuario() {
+        User user;
+        //aqui habria que hacer la llamada a la api
+        //user = userViewModel.getUserApi(mAuth);
+        user = new User(1,"token",mAuth.getCurrentUser().getDisplayName(),"Enrique",mAuth.getCurrentUser().getEmail(),"999999999",99d);
+        appViewModel.setUser(user);
     }
 
 }
