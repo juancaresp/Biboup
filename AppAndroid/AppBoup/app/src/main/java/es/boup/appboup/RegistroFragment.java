@@ -1,5 +1,7 @@
 package es.boup.appboup;
 
+import static es.boup.appboup.MainActivity.CONEXION_API;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +55,15 @@ public class RegistroFragment extends Fragment {
     //View model aplicacion (datos que se pasan entre los fragmentos)
     private AppViewModel appViewModel;
 
+    //conexion api
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(CONEXION_API)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    //servicio insertar
+    private IUserService userService;
+
     public RegistroFragment() {
         // Required empty public constructor
     }
@@ -94,7 +106,7 @@ public class RegistroFragment extends Fragment {
 
     //función de registro con correo electronico
     private void signInCorreo() {
-        String contra, correo,username;
+        String contra, correo, username;
         contra = etContra.getText().toString();
         correo = etCorreo.getText().toString();
         username = etUsername.getText().toString();
@@ -104,84 +116,46 @@ public class RegistroFragment extends Fragment {
             Log.d("prueba","hola");
             //hacer llamada para comprobar si el username existe antes de registrar
 
-            mAuth.createUserWithEmailAndPassword(correo, contra).
-                    addOnCompleteListener(getActivity(), task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //funcion para guardar el usuario en la base de datos
-                            introducirUsuario();
-                            //funcion para cambiar de fragmento
-                            cambiarFragmento();
-                        } else{
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            if (etContra.getText().toString().length() < 6) {
-                                Toast.makeText(getActivity(), "La contraseña debe ser de 6 caracteres o más", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+            userService = retrofit.create(IUserService.class);
+            Log.d("llamadaApi","Haciendo llamada a la api para insertar");
+            Call <User> peticionInsertarUsuario = userService.obtenerUsuarioUsername(username);
+            peticionInsertarUsuario.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.code() == HttpURLConnection.HTTP_OK){
+                        Log.d("llamadaApi","Usuario encontrado");
+                        Toast.makeText(getActivity(), "Username ya registrado", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Log.d("llamadaApi","username no registrado"+response.code());
+                        mAuth.createUserWithEmailAndPassword(correo, contra).
+                            addOnCompleteListener(getActivity(), task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    //funcion para guardar el usuario en la base de datos
+                                    introducirUsuario();
+                                } else{
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    if (etContra.getText().toString().length() < 6) {
+                                        Toast.makeText(getActivity(), "La contraseña debe ser de 6 caracteres o más", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(getActivity(), "Error registrando al usuario", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                    }
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("llamadaApi","Error de conexion " + t.getMessage());
+                }
+            });
         } else {
             Toast.makeText(getActivity(), "Por favor rellene los campos vacios", Toast.LENGTH_SHORT).show();
             mostrarCamposMal();
         }
     }
-
-    private void introducirUsuario() {
-        String username,email;
-        username = etUsername.getText().toString();
-        email = etCorreo.getText().toString();
-        //añadir el username al usuario de firebase
-        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().
-                setDisplayName(username).build();
-        mAuth.getCurrentUser().updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d("pruieba", "Email sent.");
-                }
-            }
-        });
-
-        CreateUserDTO createUserDTO = new CreateUserDTO(username,email,nombre,telefono);
-
-        //obtener el token para las notificaciones
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("tokenNotis", "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get new FCM registration token
-                    String token = task.getResult();
-                    createUserDTO.setToken(token);
-                });
-
-        //llamada a la api
-        /*
-        Retrofit retrofit = new Retrofit.Builder().
-        baseUrl(URLBASE).addConverterFactory(GsonConverterFactory.create()).build();
-        IUserService userService = retrofit.create(IUserService.class);
-        Call<Void> peticionInsertarUsuario = userService.insertarUsuario(createUserDTO);
-        peticionInsertarUsuario.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == HttpURLConnection.HTTP_OK){
-                    Toast.makeText(getActivity(),"usuario introducido con exito",Toast.LENGTH_SHORT);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getActivity(), "error introdiendo el usuario", Toast.LENGTH_SHORT).show();
-            }
-        });
-         */
-
-    }
-
 
     private void mostrarCamposMal(){
         if (etCorreo.getText().toString().isEmpty()) {
@@ -202,25 +176,69 @@ public class RegistroFragment extends Fragment {
 
     }
 
-    private void cambiarFragmento() {
-        // Reemplazar el fragmento actual con el nuevo fragmento
-        FragmentManager fragmentManager = getParentFragmentManager();
-        //mandar el usuario
-        mandarUsuario();
-        //hacer que se cierre la app cuando pulsan atras
-        appViewModel.setCerrar(true);
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame, new SettingsFragment())
-                .addToBackStack(null)
-                .commit();
-    }
+    private void introducirUsuario() {
+        String username,email;
+        username = etUsername.getText().toString();
+        email = etCorreo.getText().toString();
+        //añadir el username al usuario de firebase
+        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder().
+                setDisplayName(username).build();
+        mAuth.getCurrentUser().updateProfile(profileUpdate).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("prueba", "Email sent.");
+            }
+        });
 
-    private void mandarUsuario() {
-        User user;
-        //aqui habria que hacer la llamada a la api
-        //user = userViewModel.getUserApi(mAuth);
-        user = new User(1,"token",mAuth.getCurrentUser().getDisplayName(),"Enrique",mAuth.getCurrentUser().getEmail(),"999999999",99d);
-        appViewModel.setUser(user);
+        CreateUserDTO createUserDTO = new CreateUserDTO(username,email,nombre,telefono);
+
+        //obtener el token para las notificaciones
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("tokenNotis", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    createUserDTO.setToken(token);
+
+                    //llamada a la api
+                    userService = retrofit.create(IUserService.class);
+                    Log.d("llamadaApi","Haciendo llamada a la api para insertar");
+                    Call <User> peticionInsertarUsuario = userService.insertarUsuario(createUserDTO);
+                    peticionInsertarUsuario.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.code() == HttpURLConnection.HTTP_OK){
+                                Log.d("llamadaApi","Usuario insertado");
+                                Toast.makeText(getActivity(), "Registro completo", Toast.LENGTH_SHORT).show();
+                                appViewModel.setUser(response.body());
+                                FragmentManager fragmentManager = getParentFragmentManager();
+                                //mandar el usuario
+                                //hacer que se cierre la app cuando pulsan atras
+                                appViewModel.setCerrar(true);
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.frame, new SettingsFragment())
+                                        .addToBackStack(null)
+                                        .commit();
+
+                            }else{
+                                Toast.makeText(getActivity(), "Error registrando", Toast.LENGTH_SHORT).show();
+                                Log.d("llamadaApi","error registrando"+response.code());
+                                mAuth.getCurrentUser().delete();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Log.e("llamadaApi","Error de conexion " + t.getMessage());
+                            mAuth.getCurrentUser().delete();
+                        }
+
+                    });
+
+                });
+
     }
 
 }

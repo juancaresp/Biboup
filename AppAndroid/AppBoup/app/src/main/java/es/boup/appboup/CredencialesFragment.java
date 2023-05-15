@@ -56,14 +56,19 @@ public class CredencialesFragment extends Fragment {
         telefono = etTelefono.getText().toString();
         //Reemplazar el fragmento actual con el nuevo fragmento
         if (!telefono.isEmpty() && !nombre.isEmpty()) {
-            bundle.putString("telefono",telefono);
-            bundle.putString("nobmre",nombre);
-            FragmentManager fragmentManager = getParentFragmentManager();
-            getParentFragmentManager().setFragmentResult("resultadoCredenciales",bundle);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame, new RegistroFragment())
-                    .addToBackStack(null)
-                    .commit();
+            if (telefono.length() == 9){
+                bundle.putString("telefono",telefono);
+                bundle.putString("nombre",nombre);
+                FragmentManager fragmentManager = getParentFragmentManager();
+                getParentFragmentManager().setFragmentResult("resultadoCredenciales",bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame, new RegistroFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }else{
+                Toast.makeText(getActivity(), "El telefono debe ser de 9 digitos", Toast.LENGTH_SHORT).show();
+
+            }
         }else{
             Toast.makeText(getActivity(), "Rellena los campos vacios", Toast.LENGTH_SHORT).show();
         }
