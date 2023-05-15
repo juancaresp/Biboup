@@ -1,5 +1,7 @@
 package es.boup.appboup;
 
+import static es.boup.appboup.MainActivity.CONEXION_API;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,9 +32,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.net.HttpURLConnection;
+
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.Services.IUserService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class LoginFragment extends Fragment {
@@ -54,6 +64,15 @@ public class LoginFragment extends Fragment {
     //edit texts
     private EditText etCorreo, etContra;
     private Button btnSign, btnLog;
+
+    //conexion api
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(CONEXION_API)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    //servicio insertar
+    private IUserService userService;
 
     //View model aplicacion (datos que se pasan entre los fragmentos)
     private AppViewModel appViewModel;
@@ -120,21 +139,32 @@ public class LoginFragment extends Fragment {
 
         }else{
             //aqui guardo el usuario que se va a pasar por los fragmento
-            mandarUsuario();
-            appViewModel.setCerrar(true);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame, new SettingsFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
+            userService = retrofit.create(IUserService.class);
+            Log.d("llamadaApi","llamando a la api para obtener el usuario");
+            Call<User> peticionObtenerUsuario = userService.obtenerUsuarioEmail(mAuth.getCurrentUser().getEmail());
+            peticionObtenerUsuario.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.code() == HttpURLConnection.HTTP_OK){
+                        appViewModel.setUser(response.body());
+                        Log.e("llamadaApi","Usuario obtenido");
+                        appViewModel.setCerrar(true);
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frame, new SettingsFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }else{
+                        Log.e("llamadaApi","Usuario no obtenido");
 
-    private void mandarUsuario() {
-        User user;
-        //aqui habria que hacer la llamada a la api
-        //user = userViewModel.getUserApi(mAuth);
-        user = new User(1,"token",mAuth.getCurrentUser().getDisplayName(),"Enrique",mAuth.getCurrentUser().getEmail(),"999999999",99d);
-        appViewModel.setUser(user);
+                    }
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
+                }
+            });
+
+        }
     }
 
     private void signInGoogle() {
@@ -260,28 +290,43 @@ public class LoginFragment extends Fragment {
                     // Get new FCM registration token
                     String token = task.getResult();
                     createUserDTO.setToken(token);
+
+                    //llamada a la api
+                    userService = retrofit.create(IUserService.class);
+                    Log.d("llamadaApi","Haciendo llamada a la api para insertar");
+                    Call<User> peticionInsertarUsuario = userService.insertarUsuario(createUserDTO);
+                    peticionInsertarUsuario.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.code() == HttpURLConnection.HTTP_OK){
+                                Log.d("llamadaApi","Usuario insertado");
+                                Toast.makeText(getActivity(), "Usuario registrado", Toast.LENGTH_SHORT).show();
+                                appViewModel.setUser(response.body());
+                                FragmentManager fragmentManager = getParentFragmentManager();
+                                //mandar el usuario
+                                //hacer que se cierre la app cuando pulsan atras
+                                appViewModel.setCerrar(true);
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.frame, new SettingsFragment())
+                                        .addToBackStack(null)
+                                        .commit();
+
+                            }else{
+                                Toast.makeText(getActivity(), "Error registrando", Toast.LENGTH_SHORT).show();
+                                Log.d("llamadaApi","error registrando"+response.code());
+                                mAuth.getCurrentUser().delete();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Log.e("llamadaApi","Error de conexion " + t.getMessage());
+                            mAuth.getCurrentUser().delete();
+                        }
+
+                    });
+
                 });
-
-        //llamada a la api
-        /*
-        Retrofit retrofit = new Retrofit.Builder().
-        baseUrl(URLBASE).addConverterFactory(GsonConverterFactory.create()).build();
-        IUserService userService = retrofit.create(IUserService.class);
-        Call<Void> peticionInsertarUsuario = userService.insertarUsuario(createUserDTO);
-        peticionInsertarUsuario.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.code() == HttpURLConnection.HTTP_OK){
-                    Toast.makeText(getActivity(),"usuario introducido con exito",Toast.LENGTH_SHORT);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getActivity(), "error introdiendo el usuario", Toast.LENGTH_SHORT).show();
-            }
-        });
-         */
 
     }
 

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +50,13 @@ public class SettingsFragment extends Fragment {
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         tvCorreo = view.findViewById(R.id.tvEmailS);
         tvUsername = view.findViewById(R.id.tvNombreS);
+        Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");
         User user = appViewModel.getUser();
-        tvUsername.setText(user.getUsername());
-        tvCorreo.setText(user.getEmail());
+        if (user !=null){
+            tvUsername.setText(user.getUsername() + user.getNameU() + user.getTelephone());
+            tvCorreo.setText(user.getEmail());
+        }
+
 
         btCerrarSesion = view.findViewById(R.id.btCerrarSesion);
         btEditar = view.findViewById(R.id.btEditar);

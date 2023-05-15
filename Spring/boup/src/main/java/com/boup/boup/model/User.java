@@ -31,7 +31,7 @@ public class User  implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@Column(length = 30)
+	@Column(length = 400)
 	private String token;
 	
 	@Column(length = 20,unique = true)
