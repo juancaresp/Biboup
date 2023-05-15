@@ -50,7 +50,7 @@ public class CaracteristicasGrupo extends Fragment {
             @Override
             public void onClick(View v) {
                 // llamar al endpoint de añadir participante
-                
+
             }
         });
     }
