@@ -1,5 +1,7 @@
 package es.boup.appboup;
 
+import static es.boup.appboup.MainActivity.CONEXION_API;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,10 +18,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Group;
+import es.boup.appboup.Model.User;
+import es.boup.appboup.Services.IGroupService;
+import es.boup.appboup.Services.IUserService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class listaInicio extends Fragment {
@@ -29,6 +41,14 @@ public class listaInicio extends Fragment {
     private Button btnCrearGrupo;
     private List<Group> groups;
     private RecyclerView rv;
+    private IGroupService groupService;
+    private IUserService userService;
+    private AppViewModel appViewModel;
+
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(CONEXION_API)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
 
 
 
@@ -52,6 +72,22 @@ public class listaInicio extends Fragment {
         btnCrearGrupo=view.findViewById(R.id.btnCrearGrupo);
         btnVisibilizar=view.findViewById(R.id.btnAniadir);
         rv=view.findViewById(R.id.listaDeGrupos);
+        User user = appViewModel.getUser();
+        userService = retrofit.create(IUserService.class);
+        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername().toString());
+        peticionGrupos.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if(response.code()== HttpURLConnection.HTTP_OK){
+                    groups=response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+
+            }
+        });
         btnVisibilizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,11 +100,25 @@ public class listaInicio extends Fragment {
             @Override
             public void onClick(View v) {
                 //llamar a endpoint de crearGrupo con el et.gettext
+                groupService = retrofit.create(IGroupService.class);
+                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString());
+                peticionInsertarGrupo.enqueue(new Callback<Group>() {
+                    @Override
+                    public void onResponse(Call<Group> call, Response<Group> response) {
+                        if(response.code()== HttpURLConnection.HTTP_OK){
+                            rv.setAdapter(new GrupoAdapter());
+                            groups.add(response.body());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Group> call, Throwable t) {
+
+                    }
+                });
             }
         });
         groups= new ArrayList<>();
-        groups.add(new Group(1,"Valencia"));
-        groups.add(new Group(2,"Barcelona"));
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(new GrupoAdapter());
