@@ -1,6 +1,9 @@
 package es.boup.appboup.Services;
 
+import java.util.List;
+
 import es.boup.appboup.Model.CreateUserDTO;
+import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,4 +28,7 @@ public interface IUserService {
     //llamada para obtener un usuario por su correo
     @GET("username/{username}")
     Call<User> obtenerUsuarioUsername(@Path("username") String username);
+
+    @GET("users/{username}/groups")
+    Call<List<Group>> obtenerGruposDelUsuario(@Path("username") String username);
 }
