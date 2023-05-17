@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="underlineTextFlag" format="enum">
+        <enum name="none" value="0" />
+        <enum name="underline" value="0x80000000" />
+    </attr>
+
+</resources>

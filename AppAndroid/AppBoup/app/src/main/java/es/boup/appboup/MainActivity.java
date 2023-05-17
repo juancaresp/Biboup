@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity{
                     if (response.code() == HttpURLConnection.HTTP_OK){
                         appViewModel.setUser(response.body());
                         Log.e("llamadaApi","Usuario obtenido");
-                        fragmentTransaction.add(R.id.frame,new SettingsFragment());
+                        fragmentTransaction.add(R.id.frame,new PerfilFragment());
                     }else{
                         Log.e("llamadaApi","Usuario no obtenido");
                         fragmentTransaction.add(R.id.frame,new LoginFragment());
