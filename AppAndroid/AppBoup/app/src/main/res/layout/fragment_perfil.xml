@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_color"
     android:orientation="vertical"
-    tools:context=".SettingsFragment" >
+    tools:context=".PerfilFragment" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                     android:layout_width="20dp"
                     android:layout_height="60dp"
                     android:layout_weight="2"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@drawable/perfil2" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -42,19 +42,19 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvNombreS"
+                        android:id="@+id/tvUsernameP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/baloo_da"
-                        android:text="Nombre Usuario"
+                        android:text="Username"
                         android:textColor="#000000" />
 
                     <TextView
-                        android:id="@+id/tvEmailS"
+                        android:id="@+id/tvSaldoP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/baloo_da"
-                        android:text="Correo electronico"
+                        android:text="Saldo: 300,46€"
                         android:textColor="#000000" />
                 </LinearLayout>
 
@@ -64,6 +64,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:background="#00FFFFFF"
+                    android:clickable="true"
                     android:onClick="editar"
                     android:src="@drawable/edit_img" />
 
@@ -78,27 +79,73 @@
                 android:src="@drawable/linea_horizontal" />
 
             <TextView
+                android:id="@+id/tvDatosPersonales"
+                style="@style/Widget.AppCompat.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo_da"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:text="Datos Personales"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvNombrePersonal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/baloo_da"
+                android:text="Nombre personal:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCorreoP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/baloo_da"
+                android:text="Correo electronico: "
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTelefonoP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo_da"
+                android:text="Numero de telefono: "
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
                 android:id="@+id/tvPoliticasCondiciones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/baloo_da"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="5dp"
                 android:paddingBottom="10dp"
                 android:text="Politicas y Condiciones"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:id="@+id/btPoliticas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start"
                 android:orientation="horizontal"
-                android:paddingLeft="100dp"
                 android:paddingRight="40dp">
 
                 <ImageView
                     android:id="@+id/imgprivacidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
                     android:paddingRight="20dp"
                     android:src="@drawable/info" />
 
@@ -106,9 +153,11 @@
                     android:id="@+id/tvPrivacidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
                     android:fontFamily="@font/baloo_da"
                     android:text="Politicas de privacidad"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -116,8 +165,8 @@
                 android:id="@+id/btTerminos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start"
                 android:orientation="horizontal"
-                android:paddingLeft="100dp"
                 android:paddingTop="10dp"
                 android:paddingRight="40dp">
 
@@ -125,6 +174,7 @@
                     android:id="@+id/imgTerminos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
                     android:paddingRight="20dp"
                     android:src="@drawable/info" />
 
@@ -132,9 +182,11 @@
                     android:id="@+id/tvPoliticas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
                     android:fontFamily="@font/baloo_da"
                     android:text="Terminos de servicio"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <TextView
@@ -143,20 +195,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/baloo_da"
+                android:paddingLeft="5dp"
                 android:paddingTop="10dp"
+                android:paddingEnd="5dp"
                 android:paddingBottom="10dp"
                 android:text="Notificaciones"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:id="@+id/btNoti"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="start"
                 android:orientation="horizontal"
-                android:paddingLeft="100dp"
-                android:paddingTop="10dp"
-                android:paddingRight="40dp">
+                android:paddingTop="10dp">
 
                 <ImageView
                     android:id="@+id/imgNoti"
@@ -171,7 +224,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/baloo_da"
                     android:text="Notificaciones"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <ImageView
@@ -204,7 +258,8 @@
                     android:fontFamily="@font/baloo_da"
                     android:text="Cerrar sesión"
                     android:textColor="#00BCD4"
-                    android:textColorLink="#00BCD4" />
+                    android:textColorLink="#00BCD4"
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </LinearLayout>

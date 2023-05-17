@@ -150,7 +150,7 @@ public class LoginFragment extends Fragment {
                         Log.e("llamadaApi","Usuario obtenido");
                         appViewModel.setCerrar(true);
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frame, new SettingsFragment())
+                                .replace(R.id.frame, new PerfilFragment())
                                 .addToBackStack(null)
                                 .commit();
                     }else{
@@ -202,13 +202,10 @@ public class LoginFragment extends Fragment {
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (task.getResult().getAdditionalUserInfo().isNewUser()) {
-                            Toast.makeText(getActivity(), "El usuario no existia en la base de datos", Toast.LENGTH_SHORT).show();
                             //Colocar username default para gmail (usuario de gmail sin @gmail.com)
                             //hacer llamada a la api para registrar al usuario
                             introducirUsuario();
-
                         } else {
-                            Toast.makeText(getActivity(), "El usuario existia en la base de datos", Toast.LENGTH_SHORT).show();
                             registrarse =false;
                         }
                         cambiarFragmento();
@@ -307,7 +304,7 @@ public class LoginFragment extends Fragment {
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
                                 fragmentManager.beginTransaction()
-                                        .replace(R.id.frame, new SettingsFragment())
+                                        .replace(R.id.frame, new PerfilFragment())
                                         .addToBackStack(null)
                                         .commit();
 
