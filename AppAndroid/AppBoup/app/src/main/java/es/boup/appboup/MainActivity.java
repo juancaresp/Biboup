@@ -6,23 +6,28 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.net.HttpURLConnection;
+
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Services.IUserService;
-import es.boup.appboup.Services.RetrofitClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    private static String CONEXION_API = "http:/127.0.0.1:8080/";
+    public static String CONEXION_API = "http://192.168.0.12:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
@@ -30,10 +35,16 @@ public class MainActivity extends AppCompatActivity{
     //variable estadisticas
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    //Valor del usuario que se pasara entre los fragmentos
-    private AppViewModel appViewModel;
+    //conexion api
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(CONEXION_API)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
 
     private IUserService userService;
+
+    //Valor del usuario que se pasara entre los fragmentos
+    private AppViewModel appViewModel;
 
 
     @Override
@@ -47,10 +58,6 @@ public class MainActivity extends AppCompatActivity{
         //crear el viewModel que se pasara por la actividad
         appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
         appViewModel.setCerrar(false);
-
-        //conectar con retrofit
-        Retrofit retrofit = RetrofitClient.getClient(CONEXION_API);
-        userService = retrofit.create(IUserService.class);
 
         //localizar layout para poner los fragmentos
         frameLayout = findViewById(R.id.frame);
@@ -77,13 +84,33 @@ public class MainActivity extends AppCompatActivity{
         // Check if user is signed in (non-null) and update UI accordingly
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
         if (mAuth.getCurrentUser() != null){
-            obtenerUsuario();
-            fragmentTransaction.add(R.id.frame,new SettingsFragment());
+            userService = retrofit.create(IUserService.class);
+            Log.d("llamadaApi","llamando a la api para obtener el usuario");
+            Call<User> peticionObtenerUsuario = userService.obtenerUsuarioEmail(mAuth.getCurrentUser().getEmail());
+            peticionObtenerUsuario.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.code() == HttpURLConnection.HTTP_OK){
+                        appViewModel.setUser(response.body());
+                        Log.e("llamadaApi","Usuario obtenido");
+                        fragmentTransaction.add(R.id.frame,new SettingsFragment());
+                    }else{
+                        Log.e("llamadaApi","Usuario no obtenido");
+                        fragmentTransaction.add(R.id.frame,new LoginFragment());
+                    }
+                    fragmentTransaction.commit();
+                }
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
+                }
+            });
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
+            fragmentTransaction.commit();
         }
-        fragmentTransaction.commit();
 
     }
 
@@ -95,44 +122,6 @@ public class MainActivity extends AppCompatActivity{
         super.onBackPressed();
     }
 
-
-    private void obtenerUsuario() {
-        //hasta que no probemos que la llamada funciona
-        User user = new User(1,"token",mAuth.getCurrentUser().getDisplayName(),"Enrique",mAuth.getCurrentUser().getEmail(),"999999999",99d);
-        //probar si se puede hacer esto o hay que hacer la misma llamada cada vez
-        //user = userViewModel.getUserApi(mAuth);
-        appViewModel.setUser(user);
-    }
-
-    /*
-    private void obtenerUsuario() {
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("TokenPush", "Error getting token", task.getException());
-                            return;
-                        }
-                        // Obtener el token de notificación push
-                        String token = task.getResult();
-                        Call<User> peticionObtenerUsuario = userService.obtenerUsuario(mAuth.getCurrentUser().getEmail(),token);
-                        peticionObtenerUsuario.enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
-                                User user = response.body();
-                                appViewModel.setUser(user);
-                            }
-
-                            @Override
-                            public void onFailure(Call<User> call, Throwable t) {
-                            }
-                        });
-                    }
-                });
-
-    }
-     */
 
 
 }
