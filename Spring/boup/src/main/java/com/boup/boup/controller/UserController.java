@@ -187,4 +187,20 @@ public class UserController {
 		return rp;
 	}
 	
+	@GetMapping("/email/{mail}/token/{token}")
+	public ResponseEntity<User> getUpdateToken(@PathVariable String mail,@PathVariable String token) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByEmail(mail);
+		if(user.isPresent()) {
+			User u=user.get();
+			u.setToken(token);
+			userS.update(u);
+			rp=new ResponseEntity<User>(u,HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
 }
