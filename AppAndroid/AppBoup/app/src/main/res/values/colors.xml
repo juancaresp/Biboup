@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="error">#FB6363</color>
     <color name="hints">#888888</color>
+    <color name="edit">#333</color>
+    <color name="hintedit">#ff818181</color>
+
 </resources>

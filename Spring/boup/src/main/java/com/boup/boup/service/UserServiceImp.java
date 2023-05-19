@@ -110,10 +110,9 @@ public class UserServiceImp implements UserService {
 		Optional<User> op = userR.findByEmail(email);
 		if (op.isPresent()) {
 			User u = op.get();
-			if (userR.findByUsername(reg.getUsername()).isEmpty() && userR.findByEmail(reg.getEmail()).isEmpty()) {
+			if (userR.findByUsername(reg.getUsername()).isEmpty()) {
 				u.setUsername(reg.getUsername());
 				u.setNameU(reg.getNameU());
-				u.setEmail(reg.getEmail());
 				u.setTelephone(reg.getTelephone());
 				op = Optional.of(userR.save(u));
 			}

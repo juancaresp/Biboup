@@ -8,67 +8,65 @@
     android:orientation="vertical"
     tools:context=".PerfilFragment" >
 
+    <LinearLayout
+        android:id="@+id/Cabecera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="20dp"
+            android:layout_height="60dp"
+            android:layout_weight="2"
+            tools:src="@drawable/perfil2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCorreoP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo_da"
+                android:text="Username"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvSaldoP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/baloo_da"
+                android:text="Saldo: 300,46€"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btEditar"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#00FFFFFF"
+            android:clickable="true"
+            android:src="@drawable/edit_img" />
+
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
-        android:paddingTop="10dp"
         android:paddingRight="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/Cabecera"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="20dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="2"
-                    tools:src="@drawable/perfil2" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="6"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvUsernameP"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/baloo_da"
-                        android:text="Username"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/tvSaldoP"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/baloo_da"
-                        android:text="Saldo: 300,46€"
-                        android:textColor="#000000" />
-                </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/btEditar"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:background="#00FFFFFF"
-                    android:clickable="true"
-                    android:onClick="editar"
-                    android:src="@drawable/edit_img" />
-
-            </LinearLayout>
 
             <ImageView
                 android:id="@+id/barra1"
@@ -92,33 +90,84 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/tvNombrePersonal"
+                android:id="@+id/tvNombreP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:fontFamily="@font/baloo_da"
-                android:text="Nombre personal:"
+                android:text="Nombre Personal"
                 android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etNombreP"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:contextClickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/baloo_da"
+                android:hint="Nombre"
+                android:inputType="textPersonName"
+                android:textColorHint="#888"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvCorreoP"
+                android:id="@+id/tvUsernameP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:fontFamily="@font/baloo_da"
-                android:text="Correo electronico: "
+                android:text="Username"
                 android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etUsernameP"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:contextClickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/baloo_da"
+                android:hint="Username"
+                android:inputType="textPersonName"
+                android:textColorHint="#888"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tvTelefonoP"
+                android:id="@+id/tvTelefono"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/baloo_da"
-                android:text="Numero de telefono: "
+                android:inputType="phone"
+                android:text="Numero de contacto"
                 android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etTelefonoP"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:contextClickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:fontFamily="@font/baloo_da"
+                android:hint="Teléfono"
+                android:inputType="phone"
+                android:textColorHint="#7C121212"
                 android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btConfirmar"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Confirmar" />
 
             <TextView
                 android:id="@+id/tvPoliticasCondiciones"
@@ -242,7 +291,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingLeft="100dp"
-                android:paddingRight="40dp">
+                android:paddingRight="40dp"
+                android:paddingBottom="40dp">
 
                 <ImageView
                     android:id="@+id/imageView8"

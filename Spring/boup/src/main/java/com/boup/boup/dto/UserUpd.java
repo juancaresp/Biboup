@@ -17,8 +17,6 @@ public class UserUpd {
 	
 	private String nameU;
 	
-	private String email;
-	
 	private String telephone;
 	
 }
