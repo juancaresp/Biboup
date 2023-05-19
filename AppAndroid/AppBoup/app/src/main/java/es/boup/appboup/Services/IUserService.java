@@ -3,6 +3,7 @@ package es.boup.appboup.Services;
 import java.util.List;
 
 import es.boup.appboup.Model.CreateUserDTO;
+import es.boup.appboup.Model.EditUserDTO;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
 import retrofit2.Call;
@@ -31,4 +32,7 @@ public interface IUserService {
 
     @GET("users/{username}/groups")
     Call<List<Group>> obtenerGruposDelUsuario(@Path("username") String username);
+
+    @POST("users/{email}/update")
+    Call<User> modificarUsuario(@Path("email")String email,@Body EditUserDTO user);
 }
