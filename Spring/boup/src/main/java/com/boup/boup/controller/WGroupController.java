@@ -5,12 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.Group;
@@ -20,9 +20,8 @@ import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 
-
-@RestController
-@RequestMapping("/web")
+@Controller
+@RequestMapping("/web/groups")
 public class WGroupController {
 	
 	@Autowired GroupService groupS;
@@ -30,18 +29,16 @@ public class WGroupController {
 	@Autowired SpentService spentS;
 	@Autowired UserService userS;
 	
-	@GetMapping("/groupss")
-	public ModelAndView getGroups() {
-		ModelAndView mav=new ModelAndView("groups");
-		List<Group> groups=groupS.findAll();
+	@GetMapping("")
+	public String hola(Model modelo) {
+		List<Group> groups = groupS.findAll();
 
-		mav.addObject("groups", groups);
-		
-		return mav;
+		modelo.addAttribute("groups", groups);
+		return "groups";
 	}
 	
-	@GetMapping("/group")
-	public ModelAndView getGroupW(@RequestParam("id") String id) {
+	@GetMapping("/{id}")
+	public ModelAndView getGroupW(@PathVariable("id") String id) {
 		
 		//Devuelve la pagina de un usuario
 		ModelAndView mav=new ModelAndView("seeGroup");
@@ -54,24 +51,16 @@ public class WGroupController {
 	
 	//Crud
 	
-	@PostMapping("/group/insert")
-	public ModelAndView insertGroupW(@ModelAttribute Group u) {
+	@PostMapping("/insert")
+	public String insertGroupW(Model model) {
 		
-		ModelAndView mav;
+		Group u =(Group) model.getAttribute("group");
 		Optional<Group> us=groupS.insert(u);
 		
-		//Si se inserta correctamente me redirecciona a la pagina de ese usuario si no a la de usuarios
-		if(us.isPresent()) {
-			mav=new ModelAndView("redirect:/web/group");
-			mav.addObject("id", us.get().getId());
-		}else {
-			mav=new ModelAndView("redirect:/web/groups");
-		}
-		
-		return mav;
+		return "seeGroup";
 	}
 	
-	@PostMapping("/group/delete")
+	@PostMapping("/delete")
 	public ModelAndView deleteGroupW(@ModelAttribute Group u) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/groups");
@@ -81,7 +70,7 @@ public class WGroupController {
 		return mav;
 	}
 	
-	@PostMapping("/group/update")
+	@PostMapping("/update")
 	public ModelAndView updateGroupW(@ModelAttribute Group u) {
 		
 		ModelAndView mav=new ModelAndView("redirect:/web/group");
@@ -93,19 +82,17 @@ public class WGroupController {
 	
 	//Formularios
 	
-	@GetMapping("/groupFormu")
-	public ModelAndView getGroupFormEmpty() {
-		//Devuelve groupForm vacio
-		ModelAndView mav=new ModelAndView("groupForm");
-		mav.addObject("group", new Group());
-		return mav;
+	@GetMapping("/formu")
+	public String getGroupFormEmpty(Model model) {
+		model.addAttribute("group",new Group());
+		return "groupForm";
 	}
 	
-	@GetMapping("/groupForm")
-	public ModelAndView getGroupForm(@RequestParam("id") Integer id) {
+	@GetMapping("/form/{id}")
+	public ModelAndView getGroupForm(@PathVariable("id") String id) {
 		//Devuelve groupForm de algun usuario
 		ModelAndView mav=new ModelAndView("groupForm");
-		mav.addObject("group", groupS.findById(id).orElse(new Group()));
+		mav.addObject("group", groupS.findById(Integer.parseInt(id)).orElse(new Group()));
 		return mav;
 	}
 }
