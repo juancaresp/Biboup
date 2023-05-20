@@ -45,7 +45,7 @@ public class User  implements Serializable {
 	@Column(length = 9)
 	private String telephone;
 	
-	private Double wallet;
+	private double wallet;
 	
 	@Override
 	public String toString() {
