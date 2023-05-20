@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.Group;
@@ -20,7 +21,7 @@ import com.boup.boup.service.UserService;
 
 
 
-@Controller
+@RestController
 @RequestMapping("/web")
 public class WGroupController {
 	
@@ -29,7 +30,7 @@ public class WGroupController {
 	@Autowired SpentService spentS;
 	@Autowired UserService userS;
 	
-	@GetMapping("/groups")
+	@GetMapping("/groupss")
 	public ModelAndView getGroups() {
 		ModelAndView mav=new ModelAndView("groups");
 		List<Group> groups=groupS.findAll();
