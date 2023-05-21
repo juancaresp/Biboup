@@ -61,6 +61,9 @@ public class LoginFragment extends Fragment {
     //variable para cerrar la app
     private boolean cerrar = true;
 
+    //variable para ver si me inician sesion con correo o con google
+    private boolean loginGC = true;
+
     //edit texts
     private EditText etCorreo, etContra;
     private Button btnSign, btnLog;
@@ -140,30 +143,42 @@ public class LoginFragment extends Fragment {
         }else{
             //aqui guardo el usuario que se va a pasar por los fragmento
             userService = retrofit.create(IUserService.class);
-            Log.d("llamadaApi","llamando a la api para obtener el usuario");
-            Call<User> peticionObtenerUsuario = userService.obtenerUsuarioEmail(mAuth.getCurrentUser().getEmail());
-            peticionObtenerUsuario.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.code() == HttpURLConnection.HTTP_OK){
-                        appViewModel.setUser(response.body());
-                        Log.e("llamadaApi","Usuario obtenido");
-                        appViewModel.setCerrar(true);
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frame, new PerfilFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }else{
-                        Log.e("llamadaApi","Usuario no obtenido");
+            //obtener Token
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w("tokenNotis", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+                // Get new FCM registration token
+                String token = task.getResult();
+                String correo  = loginGC == true?mAuth.getCurrentUser().getEmail():etCorreo.getText().toString();
+                Log.d("llamadaApi","llamando a la api para obtener el usuario");
+                Log.d("llamadaApi","token "+token);
+                Log.d("llamadaApi","correo: "+correo);
+                Call<User> peticionObtenerUsuario = userService.obtenerUsuarioToken(correo,token);
+                peticionObtenerUsuario.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code() == HttpURLConnection.HTTP_OK){
+                            appViewModel.setUser(response.body());
+                            Log.e("llamadaApi","Usuario obtenido");
+                            appViewModel.setCerrar(true);
+                            Toast.makeText(getActivity(), "Sesion iniciada correctamente ", Toast.LENGTH_SHORT).show();
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.frame, new PerfilFragment())
+                                    .addToBackStack(null)
+                                    .commit();
+                        }else{
+                            Log.e("llamadaApi","Usuario no obtenido");
 
+                        }
                     }
-                }
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
-                }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
+                    }
+                });
             });
-
         }
     }
 
@@ -207,8 +222,9 @@ public class LoginFragment extends Fragment {
                             introducirUsuario();
                         } else {
                             registrarse =false;
+                            loginGC = true;
+                            cambiarFragmento();
                         }
-                        cambiarFragmento();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -235,7 +251,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(getActivity(), "Sesion iniciada correctamente " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                            loginGC= false;
                             cambiarFragmento();
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -298,11 +314,12 @@ public class LoginFragment extends Fragment {
                             if (response.code() == HttpURLConnection.HTTP_OK){
                                 Log.d("llamadaApi","Usuario insertado");
                                 Toast.makeText(getActivity(), "Usuario registrado", Toast.LENGTH_SHORT).show();
+                                //establecer el usuario en la app
                                 appViewModel.setUser(response.body());
-                                FragmentManager fragmentManager = getParentFragmentManager();
-                                //mandar el usuario
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
+                                //cambiar de fragmento
+                                FragmentManager fragmentManager = getParentFragmentManager();
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.frame, new PerfilFragment())
                                         .addToBackStack(null)

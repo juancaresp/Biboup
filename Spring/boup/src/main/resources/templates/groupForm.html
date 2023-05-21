@@ -22,13 +22,13 @@
 			<form id="formulario" th:object="${group}" method="POST">
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/group/insert')">
+					onclick="enviarPeticion('/web/groups/insert')">
 				<input type="submit" value="Modificar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/group/update')">
+					onclick="enviarPeticion('/web/groups/update')">
 				<input type="submit" value="Borrar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/group/delete')">
+					onclick="enviarPeticion('/web/groups/delete')">
 
 				<input type="hidden" th:field="*{id}" id="id" />
 				<div>
