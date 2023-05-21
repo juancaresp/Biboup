@@ -45,39 +45,36 @@ public class WGroupController {
 		Group group= groupS.findById(Integer.parseInt(id)).orElse(new Group());
 		
 		mav.addObject("group",group);
-		//mav.addObject("users",group.getUsers());
+		
 		return mav;
 	}
 	
 	//Crud
 	
 	@PostMapping("/insert")
-	public String insertGroupW(Model model) {
+	public String insertGroupW(Model model,Group g) {
 		
-		Group u =(Group) model.getAttribute("group");
-		Optional<Group> us=groupS.insert(u);
+		System.out.println(g);
+		Optional<Group> us=groupS.insert(g);
 		
 		return "seeGroup";
 	}
 	
 	@PostMapping("/delete")
-	public ModelAndView deleteGroupW(@ModelAttribute Group u) {
+	public String deleteGroupW(Model model,Group g) {
 		
-		ModelAndView mav=new ModelAndView("redirect:/web/groups");
-		
-		groupS.delete(u.getId());
+		groupS.delete(g.getId());
 
-		return mav;
+		return "groups";
 	}
 	
 	@PostMapping("/update")
-	public ModelAndView updateGroupW(@ModelAttribute Group u) {
+	public String updateGroupW(Model model,Group g) {
+
+		groupS.update(g).orElse(g).getId();
+		model.addAttribute("greoup",g);
 		
-		ModelAndView mav=new ModelAndView("redirect:/web/group");
-		
-		mav.addObject("id", groupS.update(u).orElse(u).getId());
-		
-		return mav;
+		return "seeGroup";
 	}
 	
 	//Formularios
