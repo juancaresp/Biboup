@@ -897,3 +897,7 @@ insert into boup_user (email, nameu, telephone, token, username, wallet, id) val
 org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOKEN CHARACTER VARYING(30)": "'dvnNhffSRBmc_-aJF0p4ZA:APA91bG-l0AO6TtH4dXDHfdwLgETm8p4UMuXvmCadb0Ic4LHnCgtcv-M... (163)"
 Value too long for column "TOKEN CHARACTER VARYING(30)": "'dvnNhffSRBmc_-aJF0p4ZA:APA91bG-l0AO6TtH4dXDHfdwLgETm8p4UMuXvmCadb0Ic4LHnCgtcv-M... (163)"; SQL statement:
 insert into boup_user (email, nameu, telephone, token, username, wallet, id) values (?, ?, ?, ?, ?, ?, ?) [22001-214]
+2023-05-20 16:00:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOKEN CHARACTER VARYING(30)": "'dvnNhffSRBmc_-aJF0p4ZA:APA91bG-l0AO6TtH4dXDHfdwLgETm8p4UMuXvmCadb0Ic4LHnCgtcv-M... (163)"
+Value too long for column "TOKEN CHARACTER VARYING(30)": "'dvnNhffSRBmc_-aJF0p4ZA:APA91bG-l0AO6TtH4dXDHfdwLgETm8p4UMuXvmCadb0Ic4LHnCgtcv-M... (163)"; SQL statement:
+insert into boup_user (email, nameu, telephone, token, username, wallet, id) values (?, ?, ?, ?, ?, ?, ?) [22001-214]

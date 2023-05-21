@@ -92,5 +92,10 @@ public class User  implements Serializable {
     public void setWallet(Double wallet) {
         this.wallet = wallet;
     }
+
+    public void addSaldo(double saldo){
+        if (saldo > 0)
+            setWallet(wallet+saldo);
+    }
 }
 
