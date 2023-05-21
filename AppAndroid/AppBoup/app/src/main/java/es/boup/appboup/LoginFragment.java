@@ -164,6 +164,7 @@ public class LoginFragment extends Fragment {
                             Log.e("llamadaApi","Usuario obtenido");
                             appViewModel.setCerrar(true);
                             Toast.makeText(getActivity(), "Sesion iniciada correctamente ", Toast.LENGTH_SHORT).show();
+                            getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                             fragmentManager.beginTransaction()
                                     .replace(R.id.frame, new PerfilFragment())
                                     .addToBackStack(null)
