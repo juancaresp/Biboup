@@ -33,7 +33,7 @@ public class UserServiceImp implements UserService {
 	public Optional<User> insert(User u) {
 		Optional<User> op = Optional.empty();
 
-		if (userR.findByUsername(u.getUsername()).isEmpty()) {
+		if (userR.findById(u.getId()).isEmpty()) {
 			op = Optional.of(userR.save(u));
 		}
 
@@ -44,10 +44,10 @@ public class UserServiceImp implements UserService {
 	public Optional<User> update(User u) {
 		Optional<User> op = Optional.empty();
 
-		if (userR.findByUsername(u.getUsername()).isEmpty()) {
+		if (userR.findById(u.getId()).isPresent()) {
 			op = Optional.of(userR.save(u));
 		}
-
+		System.out.println(op);
 		return op;
 	}
 

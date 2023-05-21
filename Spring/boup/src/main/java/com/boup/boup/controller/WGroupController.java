@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +53,6 @@ public class WGroupController {
 	@PostMapping("/insert")
 	public String insertGroupW(Model model,Group g) {
 		
-		System.out.println(g);
 		Optional<Group> us=groupS.insert(g);
 		
 		return "seeGroup";
@@ -71,8 +69,8 @@ public class WGroupController {
 	@PostMapping("/update")
 	public String updateGroupW(Model model,Group g) {
 
-		groupS.update(g).orElse(g).getId();
-		model.addAttribute("greoup",g);
+		groupS.update(g);
+		model.addAttribute("group",g);
 		
 		return "seeGroup";
 	}
