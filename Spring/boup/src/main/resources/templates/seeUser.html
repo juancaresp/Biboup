@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Usuario - ${user.username}</title>
+<link th:href="@{/materialize.css}" rel="stylesheet" />
+<script src="/materialize.js"></script>
+</head>
+<script>
+	function enviarPeticion(accion) {
+		let formuario = document.getElementById("formulario")
+		formulario.action = accion;
+	}
+</script>
+<body>
+	<div th:insert="header.html :: navbar"></div>
+	<div class="container">
+		<div class="row">
+			<h2>
+				Usuario <span th:text="${user.nameU}"></span>
+			</h2>
+		</div>
+		<div class="row">
+			<a th:href="@{/web/users/form/{id}(id=${user.id})}"
+				class="waves-effect waves-light btn">Modificar</a>
+		</div>
+	</div>
+	<div>
+		<h2>Grupos</h2>
+	</div>
+	<div class="row">
+		<table class="striped">
+
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Groupname</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="group: ${groups }">
+					<td><a th:href="@{/web/groups/{id}(id=${group.id})}"><span
+							th:text="${group.id}"></span></a></td>
+					<td th:text="${group.groupName}" />
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
