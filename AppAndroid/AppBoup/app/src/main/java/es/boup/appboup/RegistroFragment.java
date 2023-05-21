@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -218,7 +215,7 @@ public class RegistroFragment extends Fragment {
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
                                 fragmentManager.beginTransaction()
-                                        .replace(R.id.frame, new SettingsFragment())
+                                        .replace(R.id.frame, new PerfilFragment())
                                         .addToBackStack(null)
                                         .commit();
 

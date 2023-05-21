@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.User;
@@ -19,7 +20,7 @@ import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 
-@Controller
+@RestController
 @RequestMapping("/web")
 public class WUserController {
 	

@@ -6,12 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.boup.boup.model.Debt;
 import com.boup.boup.model.Group;
@@ -21,8 +21,8 @@ import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
-@Controller
-@RequestMapping("/groups")
+@RestController
+@RequestMapping("/api/groups")
 public class GroupController {
 	
 	@Autowired UserService userS;
@@ -85,11 +85,11 @@ public class GroupController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Group> getGroupById(@PathVariable Integer id) {
+	public ResponseEntity<Group> getGroupById(@PathVariable String id) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 
-		Optional<Group> group = groupS.findById(id);
+		Optional<Group> group = groupS.findById(Integer.parseInt(id));
 		if (group.isPresent()) {
 			rp = new ResponseEntity<Group>(group.get(), HttpStatus.OK);
 		}
@@ -99,12 +99,12 @@ public class GroupController {
 
 	//Llamadas pedidas
 	
-	@GetMapping("/{id}/users")
-	public ResponseEntity<List<User>> getGroupUsers(@PathVariable Integer groupid) {
+	@GetMapping("/{groupid}/users")
+	public ResponseEntity<List<User>> getGroupUsers(@PathVariable String groupid) {
 
 		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>(HttpStatus.BAD_REQUEST);
 		
-		Optional<Group> op=groupS.findById(groupid);
+		Optional<Group> op=groupS.findById(Integer.parseInt(groupid));
 		
 		if(op.isPresent()) {
 			
@@ -115,17 +115,19 @@ public class GroupController {
 		return rp;
 	}
 	
-	@PostMapping("/add/{groupname}")
-	public ResponseEntity<Group> addGroup(@PathVariable String groupname){
+	@PostMapping("/add/{groupname}/user/{username}")
+	public ResponseEntity<Group> addGroup(@PathVariable String groupname,@PathVariable String username){
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 		
 		Group group=new Group();
 		group.setGroupName(groupname);
 		
 		Optional<Group> opG=groupS.insert(group);
+		
 		if (opG.isPresent()) {
 			group=opG.get();
-			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
+			
+			rp = addUserToGroup(group.getId(), username);
 		}
 		
 		return rp;

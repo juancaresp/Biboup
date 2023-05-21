@@ -6,12 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.boup.boup.dto.AddWallet;
 import com.boup.boup.dto.UserReg;
@@ -24,8 +24,8 @@ import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
-@Controller
-@RequestMapping("/users")
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
 
 	@Autowired UserService userS;
@@ -182,6 +182,22 @@ public class UserController {
 			List<Debt> groups=debtS.findUserDebts(user.get());
 			
 			rp=new ResponseEntity<List<Debt>>(groups,HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
+	@GetMapping("/email/{mail}/token/{token}")
+	public ResponseEntity<User> getUpdateToken(@PathVariable String mail,@PathVariable String token) {
+		
+		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		
+		Optional<User> user=userS.findByEmail(mail);
+		if(user.isPresent()) {
+			User u=user.get();
+			u.setToken(token);
+			userS.update(u);
+			rp=new ResponseEntity<User>(u,HttpStatus.OK);
 		}
 		
 		return rp;
