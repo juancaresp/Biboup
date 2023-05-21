@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
 
@@ -86,26 +87,37 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (mAuth.getCurrentUser() != null){
-            userService = retrofit.create(IUserService.class);
-            Log.d("llamadaApi","llamando a la api para obtener el usuario");
-            Call<User> peticionObtenerUsuario = userService.obtenerUsuarioEmail(mAuth.getCurrentUser().getEmail());
-            peticionObtenerUsuario.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.code() == HttpURLConnection.HTTP_OK){
-                        appViewModel.setUser(response.body());
-                        Log.e("llamadaApi","Usuario obtenido");
-                        fragmentTransaction.add(R.id.frame,new PerfilFragment());
-                    }else{
-                        Log.e("llamadaApi","Usuario no obtenido");
-                        fragmentTransaction.add(R.id.frame,new LoginFragment());
+
+            //obtener token
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w("tokenNotis", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+                // Get new FCM registration token
+                String token = task.getResult();
+                //llamada a la api
+                Log.d("llamadaApi","llamando a la api para obtener el usuario");
+                userService = retrofit.create(IUserService.class);
+                Call<User> peticionObtenerUsuario = userService.obtenerUsuarioToken(mAuth.getCurrentUser().getEmail(),token);
+                peticionObtenerUsuario.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code() == HttpURLConnection.HTTP_OK){
+                            appViewModel.setUser(response.body());
+                            Log.e("llamadaApi","Usuario obtenido");
+                            fragmentTransaction.add(R.id.frame,new PerfilFragment());
+                        }else{
+                            Log.e("llamadaApi","Usuario no obtenido");
+                            fragmentTransaction.add(R.id.frame,new LoginFragment());
+                        }
+                        fragmentTransaction.commit();
                     }
-                    fragmentTransaction.commit();
-                }
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
-                }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
+                    }
+                });
             });
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
