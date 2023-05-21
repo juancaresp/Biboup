@@ -2,14 +2,17 @@ package es.boup.appboup;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -19,6 +22,7 @@ import java.net.HttpURLConnection;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Services.IUserService;
+import es.boup.appboup.databinding.ActivityMainBinding;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,11 +51,15 @@ public class MainActivity extends AppCompatActivity{
     //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
 
+    //navegacion
+    private BottomNavigationView navi;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //quitar la barra de accion de la parte superior
         getSupportActionBar().hide();
@@ -72,11 +80,36 @@ public class MainActivity extends AppCompatActivity{
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
 
         //navegador entre fragmentos
+        navi = findViewById(R.id.bottomNavM);
+        if (mAuth.getCurrentUser() != null)
+            navi.setVisibility(View.VISIBLE);
+        else
+            navi.setVisibility(View.INVISIBLE);
+        binding.bottomNavM.setOnItemSelectedListener(item ->{
+
+            switch (item.getItemId()){
+                case R.id.navPerfil:
+                    cambiarFragmento(new PerfilFragment());
+                    break;
+                case R.id.navLista:
+                    cambiarFragmento(new listaInicio());
+                    break;
+                case R.id.navAdd:
+                    cambiarFragmento(new AniadirGasto());
+                    break;
+            }
+            return true;
+        });
+
+
+
+    }
+
+    private void cambiarFragmento(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frame,new LoginFragment());
+        fragmentTransaction.add(R.id.frame,fragment);
         fragmentTransaction.commit();
-
     }
 
     @Override
@@ -122,6 +155,7 @@ public class MainActivity extends AppCompatActivity{
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
             fragmentTransaction.commit();
+
         }
 
     }

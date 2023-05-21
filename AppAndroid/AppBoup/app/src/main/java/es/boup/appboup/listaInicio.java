@@ -7,9 +7,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,9 @@ public class listaInicio extends Fragment {
     private RecyclerView rv;
     private IGroupService groupService;
     private IUserService userService;
+    //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
+    private User user;
 
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -68,13 +72,16 @@ public class listaInicio extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         etCrearGrupo=view.findViewById(R.id.etAniadir);
         btnCrearGrupo=view.findViewById(R.id.btnCrearGrupo);
         btnVisibilizar=view.findViewById(R.id.btnAniadir);
         rv=view.findViewById(R.id.listaDeGrupos);
-        User user = appViewModel.getUser();
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
-        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername().toString());
+        Log.d("llamadaApi","fd");
+        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
         peticionGrupos.enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {

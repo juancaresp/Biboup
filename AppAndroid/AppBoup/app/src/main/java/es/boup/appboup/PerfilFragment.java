@@ -5,8 +5,6 @@ import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -46,7 +44,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.HTTP;
 
 public class PerfilFragment extends Fragment {
 
@@ -239,6 +236,7 @@ public class PerfilFragment extends Fragment {
                 .replace(R.id.frame, new LoginFragment())
                 .addToBackStack(null)
                 .commit();
+        getActivity().findViewById(R.id.bottomNavM).setVisibility(View.GONE);
 
     }
 
