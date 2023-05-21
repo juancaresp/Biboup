@@ -62,7 +62,7 @@
             android:foregroundGravity="center"
             android:gravity="start"
             android:inputType="textPersonName"
-            android:textColor="#888888"
+            android:textColor="#333333"
             android:textColorHighlight="#0fc3e8"
             android:textColorHint="#0fc3e8"
             android:textSize="16dp" />
@@ -90,7 +90,7 @@
             android:foregroundGravity="center"
             android:gravity="center|start"
             android:inputType="phone"
-            android:textColor="#888888"
+            android:textColor="#333333"
             android:textColorHint="#0fc3e8"
             android:textSize="16dp" />
 

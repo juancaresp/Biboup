@@ -2,6 +2,7 @@ package es.boup.appboup.Services;
 
 import java.util.List;
 
+import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.EditUserDTO;
 import es.boup.appboup.Model.Group;
@@ -35,4 +36,7 @@ public interface IUserService {
 
     @POST("users/{email}/update")
     Call<User> modificarUsuario(@Path("email")String email,@Body EditUserDTO user);
+
+    @POST("users/wallet/add")
+    Call<User> addSaldo(@Body AddWallet wallet);
 }

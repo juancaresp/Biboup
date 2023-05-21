@@ -110,7 +110,8 @@
                 android:fontFamily="@font/baloo_da"
                 android:hint="Nombre"
                 android:inputType="textPersonName"
-                android:textColorHint="#888"
+                android:textColor="#333333"
+                android:textColorHint="#7C121212"
                 android:textSize="16sp" />
 
             <TextView
@@ -134,7 +135,8 @@
                 android:fontFamily="@font/baloo_da"
                 android:hint="Username"
                 android:inputType="textPersonName"
-                android:textColorHint="#888"
+                android:textColor="#333333"
+                android:textColorHint="#7C121212"
                 android:textSize="16sp" />
 
             <TextView
@@ -159,6 +161,7 @@
                 android:fontFamily="@font/baloo_da"
                 android:hint="Teléfono"
                 android:inputType="phone"
+                android:textColor="#333333"
                 android:textColorHint="#7C121212"
                 android:textSize="16sp" />
 
@@ -284,6 +287,13 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/linea_horizontal" />
+
+            <Button
+                android:id="@+id/btAlert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="saldo" />
 
             <LinearLayout
                 android:id="@+id/btCerrarSesion"

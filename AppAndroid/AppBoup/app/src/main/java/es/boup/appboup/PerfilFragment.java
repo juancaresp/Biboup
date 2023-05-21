@@ -7,12 +7,15 @@ import static es.boup.appboup.MainActivity.CONEXION_API;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.net.HttpURLConnection;
 
+import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.EditUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
@@ -51,7 +55,7 @@ public class PerfilFragment extends Fragment {
     private FirebaseAuth mAuth;
     private TextView tvUsername,tvSaldo,tvCorreo;
     private EditText etNombre,etUsername,etTelefono;
-    private Button btConfirmar;
+    private Button btConfirmar,btAlert;
     private AppViewModel appViewModel;
     private User user;
     private boolean cerrar,edit;
@@ -89,6 +93,7 @@ public class PerfilFragment extends Fragment {
         etTelefono = view.findViewById(R.id.etTelefonoP);
         tvSaldo = view.findViewById(R.id.tvSaldoP);
         btConfirmar = view.findViewById(R.id.btConfirmar);
+        btAlert = view.findViewById(R.id.btAlert);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
         Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");
@@ -97,7 +102,7 @@ public class PerfilFragment extends Fragment {
             tvCorreo.setText(user.getEmail());
             etUsername.setText(user.getUsername());
             if (user.getWallet() == null)
-                tvSaldo.setText("saldo: "+0 + "€");
+                tvSaldo.setText("saldo: 0.00"+ "€");
             else
                 tvSaldo.setText("saldo: "+user.getWallet()+ "€");
             if (user.getTelephone() != null)
@@ -145,6 +150,58 @@ public class PerfilFragment extends Fragment {
             startActivity(i);
         });
         btNotis.setOnClickListener(view1 -> abrirNotificaciones());
+        btAlert.setOnClickListener(view1 -> {
+
+            //crear el alertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
+            View view2 = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.layout_saldo,(ConstraintLayout)view.findViewById(R.id.layoutDialogContainer));
+            builder.setView(view2);
+            final AlertDialog alertDialog = builder.create();
+
+            //funcion add saldo del alert dialog
+            view2.findViewById(R.id.btAddSaldoA).setOnClickListener(view3 -> {
+
+                //recoger el saldo a añadir
+                EditText etSaldo = view2.findViewById(R.id.etSaldoA);
+                if (!etSaldo.getText().toString().isEmpty()){
+                    double saldo = Double.parseDouble(etSaldo.getText().toString());
+                    if (saldo > 0d){
+                        AddWallet addWallet = new AddWallet(user.getUsername(),saldo);
+                        userService = retrofit.create(IUserService.class);
+                        Call<User> addSaldo = userService.addSaldo(addWallet);
+                        addSaldo.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                Log.d("alertDialog","codigo de error: "+ response.code());
+                                if (HttpURLConnection.HTTP_OK == response.code()){
+                                    alertDialog.dismiss();
+                                    user.addSaldo(saldo);
+                                    tvSaldo.setText("saldo: "+user.getWallet()+"€");
+                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+
+                            }
+                        });
+                    }else{
+                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+            });
+
+            if (alertDialog.getWindow() != null){
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            alertDialog.show();
+        });
 
     }
 
