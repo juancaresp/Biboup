@@ -319,6 +319,7 @@ public class LoginFragment extends Fragment {
                                 appViewModel.setUser(response.body());
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
+                                getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                                 //cambiar de fragmento
                                 FragmentManager fragmentManager = getParentFragmentManager();
                                 fragmentManager.beginTransaction()
