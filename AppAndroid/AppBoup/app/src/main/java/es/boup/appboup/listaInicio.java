@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +51,7 @@ public class listaInicio extends Fragment {
     //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
     private User user;
+    public FragmentManager fragmentManager;
 
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -88,6 +91,7 @@ public class listaInicio extends Fragment {
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 if(response.code()== HttpURLConnection.HTTP_OK){
                     groups=response.body();
+                    rv.setAdapter(new GrupoAdapter());
                 }
             }
 
@@ -174,7 +178,11 @@ public class listaInicio extends Fragment {
             public void onClick(View view) {
                 Bundle bundle= new Bundle();
                 bundle.putInt("group",groups.get(getAdapterPosition()).getId());
-                getParentFragmentManager().setFragmentResult("resultadoGroup",bundle);
+                fragmentManager = getParentFragmentManager();
+                fragmentManager.setFragmentResult("resultadoGroup",bundle);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                fragmentTransaction.commit();
 
             }
         }
