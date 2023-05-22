@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -108,19 +109,21 @@ public class listaInicio extends Fragment {
             public void onClick(View v) {
                 //llamar a endpoint de crearGrupo con el et.gettext
                 groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString());
+                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString(),user.getUsername());
                 peticionInsertarGrupo.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
                         if(response.code()== HttpURLConnection.HTTP_OK){
-                            rv.setAdapter(new GrupoAdapter());
                             groups.add(response.body());
+                            rv.setAdapter(new GrupoAdapter());
+                            etCrearGrupo.setVisibility(View.GONE);
+                            btnCrearGrupo.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Group> call, Throwable t) {
-
+                        Toast.makeText(getContext(), "fallo", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -170,7 +173,8 @@ public class listaInicio extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle= new Bundle();
-                getParentFragmentManager().setFragmentResult("resultadoLibro",bundle);
+                bundle.putInt("group",groups.get(getAdapterPosition()).getId());
+                getParentFragmentManager().setFragmentResult("resultadoGroup",bundle);
 
             }
         }

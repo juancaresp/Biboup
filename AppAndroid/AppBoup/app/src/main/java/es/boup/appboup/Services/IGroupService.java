@@ -9,6 +9,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface IGroupService {
-    @POST("groups/add/{groupname}")
-    Call<Group> insertarUsuario(@Path("groupname") String groupname);
+    @POST("api/groups/add/{groupname}/user/{username}")
+    Call<Group> insertarUsuario(@Path("groupname") String groupname,@Path("username") String username);
 }
