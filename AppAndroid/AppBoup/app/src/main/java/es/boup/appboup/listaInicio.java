@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Debug;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,7 @@ public class listaInicio extends Fragment {
     //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
     private User user;
+    private Group group;
     public FragmentManager fragmentManager;
 
     private Retrofit retrofit = new Retrofit.Builder()
@@ -178,11 +181,35 @@ public class listaInicio extends Fragment {
             public void onClick(View view) {
                 Bundle bundle= new Bundle();
                 bundle.putInt("group",groups.get(getAdapterPosition()).getId());
-                fragmentManager = getParentFragmentManager();
-                fragmentManager.setFragmentResult("resultadoGroup",bundle);
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
-                fragmentTransaction.commit();
+                groupService = retrofit.create(IGroupService.class);
+                Call<Group> peticionGrupo = groupService.getGroupById(""+groups.get(getAdapterPosition()).getId());
+                peticionGrupo.enqueue(new Callback<Group>() {
+                    @Override
+                    public void onResponse(Call<Group> call, Response<Group> response) {
+                        if(response.code()== HttpURLConnection.HTTP_OK){
+                            group=response.body();
+                            appViewModel.setGroup(group);
+                            Toast.makeText(getActivity(), ""+group.getGroupName(), Toast.LENGTH_SHORT).show();
+                            fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.commit();
+                        }else{
+                            Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Group> call, Throwable t) {
+                        Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
 
             }
         }
