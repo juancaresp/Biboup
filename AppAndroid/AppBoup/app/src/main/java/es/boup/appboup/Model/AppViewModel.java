@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppViewModel extends ViewModel {
 
     private User user;
-
+    private Group group;
     //variable para cerrar tras login y registro
     private boolean cerrar;
 
@@ -37,5 +37,13 @@ public class AppViewModel extends ViewModel {
     }
     public void setCerrar(boolean cerrar){
         this.cerrar = cerrar;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

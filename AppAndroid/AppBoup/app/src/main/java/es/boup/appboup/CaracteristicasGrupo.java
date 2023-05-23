@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 
@@ -64,33 +65,13 @@ public class CaracteristicasGrupo extends Fragment {
         btnVisibilizar=view.findViewById(R.id.btnAniadir);
         etAniadirParticipante=view.findViewById(R.id.etAniadir);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
+
         btnAniadirParticipante=view.findViewById(R.id.btnAniadirParticipante);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
-        getParentFragmentManager().setFragmentResultListener("resultadoGroup", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+        tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());
 
-                int id= result.getInt("group");
-                groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionGrupo = groupService.getGroupById(""+id);
-                peticionGrupo.enqueue(new Callback<Group>() {
-                    @Override
-                    public void onResponse(Call<Group> call, Response<Group> response) {
-                        if(response.code()== HttpURLConnection.HTTP_OK){
-                            group=response.body();
-                            tvNombreGrupo.setText(group.getGroupName());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Group> call, Throwable t) {
-
-                    }
-                });
-            }
-        });
 
         btnVisibilizar.setOnClickListener(new View.OnClickListener() {
             @Override
