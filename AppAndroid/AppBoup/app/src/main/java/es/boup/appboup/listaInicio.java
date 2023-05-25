@@ -7,9 +7,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Debug;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -43,7 +50,11 @@ public class listaInicio extends Fragment {
     private RecyclerView rv;
     private IGroupService groupService;
     private IUserService userService;
+    //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
+    private User user;
+    private Group group;
+    public FragmentManager fragmentManager;
 
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -68,18 +79,22 @@ public class listaInicio extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         etCrearGrupo=view.findViewById(R.id.etAniadir);
         btnCrearGrupo=view.findViewById(R.id.btnCrearGrupo);
         btnVisibilizar=view.findViewById(R.id.btnAniadir);
         rv=view.findViewById(R.id.listaDeGrupos);
-        User user = appViewModel.getUser();
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
-        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername().toString());
+        Log.d("llamadaApi","fd");
+        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
         peticionGrupos.enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 if(response.code()== HttpURLConnection.HTTP_OK){
                     groups=response.body();
+                    rv.setAdapter(new GrupoAdapter());
                 }
             }
 
@@ -101,19 +116,21 @@ public class listaInicio extends Fragment {
             public void onClick(View v) {
                 //llamar a endpoint de crearGrupo con el et.gettext
                 groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString());
+                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString(),user.getUsername());
                 peticionInsertarGrupo.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
                         if(response.code()== HttpURLConnection.HTTP_OK){
-                            rv.setAdapter(new GrupoAdapter());
                             groups.add(response.body());
+                            rv.setAdapter(new GrupoAdapter());
+                            etCrearGrupo.setVisibility(View.GONE);
+                            btnCrearGrupo.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Group> call, Throwable t) {
-
+                        Toast.makeText(getContext(), "fallo", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -163,7 +180,36 @@ public class listaInicio extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle= new Bundle();
-                getParentFragmentManager().setFragmentResult("resultadoLibro",bundle);
+                bundle.putInt("group",groups.get(getAdapterPosition()).getId());
+                groupService = retrofit.create(IGroupService.class);
+                Call<Group> peticionGrupo = groupService.getGroupById(""+groups.get(getAdapterPosition()).getId());
+                peticionGrupo.enqueue(new Callback<Group>() {
+                    @Override
+                    public void onResponse(Call<Group> call, Response<Group> response) {
+                        if(response.code()== HttpURLConnection.HTTP_OK){
+                            group=response.body();
+                            appViewModel.setGroup(group);
+                            Toast.makeText(getActivity(), ""+group.getGroupName(), Toast.LENGTH_SHORT).show();
+                            fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.commit();
+                        }else{
+                            Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Group> call, Throwable t) {
+                        Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
 
             }
         }

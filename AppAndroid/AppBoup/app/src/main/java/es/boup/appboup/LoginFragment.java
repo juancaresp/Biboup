@@ -164,6 +164,7 @@ public class LoginFragment extends Fragment {
                             Log.e("llamadaApi","Usuario obtenido");
                             appViewModel.setCerrar(true);
                             Toast.makeText(getActivity(), "Sesion iniciada correctamente ", Toast.LENGTH_SHORT).show();
+                            getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                             fragmentManager.beginTransaction()
                                     .replace(R.id.frame, new PerfilFragment())
                                     .addToBackStack(null)
@@ -318,6 +319,7 @@ public class LoginFragment extends Fragment {
                                 appViewModel.setUser(response.body());
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
+                                getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                                 //cambiar de fragmento
                                 FragmentManager fragmentManager = getParentFragmentManager();
                                 fragmentManager.beginTransaction()

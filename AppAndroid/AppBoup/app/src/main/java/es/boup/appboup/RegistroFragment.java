@@ -214,6 +214,7 @@ public class RegistroFragment extends Fragment {
                                 //mandar el usuario
                                 //hacer que se cierre la app cuando pulsan atras
                                 appViewModel.setCerrar(true);
+                                getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.frame, new PerfilFragment())
                                         .addToBackStack(null)
