@@ -2,10 +2,12 @@ package es.boup.appboup;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,15 +15,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Debug;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +42,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class listaInicio extends Fragment {
 
-    private Button btnVisibilizar;
-    private EditText etCrearGrupo;
     private Button btnCrearGrupo;
     private List<Group> groups;
     private RecyclerView rv;
@@ -80,9 +77,7 @@ public class listaInicio extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        etCrearGrupo=view.findViewById(R.id.etAniadir);
-        btnCrearGrupo=view.findViewById(R.id.btnCrearGrupo);
-        btnVisibilizar=view.findViewById(R.id.btnAniadir);
+        btnCrearGrupo = view.findViewById(R.id.btAddP);
         rv=view.findViewById(R.id.listaDeGrupos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
@@ -103,37 +98,47 @@ public class listaInicio extends Fragment {
 
             }
         });
-        btnVisibilizar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etCrearGrupo.setVisibility(View.VISIBLE);
-                btnCrearGrupo.setVisibility(View.VISIBLE);
-            }
-        });
 
-        btnCrearGrupo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //llamar a endpoint de crearGrupo con el et.gettext
-                groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(etCrearGrupo.getText().toString(),user.getUsername());
-                peticionInsertarGrupo.enqueue(new Callback<Group>() {
-                    @Override
-                    public void onResponse(Call<Group> call, Response<Group> response) {
-                        if(response.code()== HttpURLConnection.HTTP_OK){
-                            groups.add(response.body());
-                            rv.setAdapter(new GrupoAdapter());
-                            etCrearGrupo.setVisibility(View.GONE);
-                            btnCrearGrupo.setVisibility(View.GONE);
+        btnCrearGrupo.setOnClickListener(view1 -> {
+            //crear el alertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
+            View view2 = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.layout_crear_grupo,view.findViewById(R.id.layoutDialogContainer));
+            builder.setView(view2);
+            final AlertDialog alertDialog = builder.create();
+
+            //funcion add saldo del alert dialog
+            view2.findViewById(R.id.btAddGrupoG).setOnClickListener(view3 -> {
+                //recoger el saldo a añadir
+                EditText etNombre = view2.findViewById(R.id.etNombreG);
+                if (!etNombre.getText().toString().isEmpty()) {
+                    String nombre = etNombre.getText().toString();
+
+                    groupService = retrofit.create(IGroupService.class);
+                    Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(nombre,user.getUsername());
+                    peticionInsertarGrupo.enqueue(new Callback<Group>() {
+                        @Override
+                        public void onResponse(Call<Group> call, Response<Group> response) {
+                            if(response.code()== HttpURLConnection.HTTP_OK){
+                                groups.add(response.body());
+                                rv.setAdapter(new GrupoAdapter());
+                                alertDialog.dismiss();
+                            }
                         }
-                    }
+                        @Override
+                        public void onFailure(Call<Group> call, Throwable t) {
+                            Toast.makeText(getContext(), "fallo", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                    @Override
-                    public void onFailure(Call<Group> call, Throwable t) {
-                        Toast.makeText(getContext(), "fallo", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                } else {
+                    Toast.makeText(getActivity(), "Introduce el nombre", Toast.LENGTH_SHORT).show();
+                }
+            });
+            if (alertDialog.getWindow() != null){
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
             }
+            alertDialog.show();
         });
         groups= new ArrayList<>();
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());

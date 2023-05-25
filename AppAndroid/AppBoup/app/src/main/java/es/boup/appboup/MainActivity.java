@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.1.72:8080/";
+    public static String CONEXION_API = "http://192.168.0.14:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity{
         if (mAuth.getCurrentUser() != null)
             navi.setVisibility(View.VISIBLE);
         else
-            navi.setVisibility(View.INVISIBLE);
+            navi.setVisibility(View.GONE);
         binding.bottomNavM.setOnItemSelectedListener(item ->{
 
             switch (item.getItemId()){

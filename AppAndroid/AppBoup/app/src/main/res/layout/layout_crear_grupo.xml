@@ -28,7 +28,7 @@
             android:fontFamily="@font/baloo_da"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Añadir saldo"
+            android:text="Crear grupo"
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -60,20 +60,19 @@
 
         <EditText
             android:id="@+id/etNombreG"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/baloo_da"
-            android:hint="0.00€"
-            android:textColorHint="#888"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:hint="Nombre grupo"
+            android:inputType="text"
             android:textColor="#333"
+            android:textColorHint="#888"
             android:textSize="16sp"
-            android:inputType="numberDecimal"
             app:layout_constraintBottom_toBottomOf="@+id/btAddGrupoG"
-            app:layout_constraintTop_toTopOf="@+id/textTitle"
-            tools:layout_editor_absoluteX="20dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textTitle" />
 
         <Button
             android:id="@+id/btAddGrupoG"
