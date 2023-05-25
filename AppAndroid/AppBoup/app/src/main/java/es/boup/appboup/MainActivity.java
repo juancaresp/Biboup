@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity{
         if (mAuth.getCurrentUser() != null)
             navi.setVisibility(View.VISIBLE);
         else
-            navi.setVisibility(View.INVISIBLE);
+            navi.setVisibility(View.GONE);
         binding.bottomNavM.setOnItemSelectedListener(item ->{
 
             switch (item.getItemId()){

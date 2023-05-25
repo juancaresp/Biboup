@@ -13,7 +13,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -152,31 +151,31 @@ public class PerfilFragment extends Fragment {
             //crear el alertDialog
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
             View view2 = LayoutInflater.from(getActivity()).inflate(
-                    R.layout.layout_saldo,(ConstraintLayout)view.findViewById(R.id.layoutDialogContainer));
+                    R.layout.layout_saldo,view.findViewById(R.id.layoutDialogContainer));
             builder.setView(view2);
             final AlertDialog alertDialog = builder.create();
 
             //funcion add saldo del alert dialog
-            view2.findViewById(R.id.btAddSaldoA).setOnClickListener(view3 -> {
+            view2.findViewById(R.id.btAddGrupoG).setOnClickListener(view3 -> {
 
                 //recoger el saldo a añadir
-                EditText etSaldo = view2.findViewById(R.id.etSaldoA);
-                if (!etSaldo.getText().toString().isEmpty()){
+                EditText etSaldo = view2.findViewById(R.id.etNombreG);
+                if (!etSaldo.getText().toString().isEmpty()) {
                     double saldo = Double.parseDouble(etSaldo.getText().toString());
-                    if (saldo > 0d){
-                        AddWallet addWallet = new AddWallet(user.getUsername(),saldo);
+                    if (saldo > 0d) {
+                        AddWallet addWallet = new AddWallet(user.getUsername(), saldo);
                         userService = retrofit.create(IUserService.class);
                         Call<User> addSaldo = userService.addSaldo(addWallet);
                         addSaldo.enqueue(new Callback<User>() {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
-                                Log.d("alertDialog","codigo de error: "+ response.code());
-                                if (HttpURLConnection.HTTP_OK == response.code()){
+                                Log.d("alertDialog", "codigo de error: " + response.code());
+                                if (HttpURLConnection.HTTP_OK == response.code()) {
                                     alertDialog.dismiss();
                                     user.addSaldo(saldo);
-                                    tvSaldo.setText("saldo: "+user.getWallet()+"€");
+                                    tvSaldo.setText("saldo: " + user.getWallet() + "€");
                                     Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
-                                }else{
+                                } else {
                                     Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -186,12 +185,10 @@ public class PerfilFragment extends Fragment {
 
                             }
                         });
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
             });
 
             if (alertDialog.getWindow() != null){
