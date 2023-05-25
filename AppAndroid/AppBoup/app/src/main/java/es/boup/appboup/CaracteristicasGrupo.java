@@ -86,7 +86,7 @@ public class CaracteristicasGrupo extends Fragment {
             public void onClick(View v) {
                 // llamar al endpoint de añadir participante
                 groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionInsertarUsuario = groupService.insertarUsuarioEnGrupo(group.getId(), etAniadirParticipante.getText().toString() );
+                Call<Group> peticionInsertarUsuario = groupService.insertarUsuarioEnGrupo(appViewModel.getGroup().getId(), etAniadirParticipante.getText().toString() );
                 peticionInsertarUsuario.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
