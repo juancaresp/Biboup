@@ -172,7 +172,7 @@ public class listaInicio extends Fragment {
             public GrupoHolder(@NonNull View itemView) {
                 super(itemView);
                 tvDni=itemView.findViewById(R.id.tvId);
-                tvNombre=itemView.findViewById(R.id.tvNombre);
+                tvNombre=itemView.findViewById(R.id.tvNombrePagador);
                 itemView.setOnClickListener(this);
             }
 
