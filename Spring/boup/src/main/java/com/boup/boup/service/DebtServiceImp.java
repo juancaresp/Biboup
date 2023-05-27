@@ -26,6 +26,8 @@ public class DebtServiceImp implements DebtService {
 	UserRepository userR;
 	@Autowired
 	DebtRepository debtR;
+	@Autowired
+	UserService userS;
 
 	@Override
 	public Optional<Debt> insert(Debt d) {
@@ -67,11 +69,10 @@ public class DebtServiceImp implements DebtService {
 		return debtR.findByUser(u);
 	}
 
-	
 	@Override
-	public Debt findByUserAndGroup(User u, Group g) {
+	public Optional<Debt> findByUserAndGroup(User u, Group g) {
 
-		return debtR.findByUserAndGroup(u,g);
+		return debtR.findByUserAndGroup(u, g);
 	}
 
 	@Override
@@ -80,43 +81,84 @@ public class DebtServiceImp implements DebtService {
 		return debtR.findById(id);
 	}
 
-
 	@Override
 	public Optional<Debt> addDebt(Debt d) {
-		
+
 		return Optional.empty();
 	}
 
 	@Override
 	public List<User> findGroupUsers(Group g) {
-		
-		List<Debt> debts=debtR.findByGroup(g);
-		List<User> users=new ArrayList<>();
-		debts.forEach(d-> users.add(d.getUser()));
-		
+
+		List<Debt> debts = debtR.findByGroup(g);
+		List<User> users = new ArrayList<>();
+		debts.forEach(d -> users.add(d.getUser()));
+
 		return users;
 	}
 
 	@Override
 	public List<Group> findUserGroups(User user) {
-		
-		List<Debt> debts=debtR.findByUser(user);
-		List<Group> groups=new ArrayList<>();
-		debts.forEach(d-> groups.add(d.getGroup()));
-		
+
+		List<Debt> debts = debtR.findByUser(user);
+		List<Group> groups = new ArrayList<>();
+		debts.forEach(d -> groups.add(d.getGroup()));
+
 		return groups;
 	}
 
 	@Override
 	public List<Debt> findGroupDebts(Group group) {
-		
 		return debtR.findByGroup(group);
 	}
 
 	@Override
 	public List<Debt> findUserDebts(User user) {
-		// TODO Auto-generated method stub
 		return debtR.findByUser(user);
+	}
+
+	@Override
+	public Optional<Debt> pay(Debt d) {
+		Double cant = Math.abs(d.getAmount());
+		User u = d.getUser();
+		Group g = d.getGroup();
+		Optional<Debt> opD;
+
+		if (d.getAmount() < 0 && u.getWallet() - cant >= 0) {
+
+			d.setAmount(0D);
+			d.getUser().setWallet(u.getWallet() - cant);			
+
+			update(d);
+			
+			opD=Optional.of(d);
+			
+			List<Debt> debts = findGroupDebts(g);
+			debts.sort((d1, d2) -> Double.compare(d2.getAmount(), d1.getAmount()));
+
+			for (int i = 0; i < debts.size() && cant > 0D; i++) {
+
+				Debt de = debts.get(i);
+				
+				if (de.getAmount() >= cant) {
+
+					de.setAmount(de.getAmount() - cant);
+					de.getUser().setWallet(de.getUser().getWallet() + cant);
+					cant=0D;
+				} else {
+					double diff = de.getAmount();
+					de.setAmount(0D);
+					de.getUser().setWallet(de.getUser().getWallet() + diff);
+					cant = cant - diff;
+				}
+
+				update(de);
+			}
+		} else {
+			opD = Optional.empty();
+		}
+
+		return opD;
 	}
 
 }

@@ -83,18 +83,14 @@ public class SpentServiceImp implements SpentService {
 
 		spe.ifPresent((sp) -> {
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
-			System.out.println(part);
 			groupS.findById(sp.getGroup().getId()).ifPresent(g->
 			{
-				System.out.println("payer:"+sp.getPayer()+" grupo: "+g);
-				Debt d=debtS.findByUserAndGroup(sp.getPayer(), g);
-				System.out.println(d);
+				Debt d=debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
 				debtR.save(d);
 				d.setAmount(d.getAmount()+sp.getQuantity()-part);
 				
 				sp.getUsers().forEach(u->{
-					System.out.println("llego");
-					Debt de=debtS.findByUserAndGroup(u, g);
+					Debt de=debtS.findByUserAndGroup(u, g).orElse(new Debt());
 					de.setAmount(de.getAmount()-part);
 					debtR.save(de);
 				});
