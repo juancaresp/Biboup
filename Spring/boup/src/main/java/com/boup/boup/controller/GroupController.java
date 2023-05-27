@@ -115,7 +115,7 @@ public class GroupController {
 		return rp;
 	}
 	
-	@PostMapping("/add/{groupname}/user/{username}")
+	@PostMapping("/create/{groupname}/user/{username}")
 	public ResponseEntity<Group> addGroup(@PathVariable String groupname,@PathVariable String username){
 		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
 		
