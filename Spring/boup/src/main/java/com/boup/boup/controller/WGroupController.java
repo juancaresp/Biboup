@@ -1,7 +1,6 @@
 package com.boup.boup.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,7 +52,8 @@ public class WGroupController {
 	@PostMapping("/insert")
 	public String insertGroupW(Model model,Group g) {
 		
-		Optional<Group> us=groupS.insert(g);
+		groupS.insert(g);
+		model.addAttribute("group", g);
 		
 		return "seeGroup";
 	}
