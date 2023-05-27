@@ -1,5 +1,7 @@
 package es.boup.appboup.Services;
 
+import java.util.List;
+
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
@@ -18,4 +20,7 @@ public interface IGroupService {
 
     @POST("api/groups/{idgroup}/addUser/{username}")
     Call<Group> insertarUsuarioEnGrupo(@Path("idgroup") int idgroup,@Path("username") String username);
+
+    @GET("api/groups/{groupid}/users")
+    Call<List<User>> getGroupUsers(@Path("groupid") String groupid);
 }

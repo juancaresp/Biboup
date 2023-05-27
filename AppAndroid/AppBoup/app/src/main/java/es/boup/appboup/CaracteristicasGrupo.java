@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CaracteristicasGrupo extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto;
-    public EditText etAniadirParticipante;
+
     public TextView tvNombreGrupo;
     private Group group;
     private IGroupService groupService;
