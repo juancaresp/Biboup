@@ -128,7 +128,7 @@ public class SpentController {
 	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
-		
+
 		Optional<Spent> opS=spentS.addSpent(spent);
 		if (opS.isPresent()) {
 			spent=opS.get();

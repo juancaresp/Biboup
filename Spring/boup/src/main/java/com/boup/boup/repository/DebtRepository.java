@@ -11,6 +11,6 @@ import com.boup.boup.model.User;
 public interface DebtRepository extends JpaRepository<Debt, Integer> {
 
 	public List<Debt> findByUser(User u);
-	public List<Debt> findByUserAndGroup(User u,Group g);
+	public Debt findByUserAndGroup(User u,Group g);
 	public List<Debt> findByGroup(Group g);
 }

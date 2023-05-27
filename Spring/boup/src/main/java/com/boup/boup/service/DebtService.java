@@ -16,7 +16,7 @@ public interface DebtService {
 	public boolean delete(Integer id);
 	public List<Debt> findAll();
 	public List<Debt> findByUser(User u);
-	public List<Debt> findByUserAndGroup(User u,Group g);
+	public Debt findByUserAndGroup(User u,Group g);
 	public Optional<Debt> findById(Integer id);
 	public Optional<Debt> addDebt(Debt d);
 	public List<User> findGroupUsers(Group g);
