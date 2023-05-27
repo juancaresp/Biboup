@@ -121,4 +121,9 @@ public class SpentServiceImp implements SpentService {
 		
 	}
 
+	@Override
+	public List<Spent> findByUser(String username) {
+		return spentR.findByPayerUsernameOrUsersUsername(username, username);
+	}
+
 }

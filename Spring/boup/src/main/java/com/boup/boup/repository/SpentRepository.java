@@ -9,5 +9,5 @@ import com.boup.boup.model.Spent;
 public interface SpentRepository extends JpaRepository<Spent, Integer>{
 
 	public List<Spent> findByGroupId(Integer id);
-
+	public List<Spent> findByPayerUsernameOrUsersUsername(String username,String userUsername);
 }
