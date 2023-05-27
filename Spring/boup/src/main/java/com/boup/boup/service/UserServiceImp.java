@@ -43,11 +43,9 @@ public class UserServiceImp implements UserService {
 	@Override
 	public Optional<User> update(User u) {
 		Optional<User> op = Optional.empty();
-
 		if (userR.findById(u.getId()).isPresent()) {
 			op = Optional.of(userR.save(u));
 		}
-		System.out.println(op);
 		return op;
 	}
 
