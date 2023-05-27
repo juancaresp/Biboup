@@ -111,11 +111,13 @@ public class listaInicio extends Fragment {
             view2.findViewById(R.id.btAddGrupoG).setOnClickListener(view3 -> {
                 //recoger el saldo a añadir
                 EditText etNombre = view2.findViewById(R.id.etNombreG);
+
                 if (!etNombre.getText().toString().isEmpty()) {
                     String nombre = etNombre.getText().toString();
-
+                    Log.d("llamadaApi","dentro del if del dialogo");
                     groupService = retrofit.create(IGroupService.class);
                     Call<Group> peticionInsertarGrupo = groupService.insertarUsuario(nombre,user.getUsername());
+                    Log.d("llamadaApi",nombre + user.getUsername());
                     peticionInsertarGrupo.enqueue(new Callback<Group>() {
                         @Override
                         public void onResponse(Call<Group> call, Response<Group> response) {
@@ -123,11 +125,15 @@ public class listaInicio extends Fragment {
                                 groups.add(response.body());
                                 rv.setAdapter(new GrupoAdapter());
                                 alertDialog.dismiss();
+                                Log.d("llamadaApi","llamada hecha");
+                            }else{
+                                Log.d("llamadaApi","error"+response.code());
                             }
                         }
                         @Override
                         public void onFailure(Call<Group> call, Throwable t) {
                             Toast.makeText(getContext(), "fallo", Toast.LENGTH_SHORT).show();
+                            Log.d("llamadaApi","error de red");
                         }
                     });
 
@@ -172,7 +178,7 @@ public class listaInicio extends Fragment {
             public GrupoHolder(@NonNull View itemView) {
                 super(itemView);
                 tvDni=itemView.findViewById(R.id.tvId);
-                tvNombre=itemView.findViewById(R.id.tvNombrePagador);
+                tvNombre=itemView.findViewById(R.id.tvTitulo);
                 itemView.setOnClickListener(this);
             }
 
