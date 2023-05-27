@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boup.boup.model.Debt;
 import com.boup.boup.model.Spent;
 import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
@@ -26,7 +27,9 @@ public class SpentServiceImp implements SpentService {
 	DebtRepository debtR;
 	@Autowired
 	DebtService debtS;
-
+	@Autowired
+	GroupService groupS;
+	
 	@Override
 	public Optional<Spent> insert(Spent s) {
 		System.out.println(s);
@@ -76,25 +79,24 @@ public class SpentServiceImp implements SpentService {
 	@Override
 	public Optional<Spent> addSpent(Spent spent) {
 		
-		Optional<Spent> spe = Optional.empty();
-		spe = insert(spent);
-		System.out.println(spe.get());
+		Optional<Spent> spe =insert(spent);
+
 		spe.ifPresent((sp) -> {
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
-			System.out.println(part);
-			//Debt deb;
-
-			for (int i = 0; i < sp.getUsers().size(); i++) {
-				/*deb = Debt.builder()
-						.receiver(sp.getPayer())
-						.debtor(sp.getUsers().get(i))
-						.amount(part)
-						.debtGroup(sp.getGroup())
-						.build();
-				debtS.addDebt(deb);*/
-			}
+			groupS.findById(sp.getGroup().getId()).ifPresent(g->
+			{
+				Debt d=debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
+				debtR.save(d);
+				d.setAmount(d.getAmount()+sp.getQuantity()-part);
+				
+				sp.getUsers().forEach(u->{
+					Debt de=debtS.findByUserAndGroup(u, g).orElse(new Debt());
+					de.setAmount(de.getAmount()-part);
+					debtR.save(de);
+				});
+				
+			});;
 		});
-		// Each one part
 
 		return spe;
 	}
@@ -119,6 +121,11 @@ public class SpentServiceImp implements SpentService {
 			spentR.save(s);
 		});;
 		
+	}
+
+	@Override
+	public List<Spent> findByUser(String username) {
+		return spentR.findByPayerUsernameOrUsersUsername(username, username);
 	}
 
 }

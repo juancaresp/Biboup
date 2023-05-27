@@ -99,20 +99,36 @@ public class SpentController {
 	
 	@GetMapping("/group/{groupId}")
 	public ResponseEntity<List<Spent>> getGroupSpents(@PathVariable String groupId) {
+		ResponseEntity<List<Spent>> rp =new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		if(groupS.findById(Integer.parseInt(groupId)).isPresent()) {
+			List<Spent> spents = spentS.findByGroup(Integer.parseInt(groupId));
 
-		List<Spent> spents = spentS.findByGroup(Integer.parseInt(groupId));
-
-		ResponseEntity<List<Spent>> rp = new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
-
+			rp = new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+		}
 		return rp;
 	}
+	
+	@GetMapping("/users/{username}")
+	public ResponseEntity<List<Spent>> getUserSpents(@PathVariable String username) {
+		
+		ResponseEntity<List<Spent>> rp =new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		if(userS.findByNick(username).isPresent()) {
+			List<Spent> spents = spentS.findByUser(username);
+			
+			rp= new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+		}
+		return rp;
+	}
+	
 	
 	//ADD a spent generating the debts
 	@PostMapping("/add")
 	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
-		
+
 		Optional<Spent> opS=spentS.addSpent(spent);
 		if (opS.isPresent()) {
 			spent=opS.get();

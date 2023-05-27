@@ -20,5 +20,6 @@ public interface SpentService {
 	public Optional<Spent> addSpent(Spent spent);
 	public void deleteUserSpent(Integer spentId, Integer userid);
 	public void addUserSpent(Integer spentId, Integer userid);
+	public List<Spent> findByUser(String username);
 	
 }
