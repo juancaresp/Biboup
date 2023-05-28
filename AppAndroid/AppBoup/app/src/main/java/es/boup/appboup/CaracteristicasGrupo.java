@@ -111,7 +111,7 @@ public class CaracteristicasGrupo extends Fragment {
                                 Toast.makeText(getActivity(), "Participante añadido", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
                             }else{
-                                Toast.makeText(getActivity(), "Error añadiendo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Usuario no existente", Toast.LENGTH_SHORT).show();
                             }
                         }
                         @Override
