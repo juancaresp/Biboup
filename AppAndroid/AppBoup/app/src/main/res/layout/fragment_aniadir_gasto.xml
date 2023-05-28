@@ -36,7 +36,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/button11"
+            android:id="@+id/btnGuardarGasto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
