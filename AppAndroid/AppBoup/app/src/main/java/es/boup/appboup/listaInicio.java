@@ -108,7 +108,7 @@ public class listaInicio extends Fragment {
             final AlertDialog alertDialog = builder.create();
 
             //funcion add saldo del alert dialog
-            view2.findViewById(R.id.btAddGrupoG).setOnClickListener(view3 -> {
+            view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
                 //recoger el saldo a añadir
                 EditText etNombre = view2.findViewById(R.id.etNombreG);
 
