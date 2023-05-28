@@ -28,7 +28,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imgGrupo"
+                android:id="@+id/imgGasto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="5dp"
@@ -47,7 +47,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imgGrupo"
+                app:layout_constraintStart_toEndOf="@+id/imgGasto"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.506" />
 
