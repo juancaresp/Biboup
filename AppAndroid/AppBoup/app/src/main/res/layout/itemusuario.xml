@@ -28,7 +28,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imgGrupo"
+                android:id="@+id/imgGasto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="5dp"

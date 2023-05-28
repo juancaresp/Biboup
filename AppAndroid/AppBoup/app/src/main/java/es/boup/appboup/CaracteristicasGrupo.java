@@ -12,21 +12,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Group;
+import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IGroupService;
+import es.boup.appboup.Services.ISpentService;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,11 +53,14 @@ public class CaracteristicasGrupo extends Fragment {
     private AppViewModel appViewModel;
     private User user;
     private IUserService userService;
+    private ISpentService spentService;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     private FragmentManager fragmentManager;
+    private RecyclerView recyclerView;
+    public List<Spent> gastos;
 
 
     public CaracteristicasGrupo() {
@@ -69,9 +80,11 @@ public class CaracteristicasGrupo extends Fragment {
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
         btnAniadirGasto=view.findViewById(R.id.btnAniadirGasto);
+        recyclerView = view.findViewById(R.id.rvGastos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
+        gastos = new ArrayList<>();
         tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());
 
         btnAniadirParticipante.setOnClickListener(v -> {
@@ -126,5 +139,81 @@ public class CaracteristicasGrupo extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(new GastoAdapter());
+
+        spentService = retrofit.create(ISpentService.class);
+        Call<List<Spent>> peticionObtenerSpentsGrupo = spentService.getSpentsGroup(appViewModel.getGroup().getId());
+        peticionObtenerSpentsGrupo.enqueue(new Callback<List<Spent>>() {
+            @Override
+            public void onResponse(Call<List<Spent>> call, Response<List<Spent>> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK){
+                    Log.d("llamadaApi","gastos obtenidos");
+                    gastos = response.body();
+                    recyclerView.setAdapter(new GastoAdapter());
+                }else{
+                    Log.d("llamadaApi","error obteniendo gastos");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Spent>> call, Throwable t) {
+                Log.d("llamadaApi",t.getLocalizedMessage());
+            }
+        });
     }
+
+    class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoHolder>{
+
+
+        @NonNull
+        @Override
+        public GastoAdapter.GastoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new GastoAdapter.GastoHolder(getLayoutInflater().inflate(R.layout.item_gasto,parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull GastoAdapter.GastoHolder holder, int position) {
+            holder.imprimir(gastos.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return gastos.size();
+        }
+
+        public class GastoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+            private TextView tvNombre, tvTitulo, tvDinero;
+            private ImageView tipoGasto;
+
+            public GastoHolder(@NonNull View itemView) {
+                super(itemView);
+                tvNombre = itemView.findViewById(R.id.tvpagador);
+                tvTitulo = itemView.findViewById(R.id.tvTitulo);
+                tvDinero = itemView.findViewById(R.id.tvGasto);
+                tipoGasto = itemView.findViewById(R.id.imgGasto);
+                itemView.setOnClickListener(this);
+            }
+
+            public void imprimir (Spent spent){
+                tvDinero.setText(""+spent.getQuantity());
+                tvNombre.setText(spent.getPayer().getUsername());
+                tvTitulo.setText(spent.getSpentName());
+
+                //Fix me
+                //cuando se añada el enumerado aqui poner un if o un switch
+                tipoGasto.setImageResource(R.drawable.ic_baseline_airplanemode_active_24);
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        }
+
+    }
+
 }
