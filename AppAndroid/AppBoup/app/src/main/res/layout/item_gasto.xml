@@ -28,42 +28,45 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imgGrupo"
+                android:id="@+id/imgGasto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="4dp"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/ic_baseline_restaurant_24"
-                tools:layout_editor_absoluteX="6dp" />
+                app:srcCompat="@drawable/ic_baseline_restaurant_24" />
 
             <TextView
                 android:id="@+id/tvTitulo"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/baloo_da"
                 android:text="Comida chino"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgGasto"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                tools:layout_editor_absoluteX="81dp" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tvpagador"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/baloo_da"
                 android:text="Paco"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgGasto"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.972"
-                tools:layout_editor_absoluteX="81dp" />
+                app:layout_constraintVertical_bias="0.972" />
 
             <TextView
                 android:id="@+id/tvGasto"

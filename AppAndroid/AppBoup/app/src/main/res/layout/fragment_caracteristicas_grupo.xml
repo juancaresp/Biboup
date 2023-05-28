@@ -51,14 +51,6 @@
             app:cornerRadius="50dp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/barra2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/linea_horizontal" />
-
     <TextView
         android:id="@+id/tvNombreGrupo"
         android:layout_width="match_parent"
