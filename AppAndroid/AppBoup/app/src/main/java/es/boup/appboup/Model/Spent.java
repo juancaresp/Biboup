@@ -21,6 +21,18 @@ public class Spent implements Serializable {
     @Expose
     private String spentDesc;
 
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @SerializedName("payer")
     @Expose
     private User payer;
