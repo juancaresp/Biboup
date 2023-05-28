@@ -2,6 +2,7 @@ package es.boup.appboup;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,10 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IGroupService;
 import retrofit2.Call;
@@ -37,12 +40,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AniadirGasto extends Fragment {
     private RecyclerView recyclerViewElegirPagador,recyclerViewElegirDeudores;
     private EditText etTitulo,etDescripcion, etCantidad;
-    private Button btnElegirPagador,btnElegirDeudores,btnGuardarLista;
+    private Button btnElegirPagador,btnElegirDeudores,btnGuardarLista,btnGuardarGasto;
     private IGroupService groupService;
     private AppViewModel appViewModel;
     private List<User> users;
     private List<User> deudores;
     private User pagador;
+    private Spent spent;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -68,12 +72,19 @@ public class AniadirGasto extends Fragment {
         etCantidad=view.findViewById(R.id.etCantidad);
         btnElegirDeudores=view.findViewById(R.id.btnElegirDeudores2);
         btnElegirPagador=view.findViewById(R.id.btnElegirPagador2);
+        btnGuardarGasto=view.findViewById(R.id.btnGuardarGasto);
         btnGuardarLista=view.findViewById(R.id.btnGuardarLista);
         recyclerViewElegirPagador=view.findViewById(R.id.rvPagadores);
         recyclerViewElegirDeudores=view.findViewById(R.id.rvDeudores);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         btnElegirPagador.setText(appViewModel.getUser().getUsername());
         pagador=appViewModel.getUser();
+        spent= new Spent();
+        deudores=new ArrayList<>();
+        deudores.addAll(users);
+
+        spent.setGroup(appViewModel.getGroup());
+
         groupService = retrofit.create(IGroupService.class);
         Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
         peticionUsers.enqueue(new Callback<List<User>>() {
@@ -87,6 +98,20 @@ public class AniadirGasto extends Fragment {
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+        });
+        btnGuardarGasto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spent.setQuantity(Integer.parseInt(etCantidad.getText().toString()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    spent.setDate(LocalDate.now().toString());
+                }
+                spent.setSpentDesc(etDescripcion.getText().toString());
+                spent.setUsers(deudores);
+                spent.setSpentName(etTitulo.getText().toString());
+                spent.setPayer(pagador);
 
             }
         });
@@ -117,6 +142,7 @@ public class AniadirGasto extends Fragment {
                 deudores=new ArrayList<>();
                 deudores.addAll(users);
                 deudores.remove(pagador);
+                spent.setUsers(deudores);
             }
         });
         btnGuardarLista.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +158,7 @@ public class AniadirGasto extends Fragment {
                 etDescripcion.setVisibility(View.VISIBLE);
                 etCantidad.setVisibility(View.VISIBLE);
                 Log.d("llamadaApi",deudores.toString());
+                spent.setPayer(pagador);
             }
         });
     }
