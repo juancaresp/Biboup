@@ -25,7 +25,8 @@ public interface ISpentService {
     @DELETE("api/spents/{idSpent}")
     Call<Spent> deleteSpent(@Path("idSpent") String idSpent);
 
-
+    @POST("api/spents")
+    Call<Spent> addSpent(@Body Spent spent);
 
 
 

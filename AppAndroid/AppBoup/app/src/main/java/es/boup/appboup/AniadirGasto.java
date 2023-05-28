@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +33,7 @@ import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IGroupService;
+import es.boup.appboup.Services.ISpentService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,11 +45,13 @@ public class AniadirGasto extends Fragment {
     private EditText etTitulo,etDescripcion, etCantidad;
     private Button btnElegirPagador,btnElegirDeudores,btnGuardarLista,btnGuardarGasto;
     private IGroupService groupService;
+    private ISpentService spentService;
     private AppViewModel appViewModel;
     private List<User> users;
     private List<User> deudores;
     private User pagador;
     private Spent spent;
+    private FragmentManager fragmentManager;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -81,7 +86,7 @@ public class AniadirGasto extends Fragment {
         pagador=appViewModel.getUser();
         spent= new Spent();
         deudores=new ArrayList<>();
-        deudores.addAll(users);
+
 
         spent.setGroup(appViewModel.getGroup());
 
@@ -92,7 +97,7 @@ public class AniadirGasto extends Fragment {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if(response.code()==HttpURLConnection.HTTP_OK){
                     users=response.body();
-
+                    deudores.addAll(users);
                 }
             }
 
@@ -104,6 +109,7 @@ public class AniadirGasto extends Fragment {
         btnGuardarGasto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!etCantidad.getText().toString().equals("")){
                 spent.setQuantity(Integer.parseInt(etCantidad.getText().toString()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     spent.setDate(LocalDate.now().toString());
@@ -112,7 +118,27 @@ public class AniadirGasto extends Fragment {
                 spent.setUsers(deudores);
                 spent.setSpentName(etTitulo.getText().toString());
                 spent.setPayer(pagador);
+                spentService = retrofit.create(ISpentService.class);
+                Call<Spent> peticionAddGasto = spentService.addSpent(spent);
+                peticionAddGasto.enqueue(new Callback<Spent>() {
+                    @Override
+                    public void onResponse(Call<Spent> call, Response<Spent> response) {
+                        if(response.code()==HttpURLConnection.HTTP_OK){
+                            fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.commit();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Spent> call, Throwable t) {
+
+                    }
+                });}
+                else{
+                    Toast.makeText(getContext(), "Tienes que añadir cantidad", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnElegirPagador.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +176,8 @@ public class AniadirGasto extends Fragment {
             public void onClick(View v) {
                 if( deudores.size()!= users.size()-1){
                     btnElegirDeudores.setText("personalizado");
+                }else{
+                    btnElegirDeudores.setText("entre todos");
                 }
                 btnGuardarLista.setVisibility(View.GONE);
                 recyclerViewElegirDeudores.setVisibility(View.GONE);
@@ -241,8 +269,9 @@ public class AniadirGasto extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (!checkbox.isChecked()){
-                            deudores.remove(deudores.get(getAdapterPosition()));
-
+                            deudores.remove(users.get(getAdapterPosition()));
+                        }else{
+                            deudores.add(users.get(getAdapterPosition()));
                         }
                     }
                 });
