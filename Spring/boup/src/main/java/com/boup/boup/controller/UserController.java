@@ -233,4 +233,9 @@ public class UserController {
 		return rp;
 	}
 	
+	@GetMapping("/suggest/{username}")
+	public ResponseEntity<List<String>> getUsernamesSuggest(@PathVariable String username) {
+		
+		return new ResponseEntity<>(userS.findBySuggestions(username),HttpStatus.OK);
+	}
 }

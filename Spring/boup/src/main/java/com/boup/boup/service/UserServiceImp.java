@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.boup.boup.dto.AddWallet;
@@ -81,7 +82,7 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		// TODO Auto-generated method stub
+		
 		return userR.findByEmail(email);
 	}
 
@@ -136,6 +137,12 @@ public class UserServiceImp implements UserService {
 		
 		
 		return op;
+	}
+
+	@Override
+	public List<String> findBySuggestions(String username) {
+	
+		return userR.findUsernames(Pageable.ofSize(10),username);
 	}
 
 }
