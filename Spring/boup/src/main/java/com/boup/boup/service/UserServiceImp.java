@@ -81,7 +81,7 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		// TODO Auto-generated method stub
+		
 		return userR.findByEmail(email);
 	}
 
@@ -136,6 +136,12 @@ public class UserServiceImp implements UserService {
 		
 		
 		return op;
+	}
+
+	@Override
+	public List<String> findBySuggestions(String username) {
+	
+		return userR.findUsernames(username);
 	}
 
 }

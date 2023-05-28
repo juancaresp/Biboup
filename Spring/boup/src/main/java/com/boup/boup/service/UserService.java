@@ -23,6 +23,7 @@ public interface UserService {
 	public Optional<User> register(UserReg reg);
 	public Optional<User> updateU(UserUpd reg, String email);
 	public Optional<User> addWallet(AddWallet add);
+	public List<String> findBySuggestions(String username);
 
 	
 }
