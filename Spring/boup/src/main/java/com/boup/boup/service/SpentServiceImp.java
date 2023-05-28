@@ -29,12 +29,12 @@ public class SpentServiceImp implements SpentService {
 	DebtService debtS;
 	@Autowired
 	GroupService groupS;
-	
+
 	@Override
 	public Optional<Spent> insert(Spent s) {
-		System.out.println(s);
+
 		Optional<Spent> op = Optional.of(spentR.save(s));
-		
+
 		return op;
 	}
 
@@ -75,57 +75,98 @@ public class SpentServiceImp implements SpentService {
 		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
 	}
+
 	
+
+	@Override
+	public void deleteUserSpent(Integer spentId, Integer userid) {
+		// TODO Auto-generated method stub
+		spentR.findById(spentId).ifPresent(s -> {
+			User u = userR.findById(userid).orElse(new User());
+			s.getUsers().remove(u);
+			spentR.save(s);
+		});
+		;
+
+	}
+
+	@Override
+	public void addUserSpent(Integer spentId, Integer userid) {
+		// TODO Auto-generated method stub
+		spentR.findById(spentId).ifPresent(s -> {
+			User u = userR.findById(userid).orElse(new User());
+			s.getUsers().add(u);
+			spentR.save(s);
+		});
+		;
+
+	}
+
+	@Override
+	public List<Spent> findByUser(String username) {
+		return spentR.findByPayerUsernameOrUsersUsername(username, username);
+	}
+
+	@Override
+	public boolean deleteSpent(int id) {
+		Optional<Spent> opS = spentR.findById(id);
+
+		opS.ifPresent((sp) -> {
+			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
+			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
+				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
+				d.setAmount(d.getAmount() - sp.getQuantity() + part);
+				debtR.save(d);
+
+				sp.getUsers().forEach(u -> {
+					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
+					de.setAmount(de.getAmount() + part);
+					debtR.save(de);
+				});
+				spentR.deleteById(id);
+			});
+			;
+		});
+
+		return !spentR.existsById(id);
+	}
+
 	@Override
 	public Optional<Spent> addSpent(Spent spent) {
-		
-		Optional<Spent> spe =insert(spent);
+
+		Optional<Spent> spe = insert(spent);
 
 		spe.ifPresent((sp) -> {
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
-			groupS.findById(sp.getGroup().getId()).ifPresent(g->
-			{
-				Debt d=debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
+			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
+				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
+				d.setAmount(d.getAmount() + sp.getQuantity() - part);
 				debtR.save(d);
-				d.setAmount(d.getAmount()+sp.getQuantity()-part);
-				
-				sp.getUsers().forEach(u->{
-					Debt de=debtS.findByUserAndGroup(u, g).orElse(new Debt());
-					de.setAmount(de.getAmount()-part);
+
+				sp.getUsers().forEach(u -> {
+					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
+					de.setAmount(de.getAmount() - part);
 					debtR.save(de);
 				});
-				
-			});;
+
+			});
+			;
 		});
 
 		return spe;
 	}
 	
 	@Override
-	public void deleteUserSpent(Integer spentId, Integer userid) {
-		// TODO Auto-generated method stub
-		spentR.findById(spentId).ifPresent(s ->{
-			User u= userR.findById(userid).orElse(new User());
-			s.getUsers().remove(u);
-			spentR.save(s);
-		});;
+	public Optional<Spent> updateSpent(Spent spent) {
+		Optional<Spent> opS=spentR.findById(spent.getId());
 		
-	}
-
-	@Override
-	public void addUserSpent(Integer spentId, Integer userid) {
-		// TODO Auto-generated method stub
-		spentR.findById(spentId).ifPresent(s ->{
-			User u= userR.findById(userid).orElse(new User());
-			s.getUsers().add(u);
-			spentR.save(s);
-		});;
+		if(opS.isPresent()) {
+			if(deleteSpent(opS.get().getId())) {
+				opS=addSpent(spent);
+			}
+		}
 		
-	}
-
-	@Override
-	public List<Spent> findByUser(String username) {
-		return spentR.findByPayerUsernameOrUsersUsername(username, username);
+		return opS;
 	}
 
 }

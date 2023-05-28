@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -102,7 +103,7 @@ public class DebtController {
 	}
 
 	// Close debt
-	@PostMapping("/pay/{username}/group/{groupid}")
+	@PatchMapping("/pay/{username}/group/{groupid}")
 	public ResponseEntity<Debt> closeDebt(@PathVariable String username, @PathVariable String groupid) {
 
 		ResponseEntity<Debt> rp = new ResponseEntity<Debt>(HttpStatus.BAD_REQUEST);

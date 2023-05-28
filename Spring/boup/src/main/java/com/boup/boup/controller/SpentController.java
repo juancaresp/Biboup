@@ -6,9 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,8 +60,8 @@ public class SpentController {
 		return rp;
 	}
 
-	@PostMapping("/delete")
-	public ResponseEntity<Spent> deleteSpent(@RequestBody Spent spent) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Spent> deletSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
 
@@ -124,7 +126,7 @@ public class SpentController {
 	
 	
 	//ADD a spent generating the debts
-	@PostMapping("/add")
+	@PostMapping("")
 	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
 
 		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
@@ -133,6 +135,30 @@ public class SpentController {
 		if (opS.isPresent()) {
 			spent=opS.get();
 			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
+		}
+
+		return rp;
+	}
+	
+	@DeleteMapping("/{idSpent}")
+	public ResponseEntity<Spent> deleteSpent(@PathVariable String idSpent) {
+
+		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		
+		if (spentS.deleteSpent(Integer.parseInt(idSpent))) {
+			rp = new ResponseEntity<Spent>(HttpStatus.OK);
+		}
+
+		return rp;
+	}
+	
+	@PutMapping("")
+	public ResponseEntity<Spent> updatSpent(@RequestBody Spent spent) {
+
+		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		Optional<Spent> opS=spentS.updateSpent(spent);
+		if (opS.isPresent()) {
+			rp = new ResponseEntity<Spent>(opS.get(),HttpStatus.OK);
 		}
 
 		return rp;

@@ -97,7 +97,7 @@ public class CaracteristicasGrupo extends Fragment {
             final AlertDialog alertDialog = builder.create();
 
             //funcion add saldo del alert dialog
-            view2.findViewById(R.id.btAddGrupoG).setOnClickListener(view3 -> {
+            view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
                 //recoger el saldo a a単adir
                 EditText etNombre = view2.findViewById(R.id.etNombreG);
                 if (!etNombre.getText().toString().isEmpty()) {
@@ -210,7 +210,11 @@ public class CaracteristicasGrupo extends Fragment {
 
             @Override
             public void onClick(View view) {
-
+                appViewModel.setSpent(gastos.get(getAdapterPosition()));
+                fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.frame,new GastoFragment());
+                fragmentTransaction.commit();
             }
         }
 
