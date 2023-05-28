@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -61,11 +62,14 @@ public class Spent implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Group group;
+	
+	@Enumerated
+	private SpentTypes type;
 
 	@Override
 	public String toString() {
 		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + users.stream().map(u-> u.getNameU()) + ", quantity="
-				+ quantity + ", date=" + date + ", group=" + group.getGroupName() + "]";
+				+ quantity + ", date=" + date + ", group=" + group.getGroupName() + ", type="+type+"]";
 	}
 	
 }
