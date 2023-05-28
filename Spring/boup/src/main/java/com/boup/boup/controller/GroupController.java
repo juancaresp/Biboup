@@ -60,6 +60,18 @@ public class GroupController {
 		return rp;
 	}
 
+	// List,getgroup
+	
+	@GetMapping("")
+	public ResponseEntity<List<Group>> getGroups() {
+	
+		List<Group> groups = groupS.findAll();
+	
+		ResponseEntity<List<Group>> rp = new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+	
+		return rp;
+	}
+
 	@PostMapping("/delete")
 	public ResponseEntity<Group> deleteGroup(@RequestBody Group group) {
 
@@ -73,16 +85,6 @@ public class GroupController {
 	}
 
 	// List,getgroup
-
-	@GetMapping("")
-	public ResponseEntity<List<Group>> getGroups() {
-
-		List<Group> groups = groupS.findAll();
-
-		ResponseEntity<List<Group>> rp = new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
-
-		return rp;
-	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Group> getGroupById(@PathVariable String id) {

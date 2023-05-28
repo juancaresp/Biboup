@@ -1,5 +1,7 @@
 package es.boup.appboup.Services;
 
+import java.util.List;
+
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
@@ -10,7 +12,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface IGroupService {
-    @POST("api/groups/add/{groupname}/user/{username}")
+    @POST("api/groups/create/{groupname}/user/{username}")
     Call<Group> insertarUsuario(@Path("groupname") String groupname,@Path("username") String username);
 
     @GET("api/groups/{id}")
@@ -18,4 +20,7 @@ public interface IGroupService {
 
     @POST("api/groups/{idgroup}/addUser/{username}")
     Call<Group> insertarUsuarioEnGrupo(@Path("idgroup") int idgroup,@Path("username") String username);
+
+    @GET("api/groups/{groupid}/users")
+    Call<List<User>> getGroupUsers(@Path("groupid") String groupid);
 }

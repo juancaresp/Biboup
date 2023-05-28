@@ -38,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CaracteristicasGrupo extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto;
-    public EditText etAniadirParticipante;
+
     public TextView tvNombreGrupo;
     private Group group;
     private IGroupService groupService;
@@ -90,7 +90,7 @@ public class CaracteristicasGrupo extends Fragment {
                 if (!etNombre.getText().toString().isEmpty()) {
                     String nombre = etNombre.getText().toString();
                     groupService = retrofit.create(IGroupService.class);
-                    Call<Group> peticionInsertarUsuario = groupService.insertarUsuarioEnGrupo(group.getId(),nombre);
+                    Call<Group> peticionInsertarUsuario = groupService.insertarUsuarioEnGrupo(appViewModel.getGroup().getId(),nombre);
                     peticionInsertarUsuario.enqueue(new Callback<Group>() {
                         @Override
                         public void onResponse(Call<Group> call, Response<Group> response) {

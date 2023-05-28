@@ -6,27 +6,65 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_color"
     android:orientation="vertical"
+    android:padding="15dp"
     tools:context=".CaracteristicasGrupo">
 
-    <Button
-        android:id="@+id/btAddP"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:backgroundTint="@color/principal"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:onClick="visibilizarGrupo"
-        android:text="Añadir participante"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        app:cornerRadius="15dp" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/logo2"
+            app:srcCompat="@drawable/logo2" />
+
+        <TextView
+            android:id="@+id/tvSaldoCG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="6"
+            android:fontFamily="@font/baloo_da"
+            android:gravity="center|start"
+            android:text="Saldo: 0.0€"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btAddP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/principal"
+            android:fontFamily="@font/baloo_da"
+            android:gravity="center"
+            android:onClick="visibilizarGrupo"
+            android:text="Añadir participante"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            app:cornerRadius="50dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/barra2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/linea_horizontal" />
 
     <TextView
         android:id="@+id/tvNombreGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/baloo_da"
+        android:text="Nombre grupo"
         android:textColor="#000000"
         android:textSize="35sp" />
 
@@ -41,18 +79,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/baloo_da"
-            android:text="Gastos totales del grupo"
+            android:text=" Gastos totales: 0.0€"
             android:textColor="#000000"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/baloo_da"
-            android:text="60"
-            android:textColor="#000000"
-            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,49 +91,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView16"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/baloo_da"
-            android:text="Debes o te deben"
-            android:textColor="#000000" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:fontFamily="@font/baloo_da"
-                android:gravity="right"
-                android:text="40"
-                android:textColor="#000000" />
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:fontFamily="@font/baloo_da"
-                android:gravity="right"
-                android:text="A Juan Carlos"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvGasto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -118,14 +106,53 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:backgroundTint="#069e8c"
+            android:backgroundTint="@color/principal"
             android:fontFamily="@font/baloo_da"
-            android:gravity="right"
+            android:gravity="center"
             android:text="Añadir gasto"
+            android:textSize="13sp"
             app:cornerRadius="50dp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDeudas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/baloo_da"
+                android:gravity="left"
+                android:text="Te deben: "
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvDeuda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:fontFamily="@font/baloo_da"
+                android:gravity="end"
+                android:text="10€"
+                android:textColor="@color/principal"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGastos"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
