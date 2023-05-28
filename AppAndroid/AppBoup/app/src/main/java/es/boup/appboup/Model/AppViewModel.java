@@ -23,6 +23,15 @@ public class AppViewModel extends ViewModel {
     private Group group;
     //variable para cerrar tras login y registro
     private boolean cerrar;
+    private Spent spent;
+
+    public Spent getSpent() {
+        return spent;
+    }
+
+    public void setSpent(Spent spent) {
+        this.spent = spent;
+    }
 
     public void setUser(User user) {
         this.user = user;
