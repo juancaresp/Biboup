@@ -127,6 +127,7 @@ public class AniadirGasto extends Fragment {
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }
                     }

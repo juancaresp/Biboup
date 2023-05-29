@@ -136,6 +136,7 @@ public class CaracteristicasGrupo extends Fragment {
                 fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.frame,new AniadirGasto());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
@@ -214,6 +215,7 @@ public class CaracteristicasGrupo extends Fragment {
                 fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.frame,new GastoFragment());
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         }
