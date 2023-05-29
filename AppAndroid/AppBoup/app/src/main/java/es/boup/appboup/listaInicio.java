@@ -83,7 +83,7 @@ public class listaInicio extends Fragment {
         user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
-        Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
+         Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
         peticionGrupos.enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
@@ -204,6 +204,7 @@ public class listaInicio extends Fragment {
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }else{
                             Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();

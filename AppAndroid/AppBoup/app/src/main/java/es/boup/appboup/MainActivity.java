@@ -108,7 +108,18 @@ public class MainActivity extends AppCompatActivity{
     private void cambiarFragmento(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frame,fragment);
+
+        // Verificar si ya estás en el fragmento que deseas agregar
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frame);
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
+            // Estás en el mismo fragmento, no es necesario agregarlo a la pila de retroceso
+            fragmentTransaction.replace(R.id.frame, fragment);
+        } else {
+            // No estás en el mismo fragmento, agrega el fragmento a la pila de retroceso
+            fragmentTransaction.add(R.id.frame, fragment);
+            fragmentTransaction.addToBackStack(null);
+        }
+
         fragmentTransaction.commit();
     }
 
@@ -165,7 +176,13 @@ public class MainActivity extends AppCompatActivity{
         if (appViewModel.getCerrar()){
             this.finish();
         }
-        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            // Si hay fragmentos en la pila, retroceder al fragmento anterior
+            getSupportFragmentManager().popBackStack();
+        } else {
+            // Si no hay fragmentos en la pila, permitir el comportamiento de retroceso predeterminado (cerrar la aplicación)
+            super.onBackPressed();
+        }
     }
 
 
