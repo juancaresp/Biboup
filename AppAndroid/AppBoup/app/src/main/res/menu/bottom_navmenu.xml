@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navPerfil"
-        android:icon="@drawable/ic_baseline_person_24"
-        android:title="Perfil" />
-    <item
         android:id="@+id/navLista"
         android:icon="@drawable/ic_baseline_view_list_24"
-        android:title="Lista" />
+        android:title="Grupos" />
     <item
         android:id="@+id/navAdd"
         android:icon="@drawable/ic_baseline_add_24"
         android:title="Add" />
+    <item
+        android:id="@+id/navPerfil"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="Perfil" />
 </menu>
