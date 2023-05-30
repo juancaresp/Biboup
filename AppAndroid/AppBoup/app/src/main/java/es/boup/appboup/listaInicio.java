@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.Model.Debt;
+import es.boup.appboup.Model.DebtDTO;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IGroupService;
@@ -44,6 +46,7 @@ public class listaInicio extends Fragment {
 
     private Button btnCrearGrupo;
     private List<Group> groups;
+    private List<DebtDTO> debtDTOS;
     private RecyclerView rv;
     private IGroupService groupService;
     private IUserService userService;
@@ -52,7 +55,7 @@ public class listaInicio extends Fragment {
     private User user;
     private Group group;
     public FragmentManager fragmentManager;
-
+    private List<Debt> debts;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -83,18 +86,39 @@ public class listaInicio extends Fragment {
         user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
-         Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
-        peticionGrupos.enqueue(new Callback<List<Group>>() {
+        Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
+        peticionDebts.enqueue(new Callback<List<Debt>>() {
             @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+            public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
                 if(response.code()== HttpURLConnection.HTTP_OK){
-                    groups=response.body();
-                    rv.setAdapter(new GrupoAdapter());
+                    debts=response.body();
+                    Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
+                    peticionGrupos.enqueue(new Callback<List<Group>>() {
+                        @Override
+                        public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                            if(response.code()== HttpURLConnection.HTTP_OK){
+                                groups=response.body();
+                                for (Debt d: debts) {
+                                    for (Group g: groups) {
+                                        if(d.getGroup().getId()==g.getId())
+                                            debtDTOS.add(new DebtDTO(g,d));
+                                    }
+                                }
+                                rv.setAdapter(new GrupoAdapter());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Group>> call, Throwable t) {
+
+                        }
+                    });
+
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
+            public void onFailure(Call<List<Debt>> call, Throwable t) {
 
             }
         });
@@ -122,7 +146,9 @@ public class listaInicio extends Fragment {
                         @Override
                         public void onResponse(Call<Group> call, Response<Group> response) {
                             if(response.code()== HttpURLConnection.HTTP_OK){
+                                debtDTOS.add(new DebtDTO(response.body(),new Debt()));
                                 groups.add(response.body());
+
                                 rv.setAdapter(new GrupoAdapter());
                                 alertDialog.dismiss();
                                 Log.d("llamadaApi","llamada hecha");
@@ -172,20 +198,21 @@ public class listaInicio extends Fragment {
         }
         public class GrupoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-            private TextView tvNombre,tvDni;
+            private TextView tvNombre,tvDni,tvResumen;
 
 
             public GrupoHolder(@NonNull View itemView) {
                 super(itemView);
                 tvDni=itemView.findViewById(R.id.tvId);
                 tvNombre=itemView.findViewById(R.id.tvTitulo);
+                tvResumen=itemView.findViewById(R.id.tvGasto);
                 itemView.setOnClickListener(this);
             }
 
             public void imprimir(Group group){
                 tvDni.setText(group.getId().toString());
                 tvNombre.setText(group.getGroupName());
-
+                //tvResumen.setText(debtDTOS.get(group).getDebt().getAmount()+ " €");
             }
 
             @Override
@@ -203,7 +230,7 @@ public class listaInicio extends Fragment {
                             Toast.makeText(getActivity(), ""+group.getGroupName(), Toast.LENGTH_SHORT).show();
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }else{

@@ -29,6 +29,9 @@ public interface IUserService {
     @GET("api/users/{username}/groups")
     Call<List<Group>> obtenerGruposDelUsuario(@Path("username") String username);
 
+    @GET("api/users/{username}/debts")
+    Call<List<Debt>> getUserDebts(@Path("username")String username);
+
     @GET("api/users/{username}/debts/win")
     Call<List<Debt>> getGruposQueTeDeben(@Path("username") String username);
 

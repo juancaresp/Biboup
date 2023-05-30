@@ -117,7 +117,7 @@ public class UserController {
 		return rp;
 	}
 	
-	@PostMapping("/")
+	@PostMapping("")
 	public ResponseEntity<User> registerUser(@RequestBody UserReg userReg) {
 		
 		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);

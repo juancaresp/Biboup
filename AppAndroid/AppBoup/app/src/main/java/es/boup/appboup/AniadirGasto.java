@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class AniadirGasto extends Fragment {
     private RecyclerView recyclerViewElegirPagador,recyclerViewElegirDeudores;
     private EditText etTitulo,etDescripcion, etCantidad;
     private Button btnElegirPagador,btnElegirDeudores,btnGuardarLista,btnGuardarGasto;
+    private ImageView btnAtras;
     private IGroupService groupService;
     private ISpentService spentService;
     private AppViewModel appViewModel;
@@ -76,6 +78,7 @@ public class AniadirGasto extends Fragment {
         etDescripcion=view.findViewById(R.id.etDescripcion);
         etCantidad=view.findViewById(R.id.etCantidad);
         btnElegirDeudores=view.findViewById(R.id.btnElegirDeudores2);
+        btnAtras=view.findViewById(R.id.btnAtras);
         btnElegirPagador=view.findViewById(R.id.btnElegirPagador2);
         btnGuardarGasto=view.findViewById(R.id.btnGuardarGasto);
         btnGuardarLista=view.findViewById(R.id.btnGuardarLista);
@@ -106,6 +109,17 @@ public class AniadirGasto extends Fragment {
 
             }
         });
+
+        btnAtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         btnGuardarGasto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +140,7 @@ public class AniadirGasto extends Fragment {
                         if(response.code()==HttpURLConnection.HTTP_OK){
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.add(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }

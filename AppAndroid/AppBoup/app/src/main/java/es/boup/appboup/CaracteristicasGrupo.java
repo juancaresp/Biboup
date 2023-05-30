@@ -135,7 +135,7 @@ public class CaracteristicasGrupo extends Fragment {
             public void onClick(View v) {
                 fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frame,new AniadirGasto());
+                fragmentTransaction.replace(R.id.frame,new AniadirGasto());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
