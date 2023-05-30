@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.0.14:8080/";
+    public static String CONEXION_API = "http://192.168.1.72:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity{
             fragmentTransaction.replace(R.id.frame, fragment);
         } else {
             // No estás en el mismo fragmento, agrega el fragmento a la pila de retroceso
-            fragmentTransaction.add(R.id.frame, fragment);
+            fragmentTransaction.replace(R.id.frame, fragment);
             fragmentTransaction.addToBackStack(null);
         }
 
@@ -150,10 +150,10 @@ public class MainActivity extends AppCompatActivity{
                         if (response.code() == HttpURLConnection.HTTP_OK){
                             appViewModel.setUser(response.body());
                             Log.e("llamadaApi","Usuario obtenido");
-                            fragmentTransaction.add(R.id.frame,new PerfilFragment());
+                            fragmentTransaction.replace(R.id.frame,new PerfilFragment());
                         }else{
                             Log.e("llamadaApi","Usuario no obtenido");
-                            fragmentTransaction.add(R.id.frame,new LoginFragment());
+                            fragmentTransaction.replace(R.id.frame,new LoginFragment());
                         }
                         fragmentTransaction.commit();
                     }
