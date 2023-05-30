@@ -14,6 +14,16 @@ public class Group  implements Serializable {
     @Expose
     private String groupName;
 
+    private Debt debt;
+
+    public Debt getDebt() {
+        return debt;
+    }
+
+    public void setDebt(Debt debt) {
+        this.debt = debt;
+    }
+
     public Group(Integer id, String groupName) {
         this.id = id;
         this.groupName = groupName;
