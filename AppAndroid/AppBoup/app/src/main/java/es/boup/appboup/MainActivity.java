@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity{
         if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
             // Estás en el mismo fragmento, no es necesario agregarlo a la pila de retroceso
             fragmentTransaction.replace(R.id.frame, fragment);
+
         } else {
             // No estás en el mismo fragmento, agrega el fragmento a la pila de retroceso
             fragmentTransaction.replace(R.id.frame, fragment);
@@ -173,11 +174,20 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.frame);
+
         if (appViewModel.getCerrar()){
             this.finish();
         }
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             // Si hay fragmentos en la pila, retroceder al fragmento anterior
+            if (fragment instanceof PerfilFragment)
+                binding.bottomNavM.getMenu().getItem(2).setChecked(true);
+            else if (fragment instanceof  AniadirGasto)
+                binding.bottomNavM.getMenu().getItem(1).setChecked(true);
+            else if (fragment instanceof  listaInicio)
+                binding.bottomNavM.getMenu().getItem(0).setChecked(true);
             getSupportFragmentManager().popBackStack();
         } else {
             // Si no hay fragmentos en la pila, permitir el comportamiento de retroceso predeterminado (cerrar la aplicación)

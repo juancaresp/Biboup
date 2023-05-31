@@ -97,7 +97,6 @@ public class listaInicio extends Fragment {
                         public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                             if(response.code()== HttpURLConnection.HTTP_OK){
                                 groups=response.body();
-
                                 rv.setAdapter(new GrupoAdapter());
                             }
                         }
@@ -125,9 +124,9 @@ public class listaInicio extends Fragment {
             builder.setView(view2);
             final AlertDialog alertDialog = builder.create();
 
-            //funcion add saldo del alert dialog
+            //funcion add grupo del alert dialog
             view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
-                //recoger el saldo a añadir
+                //recoger el nombre del grupo a añadir
                 EditText etNombre = view2.findViewById(R.id.etNombreG);
 
                 if (!etNombre.getText().toString().isEmpty()) {
@@ -140,7 +139,6 @@ public class listaInicio extends Fragment {
                         @Override
                         public void onResponse(Call<Group> call, Response<Group> response) {
                             if(response.code()== HttpURLConnection.HTTP_OK){
-
                                 groups.add(response.body());
                                 Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
                                 peticionDebts.enqueue(new Callback<List<Debt>>() {

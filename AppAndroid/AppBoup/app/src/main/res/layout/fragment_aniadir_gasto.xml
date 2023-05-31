@@ -44,7 +44,6 @@
             android:backgroundTint="@color/principal"
             android:fontFamily="@font/baloo_da"
             android:text="guardar"
-            android:textColor="#FFFFFF"
             app:cornerRadius="50dp" />
 
     </LinearLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/listaInicio"
         android:name="es.boup.appboup.listaInicio"
         android:label="fragment_lista_inicio"
-        tools:layout="@layout/fragment_lista_inicio" >
+        tools:layout="@layout/fragment_lista_inicio">
         <action
             android:id="@+id/action_listaInicio_to_caracteristicasGrupo"
             app:destination="@id/caracteristicasGrupo" />
@@ -28,7 +28,7 @@
         android:id="@+id/caracteristicasGrupo"
         android:name="es.boup.appboup.CaracteristicasGrupo"
         android:label="fragment_caracteristicas_grupo"
-        tools:layout="@layout/fragment_caracteristicas_grupo" >
+        tools:layout="@layout/fragment_caracteristicas_grupo">
         <action
             android:id="@+id/action_caracteristicasGrupo_to_gastoFragment2"
             app:destination="@id/gastoFragment2" />
