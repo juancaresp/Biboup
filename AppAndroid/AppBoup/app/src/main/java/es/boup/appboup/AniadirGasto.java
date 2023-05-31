@@ -29,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Spent;
@@ -85,7 +87,9 @@ public class AniadirGasto extends Fragment {
         recyclerViewElegirPagador=view.findViewById(R.id.rvPagadores);
         recyclerViewElegirDeudores=view.findViewById(R.id.rvDeudores);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-        btnElegirPagador.setText(appViewModel.getUser().getUsername());
+        btnElegirPagador.setText("elige");
+        btnElegirDeudores.setEnabled(false);
+        btnGuardarGasto.setEnabled(false);
         pagador=appViewModel.getUser();
         spent= new Spent();
         deudores=new ArrayList<>();
@@ -99,7 +103,10 @@ public class AniadirGasto extends Fragment {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if(response.code()==HttpURLConnection.HTTP_OK){
-                    users=response.body();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        users=response.body();
+                    }
+                    users.remove(pagador);
                     deudores.addAll(users);
                 }
             }
@@ -129,6 +136,7 @@ public class AniadirGasto extends Fragment {
                     spent.setDate(LocalDate.now().toString());
                 }
                 spent.setSpentDesc(etDescripcion.getText().toString());
+                deudores.remove(pagador);
                 spent.setUsers(deudores);
                 spent.setSpentName(etTitulo.getText().toString());
                 spent.setPayer(pagador);
@@ -166,7 +174,9 @@ public class AniadirGasto extends Fragment {
                 LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
                 recyclerViewElegirPagador.setLayoutManager(linearLayoutManager);
                 recyclerViewElegirPagador.setAdapter(new GrupoAdapter());
-
+                recyclerViewElegirDeudores.setVisibility(View.INVISIBLE);
+                btnElegirDeudores.setEnabled(true);
+                btnGuardarGasto.setEnabled(false);
             }
         });
         btnElegirDeudores.setOnClickListener(new View.OnClickListener() {
@@ -179,11 +189,12 @@ public class AniadirGasto extends Fragment {
                 LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
                 recyclerViewElegirDeudores.setLayoutManager(linearLayoutManager);
                 btnGuardarLista.setVisibility(View.VISIBLE);
-                recyclerViewElegirDeudores.setAdapter(new GrupoAdapter2());
                 deudores=new ArrayList<>();
                 deudores.addAll(users);
                 deudores.remove(pagador);
+                recyclerViewElegirDeudores.setAdapter(new GrupoAdapter2());
                 spent.setUsers(deudores);
+                btnGuardarGasto.setEnabled(true);
             }
         });
         btnGuardarLista.setOnClickListener(new View.OnClickListener() {
@@ -279,6 +290,7 @@ public class AniadirGasto extends Fragment {
                 super(itemView);
                 tvNombre=itemView.findViewById(R.id.tvNombrePagador);
                 checkbox=itemView.findViewById(R.id.checkBox);
+                deudores.remove(pagador);
                 itemView.setOnClickListener(this);
                 checkbox.setOnClickListener(new View.OnClickListener() {
                     @Override
