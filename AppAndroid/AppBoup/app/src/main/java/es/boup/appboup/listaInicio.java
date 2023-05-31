@@ -44,7 +44,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class listaInicio extends Fragment {
 
-    private Button btnCrearGrupo;
+    private Button btnCrearGrupo,btCobrar,btDeber;
+    private TextView tvSaldo;
     private List<Group> groups;
     private RecyclerView rv;
     private IGroupService groupService;
@@ -80,40 +81,54 @@ public class listaInicio extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         btnCrearGrupo = view.findViewById(R.id.btAddP);
+        btCobrar = view.findViewById(R.id.btCobrar);
+        btDeber = view.findViewById(R.id.btDeber);
         rv=view.findViewById(R.id.listaDeGrupos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
+        tvSaldo = view.findViewById(R.id.tvSaldoG);
+        tvSaldo.setText(user.getWallet()+"{");
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
-        Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
-        peticionDebts.enqueue(new Callback<List<Debt>>() {
-            @Override
-            public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
-                if(response.code()== HttpURLConnection.HTTP_OK){
-                    debts=response.body();
-                    Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
-                    peticionGrupos.enqueue(new Callback<List<Group>>() {
-                        @Override
-                        public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                            if(response.code()== HttpURLConnection.HTTP_OK){
-                                groups=response.body();
-                                rv.setAdapter(new GrupoAdapter());
-                            }
-                        }
+        groups= new ArrayList<>();
+        debts = new ArrayList<>();
+        //obtener las deudas de los usuarios
+        getAllDebtsUser();
 
-                        @Override
-                        public void onFailure(Call<List<Group>> call, Throwable t) {
+        btCobrar.setOnClickListener(view1 ->{
+            Call<List<Debt>> peticionDebtsWin= userService.getGruposQueTeDeben(user.getUsername());
+            peticionDebtsWin.enqueue(new Callback<List<Debt>>() {
+                @Override
+                public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
+                    if (response.code() == HttpURLConnection.HTTP_OK){
+                        debts = response.body();
+                        rv.setAdapter(new GrupoAdapter());
+                    }
+                }
 
-                        }
-                    });
+                @Override
+                public void onFailure(Call<List<Debt>> call, Throwable t) {
 
                 }
-            }
+            });
+        });
 
-            @Override
-            public void onFailure(Call<List<Debt>> call, Throwable t) {
+        btDeber.setOnClickListener(view1 ->{
+            Call<List<Debt>> peticionDebtsLose= userService.getGruposQueDebes(user.getUsername());
+            peticionDebtsLose.enqueue(new Callback<List<Debt>>() {
+                @Override
+                public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
+                    if (response.code() == HttpURLConnection.HTTP_OK){
+                        debts = response.body();
+                        rv.setAdapter(new GrupoAdapter());
+                    }
+                }
 
-            }
+                @Override
+                public void onFailure(Call<List<Debt>> call, Throwable t) {
+
+                }
+            });
         });
 
         btnCrearGrupo.setOnClickListener(view1 -> {
@@ -177,10 +192,39 @@ public class listaInicio extends Fragment {
             }
             alertDialog.show();
         });
-        groups= new ArrayList<>();
+
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(new GrupoAdapter());
+    }
+
+    private void getAllDebtsUser() {
+        Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
+        peticionDebts.enqueue(new Callback<List<Debt>>() {
+            @Override
+            public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
+                if(response.code()== HttpURLConnection.HTTP_OK){
+                    debts=response.body();
+                    Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
+                    peticionGrupos.enqueue(new Callback<List<Group>>() {
+                        @Override
+                        public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                            if(response.code()== HttpURLConnection.HTTP_OK){
+                                groups=response.body();
+                                rv.setAdapter(new GrupoAdapter());
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<List<Group>> call, Throwable t) {
+                        }
+                    });
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Debt>> call, Throwable t) {
+            }
+        });
     }
 
     class GrupoAdapter extends RecyclerView.Adapter<GrupoAdapter.GrupoHolder>{
@@ -199,7 +243,7 @@ public class listaInicio extends Fragment {
 
 
         @Override
-        public int getItemCount() {return groups.size();
+        public int getItemCount() {return debts.size();
         }
         public class GrupoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -217,6 +261,10 @@ public class listaInicio extends Fragment {
             public void imprimir(Debt debt){
                 tvDni.setText(debt.getGroup().getId().toString());
                 tvNombre.setText(debt.getGroup().getGroupName());
+                if (debt.getAmount() >= 0){
+                    tvResumen.setTextColor(getResources().getColor(R.color.principal));
+                }else
+                    tvResumen.setTextColor(getResources().getColor(R.color.error));
                 tvResumen.setText(debt.getAmount()+ " €");
             }
 

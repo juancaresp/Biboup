@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     private FrameLayout frameLayout;
     //variable sesion del usuario
     private FirebaseAuth mAuth;
+
     //variable estadisticas
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity{
         //crear el viewModel que se pasara por la actividad
         appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
         appViewModel.setCerrar(false);
+
 
         //localizar layout para poner los fragmentos
         frameLayout = findViewById(R.id.frame);
