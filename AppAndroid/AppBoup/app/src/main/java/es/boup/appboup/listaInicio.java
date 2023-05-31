@@ -46,7 +46,6 @@ public class listaInicio extends Fragment {
 
     private Button btnCrearGrupo;
     private List<Group> groups;
-    private List<DebtDTO> debtDTOS;
     private RecyclerView rv;
     private IGroupService groupService;
     private IUserService userService;
@@ -98,12 +97,7 @@ public class listaInicio extends Fragment {
                         public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                             if(response.code()== HttpURLConnection.HTTP_OK){
                                 groups=response.body();
-                                for (Debt d: debts) {
-                                    for (Group g: groups) {
-                                        if(d.getGroup().getId()==g.getId())
-                                            debtDTOS.add(new DebtDTO(g,d));
-                                    }
-                                }
+
                                 rv.setAdapter(new GrupoAdapter());
                             }
                         }
@@ -146,9 +140,22 @@ public class listaInicio extends Fragment {
                         @Override
                         public void onResponse(Call<Group> call, Response<Group> response) {
                             if(response.code()== HttpURLConnection.HTTP_OK){
-                                debtDTOS.add(new DebtDTO(response.body(),new Debt()));
-                                groups.add(response.body());
 
+                                groups.add(response.body());
+                                Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
+                                peticionDebts.enqueue(new Callback<List<Debt>>() {
+                                    @Override
+                                    public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
+                                        if(response.code()== HttpURLConnection.HTTP_OK){
+                                            debts=response.body();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<Debt>> call, Throwable t) {
+
+                                    }
+                                });
                                 rv.setAdapter(new GrupoAdapter());
                                 alertDialog.dismiss();
                                 Log.d("llamadaApi","llamada hecha");
@@ -188,7 +195,7 @@ public class listaInicio extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull GrupoAdapter.GrupoHolder holder, int position) {
-            holder.imprimir(groups.get(position));
+            holder.imprimir(debts.get(position));
         }
 
 
@@ -209,10 +216,10 @@ public class listaInicio extends Fragment {
                 itemView.setOnClickListener(this);
             }
 
-            public void imprimir(Group group){
-                tvDni.setText(group.getId().toString());
-                tvNombre.setText(group.getGroupName());
-                //tvResumen.setText(debtDTOS.get(group).getDebt().getAmount()+ " €");
+            public void imprimir(Debt debt){
+                tvDni.setText(debt.getGroup().getId().toString());
+                tvNombre.setText(debt.getGroup().getGroupName());
+                tvResumen.setText(debt.getAmount()+ " €");
             }
 
             @Override
