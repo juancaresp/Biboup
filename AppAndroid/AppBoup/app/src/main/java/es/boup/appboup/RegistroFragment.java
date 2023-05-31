@@ -216,7 +216,7 @@ public class RegistroFragment extends Fragment {
                                 appViewModel.setCerrar(true);
                                 getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                                 fragmentManager.beginTransaction()
-                                        .replace(R.id.frame, new PerfilFragment())
+                                        .replace(R.id.frame, new listaInicio())
                                         .addToBackStack(null)
                                         .commit();
 

@@ -166,7 +166,7 @@ public class LoginFragment extends Fragment {
                             Toast.makeText(getActivity(), "Sesion iniciada correctamente ", Toast.LENGTH_SHORT).show();
                             getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                             fragmentManager.beginTransaction()
-                                    .replace(R.id.frame, new PerfilFragment())
+                                    .replace(R.id.frame, new listaInicio())
                                     .addToBackStack(null)
                                     .commit();
                         }else{
@@ -323,7 +323,7 @@ public class LoginFragment extends Fragment {
                                 //cambiar de fragmento
                                 FragmentManager fragmentManager = getParentFragmentManager();
                                 fragmentManager.beginTransaction()
-                                        .replace(R.id.frame, new PerfilFragment())
+                                        .replace(R.id.frame, new listaInicio())
                                         .addToBackStack(null)
                                         .commit();
 

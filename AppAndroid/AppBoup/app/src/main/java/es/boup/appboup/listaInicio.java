@@ -86,7 +86,7 @@ public class listaInicio extends Fragment {
         user = appViewModel.getUser();
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
-        Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
+            Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
         peticionDebts.enqueue(new Callback<List<Debt>>() {
             @Override
             public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
