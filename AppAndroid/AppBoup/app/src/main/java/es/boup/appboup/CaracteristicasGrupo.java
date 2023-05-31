@@ -4,6 +4,7 @@ import static es.boup.appboup.MainActivity.CONEXION_API;
 
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -47,7 +48,7 @@ public class CaracteristicasGrupo extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto;
 
-    public TextView tvNombreGrupo;
+    public TextView tvNombreGrupo,tvGastosTotales;
     private Group group;
     private IGroupService groupService;
     private AppViewModel appViewModel;
@@ -78,6 +79,7 @@ public class CaracteristicasGrupo extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
+        tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
         btnAniadirGasto=view.findViewById(R.id.btnAniadirGasto);
         recyclerView = view.findViewById(R.id.rvGastos);
@@ -153,6 +155,9 @@ public class CaracteristicasGrupo extends Fragment {
                 if (response.code() == HttpURLConnection.HTTP_OK){
                     Log.d("llamadaApi","gastos obtenidos");
                     gastos = response.body();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        tvGastosTotales.setText("Gastos totales :" + gastos.stream().mapToDouble(Spent::getQuantity).sum());
+                    }
                     recyclerView.setAdapter(new GastoAdapter());
                 }else{
                     Log.d("llamadaApi","error obteniendo gastos");
