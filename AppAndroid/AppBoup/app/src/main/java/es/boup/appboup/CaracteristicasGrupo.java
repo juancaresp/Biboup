@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +49,13 @@ public class CaracteristicasGrupo extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto;
 
-    public TextView tvNombreGrupo,tvGastosTotales;
+    public TextView tvNombreGrupo,tvGastosTotales,tvSaldo;
     private Group group;
     private IGroupService groupService;
     private AppViewModel appViewModel;
     private User user;
     private IUserService userService;
+    private DecimalFormat formato ;
     private ISpentService spentService;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -78,6 +80,8 @@ public class CaracteristicasGrupo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        formato= new DecimalFormat("#.##");
+        tvSaldo=view.findViewById(R.id.tvSaldoCG);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
         tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
@@ -85,6 +89,7 @@ public class CaracteristicasGrupo extends Fragment {
         recyclerView = view.findViewById(R.id.rvGastos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
+        tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         gastos = new ArrayList<>();
         tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());

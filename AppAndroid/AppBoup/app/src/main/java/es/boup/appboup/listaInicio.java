@@ -90,7 +90,7 @@ public class listaInicio extends Fragment {
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
         tvSaldo = view.findViewById(R.id.tvSaldoG);
-        tvSaldo.setText(user.getWallet()+"{");
+        tvSaldo.setText(formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
         groups= new ArrayList<>();
