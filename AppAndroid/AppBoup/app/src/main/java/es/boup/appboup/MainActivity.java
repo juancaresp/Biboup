@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.0.14:8080/";
+    public static String CONEXION_API = "http://192.168.1.72:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario

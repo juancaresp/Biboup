@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class listaInicio extends Fragment {
     //Valor del usuario que se pasara entre los fragmentos
     private AppViewModel appViewModel;
     private User user;
+    private DecimalFormat formato ;
     private Group group;
     public FragmentManager fragmentManager;
     private List<Debt> debts;
@@ -80,6 +82,7 @@ public class listaInicio extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        formato= new DecimalFormat("#.##");
         btnCrearGrupo = view.findViewById(R.id.btAddP);
         btCobrar = view.findViewById(R.id.btCobrar);
         btDeber = view.findViewById(R.id.btDeber);
@@ -265,7 +268,7 @@ public class listaInicio extends Fragment {
                     tvResumen.setTextColor(getResources().getColor(R.color.principal));
                 }else
                     tvResumen.setTextColor(getResources().getColor(R.color.error));
-                tvResumen.setText(debt.getAmount()+ " €");
+                tvResumen.setText(formato.format(debt.getAmount())+ " €");
             }
 
             @Override
