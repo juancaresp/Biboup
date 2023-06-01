@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.net.HttpURLConnection;
+import java.text.DecimalFormat;
 
 import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.EditUserDTO;
@@ -50,6 +51,7 @@ public class PerfilFragment extends Fragment {
     private ImageButton btEditar;
     private FirebaseAuth mAuth;
     private TextView tvUsername,tvSaldo,tvCorreo;
+    private DecimalFormat formato ;
     private EditText etNombre,etUsername,etTelefono;
     private Button btConfirmar,btAlert;
     private AppViewModel appViewModel;
@@ -81,6 +83,7 @@ public class PerfilFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        formato= new DecimalFormat("#.##");
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         tvCorreo = view.findViewById(R.id.tvCorreoP);
         etUsername = view.findViewById(R.id.etUsernameP);
@@ -100,7 +103,7 @@ public class PerfilFragment extends Fragment {
             if (user.getWallet() == null)
                 tvSaldo.setText("saldo: 0.00"+ "€");
             else
-                tvSaldo.setText("saldo: "+user.getWallet()+ "€");
+                tvSaldo.setText("saldo: "+formato.format(user.getWallet())+ "€");
             if (user.getTelephone() != null)
                 etTelefono.setText(user.getTelephone());
             else
@@ -173,7 +176,7 @@ public class PerfilFragment extends Fragment {
                                 if (HttpURLConnection.HTTP_OK == response.code()) {
                                     alertDialog.dismiss();
                                     user.addSaldo(saldo);
-                                    tvSaldo.setText("saldo: " + user.getWallet() + "€");
+                                    tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
                                     Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
