@@ -46,4 +46,9 @@
         android:name="es.boup.appboup.pagardeuda"
         android:label="fragment_pagardeuda"
         tools:layout="@layout/fragment_pagardeuda" />
+    <fragment
+        android:id="@+id/historicoFragment"
+        android:name="es.boup.appboup.HistoricoFragment"
+        android:label="fragment_historico"
+        tools:layout="@layout/fragment_historico" />
 </navigation>
