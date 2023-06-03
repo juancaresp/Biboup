@@ -129,5 +129,29 @@ public class DebtController {
 
 		return rp;
 	}
+	//Get a specific debt
+	@GetMapping("/user/{username}/group/{groupid}")
+	public ResponseEntity<Debt> findDebt(@PathVariable String username, @PathVariable String groupid) {
+
+		ResponseEntity<Debt> rp = new ResponseEntity<Debt>(HttpStatus.NOT_FOUND);
+
+		Optional<User> opU = userS.findByNick(username);
+		Optional<Group> opG = groupS.findById(Integer.parseInt(groupid));
+
+		if (opU.isPresent() && opG.isPresent()) {
+
+			User u = opU.get();
+			Group g = opG.get();
+			Optional<Debt> debt = debtS.findByUserAndGroup(u, g);
+
+			if (debt.isPresent()) {
+				rp = new ResponseEntity<Debt>(debt.get(), HttpStatus.OK);
+			} else {
+				rp = new ResponseEntity<Debt>(HttpStatus.NOT_FOUND);
+			}
+		}
+
+		return rp;
+	}
 
 }
