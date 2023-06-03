@@ -81,7 +81,7 @@ public class CaracteristicasGrupo extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         formato= new DecimalFormat("#.##");
-        tvSaldo=view.findViewById(R.id.tvSaldoCG);
+        tvSaldo=view.findViewById(R.id.tvSaldoH);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
         tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
@@ -202,7 +202,7 @@ public class CaracteristicasGrupo extends Fragment {
 
             public GastoHolder(@NonNull View itemView) {
                 super(itemView);
-                tvNombre = itemView.findViewById(R.id.tvpagador);
+                tvNombre = itemView.findViewById(R.id.tvGrupo);
                 tvTitulo = itemView.findViewById(R.id.tvTitulo);
                 tvDinero = itemView.findViewById(R.id.tvGasto);
                 tipoGasto = itemView.findViewById(R.id.imgGasto);
@@ -224,7 +224,7 @@ public class CaracteristicasGrupo extends Fragment {
                 appViewModel.setSpent(gastos.get(getAdapterPosition()));
                 fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frame,new GastoFragment());
+                fragmentTransaction.replace(R.id.frame,new GastoFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

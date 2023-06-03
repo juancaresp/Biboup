@@ -56,11 +56,11 @@
 
             <TextView
                 android:id="@+id/tvpagadoPor"
-                android:layout_width="80dp"
+                android:layout_width="47dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/baloo_da"
-                android:text="Pagado por:"
+                android:text="Grupo:"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
