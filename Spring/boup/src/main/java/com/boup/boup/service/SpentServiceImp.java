@@ -147,7 +147,7 @@ public class SpentServiceImp implements SpentService {
 				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
 				d.setAmount(d.getAmount() + sp.getQuantity() - part);
 				debtR.save(d);
-
+				sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
 				sp.getUsers().forEach(u -> {
 					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
 					de.setAmount(de.getAmount() - part);

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boup.boup.model.Debt;
 import com.boup.boup.model.Group;
 import com.boup.boup.repository.DebtRepository;
 import com.boup.boup.repository.GroupRepository;
@@ -44,9 +45,22 @@ public class GroupServiceImp implements GroupService{
 	@Override
 	public boolean delete(Integer id) {
 		boolean exit=false;
-		if(groupR.existsById(id)) {
-			groupR.deleteById(id);
-			exit=true;
+		Optional<Group> opGroup=groupR.findById(id);
+		
+		if(opGroup.isPresent()) {
+			Group g=opGroup.get();
+			List<Debt> debts=debtR.findByGroup(g);
+			boolean removable=true;
+			
+			for(int i=0;i<debts.size()&&removable;i++) {
+				if(debts.get(i).getAmount()!=0)
+					removable=false;
+			}
+			
+			if(removable) {
+				groupR.deleteById(id);
+				exit=true;
+			}
 		}
 		return exit;
 	}
