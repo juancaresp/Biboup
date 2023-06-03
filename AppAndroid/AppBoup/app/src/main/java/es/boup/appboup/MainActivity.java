@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -32,11 +33,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.0.14:8080/";
+    public static String CONEXION_API = "http://192.168.1.72:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
     private FirebaseAuth mAuth;
+
     //variable estadisticas
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity{
         //crear el viewModel que se pasara por la actividad
         appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
         appViewModel.setCerrar(false);
+
 
         //localizar layout para poner los fragmentos
         frameLayout = findViewById(R.id.frame);

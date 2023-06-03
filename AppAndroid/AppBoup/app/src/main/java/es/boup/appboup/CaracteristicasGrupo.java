@@ -4,6 +4,7 @@ import static es.boup.appboup.MainActivity.CONEXION_API;
 
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +49,13 @@ public class CaracteristicasGrupo extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto;
 
-    public TextView tvNombreGrupo;
+    public TextView tvNombreGrupo,tvGastosTotales,tvSaldo;
     private Group group;
     private IGroupService groupService;
     private AppViewModel appViewModel;
     private User user;
     private IUserService userService;
+    private DecimalFormat formato ;
     private ISpentService spentService;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -77,12 +80,16 @@ public class CaracteristicasGrupo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        formato= new DecimalFormat("#.##");
+        tvSaldo=view.findViewById(R.id.tvSaldoCG);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
+        tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
         btnAniadirGasto=view.findViewById(R.id.btnAniadirGasto);
         recyclerView = view.findViewById(R.id.rvGastos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
+        tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         gastos = new ArrayList<>();
         tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());
@@ -153,6 +160,9 @@ public class CaracteristicasGrupo extends Fragment {
                 if (response.code() == HttpURLConnection.HTTP_OK){
                     Log.d("llamadaApi","gastos obtenidos");
                     gastos = response.body();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        tvGastosTotales.setText("Gastos totales :" + gastos.stream().mapToDouble(Spent::getQuantity).sum());
+                    }
                     recyclerView.setAdapter(new GastoAdapter());
                 }else{
                     Log.d("llamadaApi","error obteniendo gastos");
