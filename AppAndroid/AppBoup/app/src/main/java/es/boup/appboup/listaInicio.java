@@ -93,28 +93,10 @@ public class listaInicio extends Fragment {
         tvSaldo.setText(formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
-<<<<<<< HEAD
-            Call<List<Debt>> peticionDebts= userService.getUserDebts(user.getUsername());
-        peticionDebts.enqueue(new Callback<List<Debt>>() {
-            @Override
-            public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
-                if(response.code()== HttpURLConnection.HTTP_OK){
-                    debts=response.body();
-                    Call<List<Group>> peticionGrupos = userService.obtenerGruposDelUsuario(user.getUsername());
-                    peticionGrupos.enqueue(new Callback<List<Group>>() {
-                        @Override
-                        public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                            if(response.code()== HttpURLConnection.HTTP_OK){
-                                groups=response.body();
-                                rv.setAdapter(new GrupoAdapter());
-                            }
-                        }
-=======
         groups= new ArrayList<>();
         debts = new ArrayList<>();
         //obtener las deudas de los usuarios
         getAllDebtsUser();
->>>>>>> 46f079b7c6866df7199e07c227b90089807df5e4
 
         btCobrar.setOnClickListener(view1 ->{
             Call<List<Debt>> peticionDebtsWin= userService.getGruposQueTeDeben(user.getUsername());
