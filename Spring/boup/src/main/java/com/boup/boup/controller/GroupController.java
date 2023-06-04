@@ -163,6 +163,24 @@ public class GroupController {
 		return rp;
 	}
 	
+	@PutMapping("/{idgroup}/removeUser/{username}")
+	public ResponseEntity<Group> removeUserFromGroup(@PathVariable("idgroup") Integer idgroup, @PathVariable("username") String username){
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		Optional<Group> opG=groupS.findById(idgroup);
+		Optional<User> opU=userS.findByNick(username);
+		
+		if (opG.isPresent() && opU.isPresent()) {
+			
+			Debt d=debtS.findByUserAndGroup(opU.get(), opG.get()).orElse(new Debt());
+			debtS.delete(d.getId());
+			rp = new ResponseEntity<>(opG.get(), HttpStatus.OK);
+		}
+		
+		return rp;
+	}
+	
+	
 	@GetMapping("/{groupid}/debts")
 	public ResponseEntity<List<Debt>> getGroupDebts(@PathVariable Integer groupid) {
 
@@ -173,7 +191,7 @@ public class GroupController {
 		if(op.isPresent()) {
 			
 			List<Debt> debts=debtS.findGroupDebts(op.get());	
-			rp= new ResponseEntity<List<Debt>>(debts,HttpStatus.OK);
+			rp= new ResponseEntity<>(debts,HttpStatus.OK);
 		}
 
 		return rp;

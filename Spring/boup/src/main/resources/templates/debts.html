@@ -1,20 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Formulario de Grupos</title>
+<title>Formulario de Deuda</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
+<script>
+	function enviarPeticion(accion) {
+		let formuario = document.getElementById("formulario")
+		formulario.action = accion;
+	}
+</script>
 <body>
 	<div th:replace="~{header.html :: navbar}"></div>
-
 	<div class="container">
 		<div class="row">
-			<h2>Grupos</h2>
+			<h2>Deudas</h2>
 		</div>
 		<div class="row">
 			<div class="col s2  offset-s4">
-				<form method="get" action="/web/groups/formu">
+				<form method="get" action="/web/debts/formu">
 					<input type="submit" class="waves-effect waves-light btn"
 						value="Nuevo">
 				</form>
@@ -26,14 +31,19 @@
 
 				<thead>
 					<tr>
-						<th>ID</th>
-						<th>Groupname</th>
+						<th>Modificar</th>
+						<th>User</th>
+						<th>Cantidad</th>
+						<th>Grupo</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="group: ${groups}">
-						<td><a th:href="@{/web/groups/{id}(id=${group.id})}"><span th:text="${group.id}"></span></a></td>
-						<td th:text="${group.groupName}"/>
+					<tr th:each="d: ${debts}">
+						<td><a th:href="@{/web/debts/form/{id}(id=${d.id})}"><span
+								th:text="${d.id}"></span></a></td>
+						<td th:text="${d.user.username}" />
+						<td th:text="${d.amount}" />
+						<td th:text="${d.group.groupName}" />
 					</tr>
 				</tbody>
 			</table>

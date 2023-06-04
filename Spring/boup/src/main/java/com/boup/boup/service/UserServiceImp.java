@@ -29,17 +29,6 @@ public class UserServiceImp implements UserService {
 	DebtRepository debtR;
 	@Autowired
 	GroupService groupS;
-
-	@Override
-	public Optional<User> insert(User u) {
-		Optional<User> op = Optional.empty();
-
-		if (userR.findById(u.getId()).isEmpty()) {
-			op = Optional.of(userR.save(u));
-		}
-
-		return op;
-	}
 	
 	@Override
 	public Optional<User> update(User u) {

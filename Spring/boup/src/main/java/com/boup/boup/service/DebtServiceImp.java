@@ -86,12 +86,6 @@ public class DebtServiceImp implements DebtService {
 	}
 
 	@Override
-	public Optional<Debt> addDebt(Debt d) {
-
-		return Optional.empty();
-	}
-
-	@Override
 	public List<User> findGroupUsers(Group g) {
 
 		List<Debt> debts = debtR.findByGroup(g);
