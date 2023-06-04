@@ -4,11 +4,14 @@ import static es.boup.appboup.MainActivity.CONEXION_API;
 
 import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +57,7 @@ public class GastoFragment extends Fragment {
     private List<User> deudores;
     private User pagador;
     private Spent gasto;
+    private FragmentManager fragmentManager;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -75,14 +80,16 @@ public class GastoFragment extends Fragment {
         etTitulo=view.findViewById(R.id.etTitulo2);
         etDescripcion=view.findViewById(R.id.etDescripcion2);
         etCantidad=view.findViewById(R.id.etCantidad2);
-        btnElegirDeudores=view.findViewById(R.id.btnElegirDeudores2);
-        btnElegirPagador=view.findViewById(R.id.btnElegirPagador2);
+        btnElegirDeudores=view.findViewById(R.id.btnElegirDeudores3);
+        btnElegirPagador=view.findViewById(R.id.btnElegirPagador3);
         btBorrar = view.findViewById(R.id.btBorrar);
         btGuardar = view.findViewById(R.id.btGuardar);
         btnGuardarLista=view.findViewById(R.id.btnGuardarLista2);
         recyclerViewElegirPagador=view.findViewById(R.id.rvPagadores);
         recyclerViewElegirDeudores=view.findViewById(R.id.rvDeudores);
+
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+
         btnElegirPagador.setText(appViewModel.getUser().getUsername());
         gasto = appViewModel.getSpent();
         etTitulo.setText(gasto.getSpentName());
@@ -91,7 +98,9 @@ public class GastoFragment extends Fragment {
         users = gasto.getUsers();
         pagador = gasto.getPayer();
         btnElegirPagador.setText(pagador.getUsername());
+        btnElegirDeudores.setEnabled(false);
         deudores = appViewModel.getSpent().getUsers();
+
         groupService = retrofit.create(IGroupService.class);
         Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
         peticionUsers.enqueue(new Callback<List<User>>() {
@@ -104,6 +113,8 @@ public class GastoFragment extends Fragment {
                     }else{
                         btnElegirDeudores.setText("Personalizado");
                     }
+                    users.remove(pagador);
+                    deudores.addAll(users);
                 }
             }
 
@@ -113,40 +124,40 @@ public class GastoFragment extends Fragment {
             }
         });
         pagador=appViewModel.getUser();
-        btnElegirPagador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etTitulo.setVisibility(View.GONE);
-                etDescripcion.setVisibility(View.GONE);
-                etCantidad.setVisibility(View.GONE);
-                recyclerViewElegirPagador.setVisibility(View.VISIBLE);
-                LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
-                recyclerViewElegirPagador.setLayoutManager(linearLayoutManager);
-                recyclerViewElegirPagador.setAdapter(new GrupoAdapter());
+        btnElegirPagador.setOnClickListener(v -> {
+            etTitulo.setVisibility(View.GONE);
+            etDescripcion.setVisibility(View.GONE);
+            etCantidad.setVisibility(View.GONE);
+            recyclerViewElegirPagador.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+            recyclerViewElegirPagador.setLayoutManager(linearLayoutManager);
+            recyclerViewElegirPagador.setAdapter(new GrupoAdapter());
+            recyclerViewElegirDeudores.setVisibility(View.INVISIBLE);
+            btnElegirDeudores.setEnabled(true);
 
-            }
         });
-        btnElegirDeudores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etTitulo.setVisibility(View.GONE);
-                etDescripcion.setVisibility(View.GONE);
-                etCantidad.setVisibility(View.GONE);
-                recyclerViewElegirDeudores.setVisibility(View.VISIBLE);
-                LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
-                recyclerViewElegirDeudores.setLayoutManager(linearLayoutManager);
-                btnGuardarLista.setVisibility(View.VISIBLE);
-                recyclerViewElegirDeudores.setAdapter(new GrupoAdapter2());
-                deudores=new ArrayList<>();
-                deudores.addAll(users);
-                deudores.remove(pagador);
-            }
+        btnElegirDeudores.setOnClickListener(v -> {
+            etTitulo.setVisibility(View.GONE);
+            etDescripcion.setVisibility(View.GONE);
+            etCantidad.setVisibility(View.GONE);
+            recyclerViewElegirDeudores.setVisibility(View.VISIBLE);
+            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+            recyclerViewElegirDeudores.setLayoutManager(linearLayoutManager);
+            btnGuardarLista.setVisibility(View.VISIBLE);
+            deudores=new ArrayList<>();
+            deudores.addAll(users);
+            deudores.remove(pagador);
+            recyclerViewElegirDeudores.setAdapter(new GrupoAdapter2());
+            gasto.setUsers(deudores);
+            btGuardar.setEnabled(true);
         });
         btnGuardarLista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if( deudores.size()!= users.size()-1){
                     btnElegirDeudores.setText("personalizado");
+                }else{
+                    btnElegirDeudores.setText("entre todos");
                 }
                 btnGuardarLista.setVisibility(View.GONE);
                 recyclerViewElegirDeudores.setVisibility(View.GONE);
@@ -155,10 +166,21 @@ public class GastoFragment extends Fragment {
                 etDescripcion.setVisibility(View.VISIBLE);
                 etCantidad.setVisibility(View.VISIBLE);
                 Log.d("llamadaApi",deudores.toString());
+                gasto.setPayer(pagador);
             }
         });
 
         btGuardar.setOnClickListener(view1 -> {
+            if(!etCantidad.getText().toString().equals("")){
+                gasto.setQuantity(Integer.parseInt(etCantidad.getText().toString()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    gasto.setDate(LocalDate.now().toString());
+                }
+                gasto.setSpentDesc(etDescripcion.getText().toString());
+                deudores.remove(pagador);
+                gasto.setUsers(deudores);
+                gasto.setSpentName(etTitulo.getText().toString());
+                gasto.setPayer(pagador);
                 spentService = retrofit.create(ISpentService.class);
                 Call<Spent> peticionEdit = spentService.updateSpent(gasto);
                 peticionEdit.enqueue(new Callback<Spent>() {
@@ -166,6 +188,11 @@ public class GastoFragment extends Fragment {
                     public void onResponse(Call<Spent> call, Response<Spent> response) {
                         if(response.code()== HttpURLConnection.HTTP_OK){
                             Toast.makeText(getActivity(), "Gasto modificado", Toast.LENGTH_SHORT).show();
+                            fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
 
                         }else{
                             Toast.makeText(getActivity(), "Error modificando", Toast.LENGTH_SHORT).show();
@@ -178,6 +205,9 @@ public class GastoFragment extends Fragment {
 
                     }
                 });
+            }else{
+                Toast.makeText(getContext(), "Tienes que añadir cantidad", Toast.LENGTH_SHORT).show();
+            }
 
         });
 
@@ -196,16 +226,28 @@ public class GastoFragment extends Fragment {
                 public void onResponse(Call<Spent> call, Response<Spent> response) {
                     if(response.code()== HttpURLConnection.HTTP_OK){
                         Toast.makeText(getActivity(), "Gasto Eliminado", Toast.LENGTH_SHORT).show();
-                        alertDialog.dismiss();
                     }else{
-                        Toast.makeText(getActivity(), "Error eliminando", Toast.LENGTH_SHORT).show();
+                        Log.d("llamadaApi","error eliminando"+response.code());
                     }
+                    alertDialog.dismiss();
+                    fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
 
                 @Override
                 public void onFailure(Call<Spent> call, Throwable t) {
-
+                    Log.d("llamadaApi","error eliminando de red un gasto"+t.getMessage());
+                    alertDialog.dismiss();
+                    fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
+
             });
 
         });
@@ -292,13 +334,15 @@ public class GastoFragment extends Fragment {
                 super(itemView);
                 tvNombre=itemView.findViewById(R.id.tvNombrePagador);
                 checkbox=itemView.findViewById(R.id.checkBox);
+                deudores.remove(pagador);
                 itemView.setOnClickListener(this);
                 checkbox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (!checkbox.isChecked()){
-                            deudores.remove(deudores.get(getAdapterPosition()));
-
+                            deudores.remove(users.get(getAdapterPosition()));
+                        }else{
+                            deudores.add(users.get(getAdapterPosition()));
                         }
                     }
                 });
