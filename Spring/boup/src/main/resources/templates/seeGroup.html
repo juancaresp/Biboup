@@ -1,59 +1,67 @@
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Grupo </title>
+<title>Grupo</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
 <body>
-	<div th:insert="header.html :: navbar"></div>
+	<div th:replace="~{header.html :: navbar}"></div>
 	<div class="container">
 		<div class="row">
-			<h2>Grupo <span th:text="${group.groupName}"></span> </h2>
+			<h2>
+				Grupo <span th:text="${group.groupName}"></span>
+			</h2>
 		</div>
 		<div class="row">
-			<a th:href="@{/web/groups/form/{id}(id=${group.id})}" class="waves-effect waves-light btn">Modificar</a>
+			<a th:href="@{/web/groups/form/{id}(id=${group.id})}"
+				class="waves-effect waves-light btn">Modificar</a>
 		</div>
 	</div>
 	<div>
 		<h2>Usuarios</h2>
 	</div>
 	<div>
-		<form method="POST" id="addUformulario" action='/web/user/addGroup'>
+		<form method="POST" id="addUformulario" action='/web/users/addGroup'>
 			<div>
 				<div class="input-field col s2">
-					<label for="userId">ID del usuario</label>
-					<input type="text" id="userId" name="userId" />
+					<label for="username">Username</label> <input type="text"
+						id="username" name="username" />
 				</div>
 			</div>
-			<input type="hidden" name="groupid" value="${group.id}" /> 
-			<input type="submit" value="Agregar" />
+			<input type="hidden" name="groupId" th:value="${group.id}" /> <input
+				type="submit" value="Agregar" />
 		</form>
 	</div>
 
 	<div class="row">
-		<table class="striped col s6 offset-s3">
-
+		<table class="striped">
 			<thead>
 				<tr>
-					<th>Usuario</th>
-					<th>Accion</th>
+					<th>Username</th>
+					<th>Correo</th>
+					<th>Nombre</th>
+					<th>Telefono</th>
+					<th>Monedero</th>
 				</tr>
 			</thead>
 			<tbody>
-					<tr>
-						<td><c:url var="url" value="user">
-								<c:param name="id" value="${u.id}"></c:param>
-							</c:url> <a href="${url}">${u.username}</a></td>
-						<td>
-							<form method="POST" id="deleteGformulario"
-								action='/web/user/deleteGroup'>
-								<input type="hidden" name="groupId" value="${group.id}" /> <input
-									type="hidden" name="userId" value="${u.id}" /> <input
-									type="submit" value="Borrar" />
-							</form>
-						</td>
-					</tr>
+				<tr th:each="u: ${users}">
+					<td><a th:href="@{/web/users/form/{id}(id=${u.id})}"><span
+							th:text="${u.username}"></span></a></td>
+					<td th:text="${u.email}" />
+					<td th:text="${u.nameU}" />
+					<td th:text="${u.telephone}" />
+					<td th:text="${u.wallet}" />
+					<td>
+						<form method="POST" id="deleteGformulario"
+							action='/web/users/deleteGroup'>
+							<input type="hidden" name="groupId" th:value="${group.id}" /> <input
+								type="hidden" name="username" th:value="${u.username}" /> <input
+								type="submit" value="Borrar" />
+						</form>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

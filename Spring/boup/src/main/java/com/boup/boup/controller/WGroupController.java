@@ -3,12 +3,12 @@ package com.boup.boup.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.Group;
@@ -18,7 +18,7 @@ import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
 
 
-@Controller
+@RestController
 @RequestMapping("/web/groups")
 public class WGroupController {
 	
@@ -28,11 +28,12 @@ public class WGroupController {
 	@Autowired UserService userS;
 	
 	@GetMapping("")
-	public String hola(Model modelo) {
+	public ModelAndView hola() {
+		ModelAndView mav=new ModelAndView("groups");
 		List<Group> groups = groupS.findAll();
 
-		modelo.addAttribute("groups", groups);
-		return "groups";
+		mav.addObject("groups", groups);
+		return mav;
 	}
 	
 	@GetMapping("/{id}")
@@ -43,6 +44,7 @@ public class WGroupController {
 		Group group= groupS.findById(Integer.parseInt(id)).orElse(new Group());
 		
 		mav.addObject("group",group);
+		mav.addObject("users", debtS.findGroupUsers(group));
 		
 		return mav;
 	}
@@ -50,37 +52,41 @@ public class WGroupController {
 	//Crud
 	
 	@PostMapping("/insert")
-	public String insertGroupW(Model model,Group g) {
+	public ModelAndView insertGroupW(Group g) {
+		ModelAndView mav=new ModelAndView("seeGroup");
+
+		g=groupS.insert(g).orElse(new Group());
+		mav.addObject("group", g);
 		
-		groupS.insert(g);
-		model.addAttribute("group", g);
-		
-		return "seeGroup";
+		return mav;
 	}
 	
 	@PostMapping("/delete")
-	public String deleteGroupW(Model model,Group g) {
-		
+	public ModelAndView deleteGroupW(Model model,Group g) {
+		ModelAndView mav=new ModelAndView("groups");
 		groupS.delete(g.getId());
 
-		return "groups";
+		return mav;
 	}
 	
 	@PostMapping("/update")
-	public String updateGroupW(Model model,Group g) {
+	public ModelAndView updateGroupW(Group g) {
+		ModelAndView mav=new ModelAndView("seeGroup");
 
-		groupS.update(g);
-		model.addAttribute("group",g);
+		g=groupS.update(g).orElse(new Group());
+		mav.addObject("group",g);
 		
-		return "seeGroup";
+		return mav;
 	}
 	
 	//Formularios
 	
 	@GetMapping("/formu")
-	public String getGroupFormEmpty(Model model) {
-		model.addAttribute("group",new Group());
-		return "groupForm";
+	public ModelAndView getGroupFormEmpty() {
+		ModelAndView mav=new ModelAndView("seeGroup");
+
+		mav.addObject("group",new Group());
+		return mav;
 	}
 	
 	@GetMapping("/form/{id}")

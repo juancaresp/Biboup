@@ -1,17 +1,21 @@
 package com.boup.boup.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.boup.boup.model.Debt;
+import com.boup.boup.model.Group;
+import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
@@ -19,7 +23,7 @@ import com.boup.boup.service.UserService;
 
 
 @RestController
-@RequestMapping("/web")
+@RequestMapping("/web/debts")
 public class WDebtController {
 	
 	@Autowired UserService userS;
@@ -27,7 +31,7 @@ public class WDebtController {
 	@Autowired SpentService spentS;
 	@Autowired GroupService groupS;
 	
-	@GetMapping("/debts")
+	@GetMapping("")
 	public ModelAndView getDebts() {
 		ModelAndView mav=new ModelAndView("debts");
 		List<Debt> debts=debtS.findAll();
@@ -37,12 +41,12 @@ public class WDebtController {
 		return mav;
 	}
 	
-	@GetMapping("/debt")
-	public ModelAndView getDebtW(@RequestParam("id") Integer id) {
+	@GetMapping("/{id}")
+	public ModelAndView getDebtW(@PathVariable("id") String id) {
 		
 		//Devuelve la pagina de un usuario
 		ModelAndView mav=new ModelAndView("seeDebt");
-		Debt debt= debtS.findById(id).orElse(new Debt());
+		Debt debt= debtS.findById(Integer.parseInt(id)).orElse(new Debt());
 		
 		mav.addObject("debt",debt);
 		
@@ -51,65 +55,60 @@ public class WDebtController {
 	
 	//Crud
 	
-	@PostMapping("/debt/insert")
-	public ModelAndView insertDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
+	@PostMapping("/insert")
+	public ModelAndView insertDebtW(@ModelAttribute Debt d,Model model) {
+		Optional<User> opU=userS.findByNick(d.getUser().getUsername());
+		Optional<Group> opG=groupS.findById(d.getGroup().getId());
 		
-		ModelAndView mav=new ModelAndView("redirect:/web/debts");
-		/*userS.findByNick(receiver)
-			.ifPresent(rec -> userS.findByNick(debtor)
-					.ifPresent(debto-> groupS.findByGroupName(group)
-										.ifPresent(grou->{
-											d.setReceiver(rec);
-											d.setDebtor(debto);
-											d.setDebtGroup(grou);
-										debtS.insert(d);})));
+		if(opU.isPresent()&&opG.isPresent()) {
+			System.out.println("llego?");
+			d.setUser(opU.get());
+			d.setGroup(opG.get());
+			d=debtS.insert(d).orElse(new Debt());
+			model.addAttribute("debt", d);
+		}
 		
-		*/
-		return mav;
+		return new ModelAndView("debts").addObject("debts", debtS.findAll());
 	}
 	
-	@PostMapping("/debt/delete")
-	public ModelAndView deleteDebtW(@ModelAttribute Debt d) {
-		
-		ModelAndView mav=new ModelAndView("redirect:/web/debts");
+	@PostMapping("/delete")
+	public ModelAndView deleteDebtW(@ModelAttribute Debt d) {		
 		
 		debtS.delete(d.getId());
 
-		return mav;
+		return new ModelAndView("debts").addObject("debts", debtS.findAll());
 	}
 	
-	@PostMapping("/debt/update")
-	public ModelAndView updateDebtW(@ModelAttribute Debt d,@RequestParam("rec")String receiver,@RequestParam("debto") String debtor,@RequestParam("group") String group) {
+	@PostMapping("/update")
+	public ModelAndView updateDebtW(@ModelAttribute Debt d, Model model) {
 		
-		ModelAndView mav=new ModelAndView("redirect:/web/debts");
-		/*
-		userS.findByNick(receiver)
-		.ifPresent(rec -> userS.findByNick(debtor)
-				.ifPresent(debto-> groupS.findByGroupName(group)
-									.ifPresent(grou->{
-										d.setReceiver(rec);
-										d.setDebtor(debto);
-										d.setDebtGroup(grou);
-									debtS.update(d);})));
-		*/
-		return mav;
+		Optional<User> opU=userS.findByNick(d.getUser().getUsername());
+		Optional<Group> opG=groupS.findById(d.getGroup().getId());
+		
+		if(opU.isPresent()&&opG.isPresent()) {
+			d.setUser(opU.get());
+			d.setGroup(opG.get());
+			d=debtS.update(d).orElse(new Debt());
+			model.addAttribute("debt", d);
+		}
+		return new ModelAndView("debts").addObject("debts", debtS.findAll());
 	}
 	
 	//Formularios
 	
-	@GetMapping("/debtFormu")
-	public ModelAndView getDebtFormEmpty() {
+	@GetMapping("/formu")
+	public ModelAndView getDebtFormEmpty(Model model) {
 		//Devuelve debtForm vacio
 		ModelAndView mav=new ModelAndView("debtForm");
 		mav.addObject("debt", new Debt());
 		return mav;
 	}
 	
-	@GetMapping("/debtForm")
-	public ModelAndView getDebtForm(@RequestParam("id") Integer id) {
-		//Devuelve debtForm de algun usuario
+	@GetMapping("/form/{id}")
+	public ModelAndView getDebtForm(Model model,@PathVariable("id") String id ) {
+		//Devuelve debtForm
 		ModelAndView mav=new ModelAndView("debtForm");
-		mav.addObject("debt", debtS.findById(id).orElse(new Debt()));
+		mav.addObject("debt", debtS.findById(Integer.parseInt(id)).orElse(new Debt()));
 		return mav;
 	}
 }
