@@ -102,7 +102,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnElegirPagador2"
+            android:id="@+id/btnElegirPagador3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -138,7 +138,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnElegirDeudores2"
+            android:id="@+id/btnElegirDeudores3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

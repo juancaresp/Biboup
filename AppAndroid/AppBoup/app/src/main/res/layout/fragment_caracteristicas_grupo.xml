@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/LogoH"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/logo2" />
 
         <TextView
-            android:id="@+id/tvSaldoCG"
+            android:id="@+id/tvSaldoH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

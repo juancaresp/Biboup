@@ -16,7 +16,7 @@ public interface ISpentService {
     @GET("api/spents/group/{groupId}")
     Call<List<Spent>> getSpentsGroup(@Path("groupId") int groupId);
 
-    @GET("api/spents/{username}")
+    @GET("api/spents/users/{username}")
     Call<List<Spent>> getSpentsUser(@Path("username") String username);
 
     @PUT("api/spents/")

@@ -1,12 +1,15 @@
 package com.boup.boup.service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boup.boup.dto.FireBaseNot;
 import com.boup.boup.model.Debt;
+import com.boup.boup.model.Group;
 import com.boup.boup.model.Spent;
 import com.boup.boup.model.User;
 import com.boup.boup.repository.DebtRepository;
@@ -29,6 +32,8 @@ public class SpentServiceImp implements SpentService {
 	DebtService debtS;
 	@Autowired
 	GroupService groupS;
+	@Autowired
+	FireBaseService fireBase;
 
 	@Override
 	public Optional<Spent> insert(Spent s) {
@@ -142,11 +147,12 @@ public class SpentServiceImp implements SpentService {
 				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
 				d.setAmount(d.getAmount() + sp.getQuantity() - part);
 				debtR.save(d);
-
+				sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
 				sp.getUsers().forEach(u -> {
 					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
 					de.setAmount(de.getAmount() - part);
 					debtR.save(de);
+					sendNotification(u, g,sp, part);
 				});
 
 			});
@@ -169,4 +175,12 @@ public class SpentServiceImp implements SpentService {
 		return opS;
 	}
 
+	private void sendNotification(User user, Group group, Spent sp, Double cant) {
+        DecimalFormat df = new DecimalFormat("#.##");
+		FireBaseNot not=new FireBaseNot();
+		not.setToken(user.getToken());
+		not.setTittle("Tienes un nuevo gasto");
+		not.setBody("El gasto"+sp.getSpentName()+" de "+ df.format(cant)+ "€ en el grupo "+group.getGroupName()+" por"+sp.getSpentDesc()+".");
+		fireBase.sendNotification(not);
+	}
 }

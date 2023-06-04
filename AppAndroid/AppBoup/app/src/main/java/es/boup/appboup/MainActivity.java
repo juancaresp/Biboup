@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -33,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.1.72:8080/";
+    public static String CONEXION_API = "http://192.168.0.14:8080/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity{
                     cambiarFragmento(new listaInicio());
                     break;
                 case R.id.navAdd:
-                    cambiarFragmento(new AniadirGasto());
+                    cambiarFragmento(new HistoricoFragment());
                     break;
             }
             return true;

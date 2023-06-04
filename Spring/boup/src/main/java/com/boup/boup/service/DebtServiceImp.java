@@ -1,5 +1,6 @@
 package com.boup.boup.service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.boup.boup.dto.FireBaseNot;
 import com.boup.boup.model.Debt;
 import com.boup.boup.model.Group;
 import com.boup.boup.model.User;
@@ -28,6 +30,8 @@ public class DebtServiceImp implements DebtService {
 	DebtRepository debtR;
 	@Autowired
 	UserService userS;
+	@Autowired
+	FireBaseService fireBase;
 
 	@Override
 	public Optional<Debt> insert(Debt d) {
@@ -129,10 +133,8 @@ public class DebtServiceImp implements DebtService {
 			d.setAmount(0D);
 			d.getUser().setWallet(u.getWallet() - cant);			
 
-			update(d);
-			
-			opD=Optional.of(d);
-			
+			opD=update(d);
+						
 			List<Debt> debts = findGroupDebts(g);
 			debts.sort((d1, d2) -> Double.compare(d2.getAmount(), d1.getAmount()));
 
@@ -144,11 +146,13 @@ public class DebtServiceImp implements DebtService {
 
 					de.setAmount(de.getAmount() - cant);
 					de.getUser().setWallet(de.getUser().getWallet() + cant);
+					sendNotification(de.getUser(),de.getGroup(),cant);
 					cant=0D;
 				} else {
 					double diff = de.getAmount();
 					de.setAmount(0D);
 					de.getUser().setWallet(de.getUser().getWallet() + diff);
+					sendNotification(de.getUser(),de.getGroup(),diff);
 					cant = cant - diff;
 				}
 
@@ -159,6 +163,15 @@ public class DebtServiceImp implements DebtService {
 		}
 
 		return opD;
+	}
+
+	private void sendNotification(User user, Group group, Double cant) {
+        DecimalFormat df = new DecimalFormat("#.##");
+		FireBaseNot not=new FireBaseNot();
+		not.setToken(user.getToken());
+		not.setTittle("Has recibido un pago");
+		not.setBody("Has recibido "+ df.format(cant)+ "€ del grupo "+group.getGroupName()+".");
+		fireBase.sendNotification(not);
 	}
 
 }

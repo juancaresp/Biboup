@@ -90,7 +90,7 @@ public class listaInicio extends Fragment {
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
         tvSaldo = view.findViewById(R.id.tvSaldoG);
-        tvSaldo.setText(formato.format(user.getWallet())+"€");
+        tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         Log.d("llamadaApi","fd");
         groups= new ArrayList<>();
@@ -164,6 +164,7 @@ public class listaInicio extends Fragment {
                                     public void onResponse(Call<List<Debt>> call, Response<List<Debt>> response) {
                                         if(response.code()== HttpURLConnection.HTTP_OK){
                                             debts=response.body();
+                                            rv.setAdapter(new GrupoAdapter());
                                         }
                                     }
 
