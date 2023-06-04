@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.Spent;
@@ -57,6 +59,7 @@ public class CaracteristicasGrupo extends Fragment {
     private IUserService userService;
     private DecimalFormat formato ;
     private ISpentService spentService;
+    private LinearLayout addSaldo;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -174,6 +177,55 @@ public class CaracteristicasGrupo extends Fragment {
                 Log.d("llamadaApi",t.getLocalizedMessage());
             }
         });
+
+            addSaldo.setOnClickListener(v ->{
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
+                View view2 = LayoutInflater.from(getActivity()).inflate(
+                        R.layout.layout_saldo,view.findViewById(R.id.layoutDialogContainer));
+                builder.setView(view2);
+                final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+                //funcion add saldo del alert dialog
+                view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
+
+                    //recoger el saldo a añadir
+                    EditText etSaldo = view2.findViewById(R.id.etNombreG);
+                    if (!etSaldo.getText().toString().isEmpty()) {
+                        double saldo = Double.parseDouble(etSaldo.getText().toString());
+                        if (saldo > 0d) {
+                            AddWallet addWallet = new AddWallet(user.getUsername(), saldo);
+                            userService = retrofit.create(IUserService.class);
+                            Call<User> addSaldo = userService.addSaldo(addWallet);
+                            addSaldo.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    Log.d("alertDialog", "codigo de error: " + response.code());
+                                    if (HttpURLConnection.HTTP_OK == response.code()) {
+                                        alertDialog.dismiss();
+                                        user.addSaldo(saldo);
+                                        tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
+                                        Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                if (alertDialog.getWindow() != null){
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                alertDialog.show();
+            });
     }
 
     class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoHolder>{
