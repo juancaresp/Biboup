@@ -2,6 +2,7 @@ package es.boup.appboup;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,19 +18,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.Spent;
+import es.boup.appboup.Model.User;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
+import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +53,10 @@ public class HistoricoFragment extends Fragment {
     public FragmentManager fragmentManager;
     private ISpentService spentService;
     private IGroupService groupoService;
+    private IUserService userService;
     private DecimalFormat formato ;
     private Double total;
+    private LinearLayout addSaldo;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -75,6 +84,7 @@ public class HistoricoFragment extends Fragment {
         spentService = retrofit.create(ISpentService.class);
         groupoService = retrofit.create(IGroupService.class);
         gastos = new ArrayList<>();
+        addSaldo = view.findViewById(R.id.llAddSaldoH);
 
         formato= new DecimalFormat("#.##");
         tvSaldo.setText("Saldo: "+formato.format(appViewModel.getUser().getWallet())+"€");
@@ -105,6 +115,55 @@ public class HistoricoFragment extends Fragment {
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(new HistoricoAdapter());
+
+        addSaldo.setOnClickListener(v ->{
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
+            View view2 = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.layout_saldo,view.findViewById(R.id.layoutDialogContainer));
+            builder.setView(view2);
+            final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+            //funcion add saldo del alert dialog
+            view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
+
+                //recoger el saldo a añadir
+                EditText etSaldo = view2.findViewById(R.id.etNombreG);
+                if (!etSaldo.getText().toString().isEmpty()) {
+                    double saldo = Double.parseDouble(etSaldo.getText().toString());
+                    if (saldo > 0d) {
+                        AddWallet addWallet = new AddWallet(appViewModel.getUser().getUsername(), saldo);
+                        userService = retrofit.create(IUserService.class);
+                        Call<User> addSaldo = userService.addSaldo(addWallet);
+                        addSaldo.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                Log.d("alertDialog", "codigo de error: " + response.code());
+                                if (HttpURLConnection.HTTP_OK == response.code()) {
+                                    alertDialog.dismiss();
+                                    appViewModel.getUser().addSaldo(saldo);
+                                    tvSaldo.setText("saldo: " + formato.format(appViewModel.getUser().getWallet()) + "€");
+                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            if (alertDialog.getWindow() != null){
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            alertDialog.show();
+        });
 
     }
 

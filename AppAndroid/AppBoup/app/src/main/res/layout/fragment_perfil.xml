@@ -285,13 +285,6 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/linea_horizontal" />
 
-            <Button
-                android:id="@+id/btAlert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="saldo" />
-
             <LinearLayout
                 android:id="@+id/btCerrarSesion"
                 android:layout_width="match_parent"
