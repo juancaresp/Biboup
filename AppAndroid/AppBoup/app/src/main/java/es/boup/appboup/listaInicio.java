@@ -85,7 +85,7 @@ public class listaInicio extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         formato= new DecimalFormat("#.##");
-        btnCrearGrupo = view.findViewById(R.id.btAddP);
+        btnCrearGrupo = view.findViewById(R.id.btVerP);
         btCobrar = view.findViewById(R.id.btCobrar);
         btDeber = view.findViewById(R.id.btDeber);
         rv=view.findViewById(R.id.listaDeGrupos);

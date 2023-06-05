@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,12 +53,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CaracteristicasGrupo extends Fragment {
 
-    public Button btnAniadirParticipante,btnAniadirGasto,btnLiquidarDeuda;
-
-    public TextView tvNombreGrupo,tvGastosTotales,tvSaldo;
+    public Button btnAniadirParticipante,btnAniadirGasto,btnLiquidarDeuda,btnVerPart;
+    private List<User> users;
+    private TextView tvNombreGrupo,tvGastosTotales,tvSaldo;
+    private ImageView atrasVerPart;
     private IGroupService groupService;
     private AppViewModel appViewModel;
     private User user;
+    private View layoutVerPart,layoutInicial;
     private IUserService userService;
     private DecimalFormat formato ;
     private ISpentService spentService;
@@ -69,7 +72,7 @@ public class CaracteristicasGrupo extends Fragment {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
     private FragmentManager fragmentManager;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,rvUsuarios;
     public List<Spent> gastos;
     private TextView tvDeuda,tvDeudaText;
 
@@ -90,8 +93,13 @@ public class CaracteristicasGrupo extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         formato= new DecimalFormat("#.##");
         tvSaldo=view.findViewById(R.id.tvSaldoG);
+        rvUsuarios=view.findViewById(R.id.rvVerUsus);
         btnLiquidarDeuda=view.findViewById(R.id.btnLiquidar);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
+        layoutInicial=view.findViewById(R.id.layoutInicial);
+        atrasVerPart=view.findViewById(R.id.atrasVerPart);
+        btnVerPart=view.findViewById(R.id.btVerP);
+        layoutVerPart=view.findViewById(R.id.layoutVerP);
         tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
         btnAniadirGasto=view.findViewById(R.id.btnAniadirGasto);
@@ -126,6 +134,40 @@ public class CaracteristicasGrupo extends Fragment {
 
             }
         });
+        atrasVerPart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutVerPart.setVisibility(View.GONE);
+                layoutInicial.setVisibility(View.VISIBLE);
+            }
+        });
+        btnVerPart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                groupService = retrofit.create(IGroupService.class);
+                Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
+                peticionUsers.enqueue(new Callback<List<User>>() {
+                    @Override
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        if(response.code()==HttpURLConnection.HTTP_OK){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                users=response.body();
+                            }
+                            layoutVerPart.setVisibility(View.VISIBLE);
+                            layoutInicial.setVisibility(View.GONE);
+                            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+                            rvUsuarios.setLayoutManager(linearLayoutManager);
+                            rvUsuarios.setAdapter(new GrupoAdapter());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<User>> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
         btnAniadirParticipante.setOnClickListener(v -> {
             // llamar al endpoint de a単adir participante
@@ -150,6 +192,27 @@ public class CaracteristicasGrupo extends Fragment {
                             if(response.code()==HttpURLConnection.HTTP_OK ){
                                 Toast.makeText(getActivity(), "Participante añadido", Toast.LENGTH_SHORT).show();
                                 alertDialog.dismiss();
+                                Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
+                                peticionUsers.enqueue(new Callback<List<User>>() {
+                                    @Override
+                                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                                        if(response.code()==HttpURLConnection.HTTP_OK){
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                                users=response.body();
+                                            }
+                                            layoutVerPart.setVisibility(View.VISIBLE);
+                                            layoutInicial.setVisibility(View.GONE);
+                                            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+                                            rvUsuarios.setLayoutManager(linearLayoutManager);
+                                            rvUsuarios.setAdapter(new GrupoAdapter());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<User>> call, Throwable t) {
+
+                                    }
+                                });
                             }else{
                                 Toast.makeText(getActivity(), "Usuario no existente", Toast.LENGTH_SHORT).show();
                             }
@@ -336,6 +399,45 @@ public class CaracteristicasGrupo extends Fragment {
             }
         }
 
+    }
+    class GrupoAdapter extends RecyclerView.Adapter<GrupoAdapter.GrupoHolder>{
+
+        @NonNull
+        @Override
+        public GrupoAdapter.GrupoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new GrupoAdapter.GrupoHolder(getLayoutInflater().inflate(R.layout.itemusuario,parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull GrupoAdapter.GrupoHolder holder, int position) {
+            holder.imprimir(users.get(position));
+        }
+
+
+
+        @Override
+        public int getItemCount() {return users.size();
+        }
+        public class GrupoHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+            private TextView tvNombre;
+
+
+            public GrupoHolder(@NonNull View itemView) {
+                super(itemView);
+                tvNombre=itemView.findViewById(R.id.tvNombrePagador);
+            }
+
+            public void imprimir(User user){
+                tvNombre.setText(user.getUsername());
+
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        }
     }
 
 }
