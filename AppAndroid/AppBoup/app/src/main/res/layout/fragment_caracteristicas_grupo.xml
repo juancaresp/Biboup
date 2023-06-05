@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/logo2" />
 
         <LinearLayout
-            android:id="@+id/llAddSaldoH"
+            android:id="@+id/llAddSaldoCG"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -89,7 +89,7 @@
             android:fontFamily="@font/baloo_da"
             android:text=" Gastos totales: 0.0€"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -125,7 +125,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,7 +134,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvDeudas"
+                android:id="@+id/tvDeudaText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -142,7 +142,7 @@
                 android:gravity="left"
                 android:text="Te deben: "
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tvDeuda"
@@ -153,8 +153,23 @@
                 android:gravity="end"
                 android:text="10€"
                 android:textColor="@color/principal"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLiquidar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Liquidar deudas"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

@@ -84,7 +84,7 @@ public class HistoricoFragment extends Fragment {
         spentService = retrofit.create(ISpentService.class);
         groupoService = retrofit.create(IGroupService.class);
         gastos = new ArrayList<>();
-        addSaldo = view.findViewById(R.id.llAddSaldoH);
+        addSaldo = view.findViewById(R.id.llAddSaldoCG);
 
         formato= new DecimalFormat("#.##");
         tvSaldo.setText("Saldo: "+formato.format(appViewModel.getUser().getWallet())+"€");

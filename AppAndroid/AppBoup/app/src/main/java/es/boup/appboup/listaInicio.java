@@ -89,7 +89,7 @@ public class listaInicio extends Fragment {
         btCobrar = view.findViewById(R.id.btCobrar);
         btDeber = view.findViewById(R.id.btDeber);
         rv=view.findViewById(R.id.listaDeGrupos);
-        addSaldo = view.findViewById(R.id.llAddSaldoH);
+        addSaldo = view.findViewById(R.id.llAddSaldoCG);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
         tvSaldo = view.findViewById(R.id.tvSaldoG);

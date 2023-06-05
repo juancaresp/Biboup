@@ -92,7 +92,6 @@ public class PerfilFragment extends Fragment {
         etTelefono = view.findViewById(R.id.etTelefonoP);
         tvSaldo = view.findViewById(R.id.tvSaldoP);
         btConfirmar = view.findViewById(R.id.btConfirmar);
-        btAlert = view.findViewById(R.id.btAlert);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
         Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");

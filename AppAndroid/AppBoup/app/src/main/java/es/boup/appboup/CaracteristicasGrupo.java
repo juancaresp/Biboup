@@ -3,6 +3,7 @@ package es.boup.appboup;
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,9 +35,11 @@ import java.util.List;
 
 import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.Model.Debt;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.Services.IDebtService;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
 import es.boup.appboup.Services.IUserService;
@@ -49,17 +52,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CaracteristicasGrupo extends Fragment {
 
-    public Button btnAniadirParticipante,btnAniadirGasto;
+    public Button btnAniadirParticipante,btnAniadirGasto,btnLiquidarDeuda;
 
     public TextView tvNombreGrupo,tvGastosTotales,tvSaldo;
-    private Group group;
     private IGroupService groupService;
     private AppViewModel appViewModel;
     private User user;
     private IUserService userService;
     private DecimalFormat formato ;
     private ISpentService spentService;
+    private IDebtService debtService;
     private LinearLayout addSaldo;
+    private Debt debt;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
             .addConverterFactory(GsonConverterFactory.create())
@@ -67,6 +71,7 @@ public class CaracteristicasGrupo extends Fragment {
     private FragmentManager fragmentManager;
     private RecyclerView recyclerView;
     public List<Spent> gastos;
+    private TextView tvDeuda,tvDeudaText;
 
 
     public CaracteristicasGrupo() {
@@ -84,7 +89,8 @@ public class CaracteristicasGrupo extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         formato= new DecimalFormat("#.##");
-        tvSaldo=view.findViewById(R.id.tvSaldoH);
+        tvSaldo=view.findViewById(R.id.tvSaldoG);
+        btnLiquidarDeuda=view.findViewById(R.id.btnLiquidar);
         tvNombreGrupo=view.findViewById(R.id.tvNombreGrupo);
         tvGastosTotales=view.findViewById(R.id.tvGastostotales);
         btnAniadirParticipante=view.findViewById(R.id.btAddP);
@@ -92,10 +98,34 @@ public class CaracteristicasGrupo extends Fragment {
         recyclerView = view.findViewById(R.id.rvGastos);
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
         user = appViewModel.getUser();
+        tvDeuda=view.findViewById(R.id.tvDeuda);
+        tvDeudaText=view.findViewById(R.id.tvDeudaText);
         tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         gastos = new ArrayList<>();
+        addSaldo=view.findViewById(R.id.llAddSaldoCG);
         tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());
+        debtService=retrofit.create(IDebtService.class);
+        Call<Debt> peticionDeuda = debtService.getDebtByGroup(appViewModel.getUser().getUsername(),appViewModel.getGroup().getId().toString());
+        peticionDeuda.enqueue(new Callback<Debt>() {
+            @Override
+            public void onResponse(Call<Debt> call, Response<Debt> response) {
+                if(response.code()==HttpURLConnection.HTTP_OK ){
+                    debt= response.body();
+                    tvDeuda.setText(formato.format(debt.getAmount()));
+                    if(debt.getAmount()<0){
+                        tvDeuda.setTextColor(Color.RED);
+                        tvDeudaText.setText("Debes:");
+                        btnLiquidarDeuda.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Debt> call, Throwable t) {
+
+            }
+        });
 
         btnAniadirParticipante.setOnClickListener(v -> {
             // llamar al endpoint de a単adir participante
@@ -148,6 +178,30 @@ public class CaracteristicasGrupo extends Fragment {
                 fragmentTransaction.replace(R.id.frame,new AniadirGasto());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+            }
+        });
+        btnLiquidarDeuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                debtService=retrofit.create(IDebtService.class);
+                Call<Debt> peticionLiquidar = debtService.closeDebt(appViewModel.getUser().getUsername(),appViewModel.getGroup().getId().toString());
+                peticionLiquidar.enqueue(new Callback<Debt>() {
+                    @Override
+                    public void onResponse(Call<Debt> call, Response<Debt> response) {
+                        if(response.code()==HttpURLConnection.HTTP_OK ){
+                            fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame,new listaInicio());
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Debt> call, Throwable t) {
+
+                    }
+                });
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

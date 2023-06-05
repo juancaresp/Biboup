@@ -20,7 +20,7 @@
             android:src="@drawable/logo2" />
 
         <LinearLayout
-            android:id="@+id/llAddSaldoH"
+            android:id="@+id/llAddSaldoCG"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
