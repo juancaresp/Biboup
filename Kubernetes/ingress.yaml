@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: biboup-ingress
+  namespace: biboup
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  labels:
+    name: biboup
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: app.biboup.me
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: "/"
+        backend:
+          service:
+            name: api-boup-service
+            port: 
+              number: 8080

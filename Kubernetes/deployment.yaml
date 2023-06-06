@@ -1,0 +1,26 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-app
+  namespace: biboup
+spec:
+  selector:
+    matchLabels:
+      app: springboot-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-app
+          image: gcr.io/terraform-privado/biboup@sha256:aa0b5dadc30292b19419446aef650f4b5b5016a33d0d99850a36da5c6eea0eb6
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "200m"
+          
