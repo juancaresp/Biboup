@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Formulario de Usuario</title>
+<title>Formulario de Deudas</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
@@ -16,45 +15,36 @@
 	<div th:replace="~{header.html :: navbar}"></div>
 	<div class="container">
 		<div class="row">
-			<h2>Usuario</h2>
+			<h2>Deuda</h2>
 		</div>
 		<div class="row">
-			<form id="formulario" th:object="${user}" method="POST">
+			<form id="formulario" th:object="${debt}" method="POST">
+
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/insert')">
+					onclick="enviarPeticion('/web/debts/insert')">
 				<input type="submit" value="Modificar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/update')">
+					onclick="enviarPeticion('/web/debts/update')">
 				<input type="submit" value="Borrar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/delete')">
+					onclick="enviarPeticion('/web/debts/delete')">
 
 				<input type="hidden" th:field="*{id}" id="id" />
 				<div>
 					<div class="input-field col s12">
-						<label for="username">Username</label>
-						<input type="text" th:field="*{username}" id="username" name="username" />
+						<label for="amount">Cantidad</label>
+						<input type="text" th:field="*{amount}" id="amount" name="amount" />
 					</div>
 					<div class="input-field col s12">
-						<label for="email">Email</label>
-						<input th:field="*{email}" id="email" type="email" name="email"
-							class="validate" />
+						<label for="username">Usuario-Username</label> 
+						<input type="text" name="username" id="username" th:field="*{user.username}" />
 					</div>
 					<div class="input-field col s12">
-						<label for="nameU">Nombre de Usuario</label>
-						<input type="text" th:field="*{nameU}" id="nameU" name="nameU" />
-					</div>
-					<div class="input-field col s6">
-						<label for="telephone">Teléfono</label>
-						<input type="text" th:field="*{telephone}" id="telephone" name="telephone" />
-					</div>
-					<div class="input-field col s3">
-						<label for="wallet">Monedero</label>
-						<input th:field="*{wallet}" id="wallet" name="wallet" />
+						<label for="group">Id Grupo</label> 
+						<input type="text" name="group" id="group" th:field="*{group.id}" />
 					</div>
 				</div>
-
 			</form>
 		</div>
 	</div>

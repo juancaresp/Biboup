@@ -7,7 +7,7 @@
 <script src="/materialize.js"></script>
 </head>
 <body>
-	<div th:insert="header.html :: navbar"></div>
+	<div th:replace="~{header.html :: navbar}"></div>
 	
 	<div class="container">
 		<div class="row">
@@ -36,7 +36,7 @@
 					<tbody>
 							<tr th:each="u: ${users}">
 								<td>
-									<a th:href="@{/web/users/form/{id}(id=${u.id})}"><span th:text="${u.username}"></span></a>
+									<a th:href="@{/web/users/{id}(id=${u.id})}"><span th:text="${u.username}"></span></a>
 								</td>
 								<td th:text="${u.email}"/>
 								<td th:text="${u.nameU}"/>

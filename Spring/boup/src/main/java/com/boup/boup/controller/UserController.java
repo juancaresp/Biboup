@@ -37,20 +37,7 @@ public class UserController {
 	
 	
 	//CRUD
-		
-	@PostMapping("/insert")
-	public ResponseEntity<User> insertUser(@RequestBody User user) {
-		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		
-		Optional<User> opU=userS.insert(user);
-		if(opU.isPresent()) {
-			user=opU.get();
-			rp=new ResponseEntity<User>(user,HttpStatus.OK);
-		}
-		
-		return rp;
-	}
+
 
 	@PostMapping("/delete")
 	public ResponseEntity<User> deleteUser(@RequestBody User user) {

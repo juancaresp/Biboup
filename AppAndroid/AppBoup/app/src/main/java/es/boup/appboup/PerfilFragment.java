@@ -92,7 +92,6 @@ public class PerfilFragment extends Fragment {
         etTelefono = view.findViewById(R.id.etTelefonoP);
         tvSaldo = view.findViewById(R.id.tvSaldoP);
         btConfirmar = view.findViewById(R.id.btConfirmar);
-        btAlert = view.findViewById(R.id.btAlert);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
         Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");
@@ -149,56 +148,6 @@ public class PerfilFragment extends Fragment {
             startActivity(i);
         });
         btNotis.setOnClickListener(view1 -> abrirNotificaciones());
-        btAlert.setOnClickListener(view1 -> {
-
-            //crear el alertDialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
-            View view2 = LayoutInflater.from(getActivity()).inflate(
-                    R.layout.layout_saldo,view.findViewById(R.id.layoutDialogContainer));
-            builder.setView(view2);
-            final AlertDialog alertDialog = builder.create();
-
-            //funcion add saldo del alert dialog
-            view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
-
-                //recoger el saldo a añadir
-                EditText etSaldo = view2.findViewById(R.id.etNombreG);
-                if (!etSaldo.getText().toString().isEmpty()) {
-                    double saldo = Double.parseDouble(etSaldo.getText().toString());
-                    if (saldo > 0d) {
-                        AddWallet addWallet = new AddWallet(user.getUsername(), saldo);
-                        userService = retrofit.create(IUserService.class);
-                        Call<User> addSaldo = userService.addSaldo(addWallet);
-                        addSaldo.enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
-                                Log.d("alertDialog", "codigo de error: " + response.code());
-                                if (HttpURLConnection.HTTP_OK == response.code()) {
-                                    alertDialog.dismiss();
-                                    user.addSaldo(saldo);
-                                    tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
-                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<User> call, Throwable t) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            if (alertDialog.getWindow() != null){
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
-            alertDialog.show();
-        });
 
     }
 

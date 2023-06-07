@@ -15,6 +15,4 @@ public interface GroupService {
 	public List<Group> findAll();
 	public Optional<Group> findByGroupName(String name);
 	public Optional<Group> findById(Integer id);
-	Optional<Group> addUserGroup(Integer groupID, Integer userid);
-	public Optional<Group> deleteUserGroup(Integer groupid,Integer userid);
 }

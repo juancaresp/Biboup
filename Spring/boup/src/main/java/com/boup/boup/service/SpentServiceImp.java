@@ -180,7 +180,7 @@ public class SpentServiceImp implements SpentService {
 		FireBaseNot not=new FireBaseNot();
 		not.setToken(user.getToken());
 		not.setTittle("Tienes un nuevo gasto");
-		not.setBody("El gasto"+sp.getSpentName()+" de "+ df.format(cant)+ "€ en el grupo "+group.getGroupName()+" por"+sp.getSpentDesc()+".");
+		not.setBody("El gasto "+sp.getSpentName()+" de "+ df.format(cant)+ "€ en el grupo "+group.getGroupName()+" por "+sp.getSpentDesc()+".");
 		fireBase.sendNotification(not);
 	}
 }

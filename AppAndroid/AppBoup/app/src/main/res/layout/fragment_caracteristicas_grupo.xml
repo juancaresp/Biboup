@@ -10,6 +10,7 @@
     tools:context=".CaracteristicasGrupo">
 
     <LinearLayout
+        android:id="@+id/layoutInicial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -22,20 +23,36 @@
             android:src="@drawable/logo2"
             app:srcCompat="@drawable/logo2" />
 
-        <TextView
-            android:id="@+id/tvSaldoH"
+        <LinearLayout
+            android:id="@+id/llAddSaldoCG"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="6"
-            android:fontFamily="@font/baloo_da"
-            android:gravity="center|start"
-            android:text="Saldo: 0.0€"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSaldoG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/baloo_da"
+                android:gravity="bottom"
+                android:text=" Saldo: 0.00€"
+                android:textColor="#000000"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_baseline_add_24" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btAddP"
+            android:id="@+id/btVerP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
@@ -44,11 +61,67 @@
             android:fontFamily="@font/baloo_da"
             android:gravity="center"
             android:onClick="visibilizarGrupo"
-            android:text="Añadir participante"
+            android:text="Ver participantes"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:cornerRadius="50dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutVerP"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/atrasVerPart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_arrow_back_24" />
+
+            <TextView
+                android:id="@+id/tvParticipantes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/baloo_da"
+                android:gravity="center"
+                android:text="Participantes"
+                android:textColor="#000000"
+                android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/btAddP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/principal"
+                android:fontFamily="@font/baloo_da"
+                android:gravity="center"
+                android:onClick="visibilizarGrupo"
+                android:text="Añadir participante"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:cornerRadius="50dp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvVerUsus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <TextView
@@ -73,7 +146,7 @@
             android:fontFamily="@font/baloo_da"
             android:text=" Gastos totales: 0.0€"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -109,7 +182,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,7 +191,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvDeudas"
+                android:id="@+id/tvDeudaText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -126,7 +199,7 @@
                 android:gravity="left"
                 android:text="Te deben: "
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tvDeuda"
@@ -137,8 +210,23 @@
                 android:gravity="end"
                 android:text="10€"
                 android:textColor="@color/principal"
-                android:textSize="16sp" />
+                android:textSize="24sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLiquidar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Liquidar deudas"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

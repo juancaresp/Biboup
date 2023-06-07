@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.boup.boup.dto.UserReg;
 import com.boup.boup.model.User;
 import com.boup.boup.service.DebtService;
 import com.boup.boup.service.GroupService;
 import com.boup.boup.service.SpentService;
 import com.boup.boup.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -26,6 +30,7 @@ public class WUserController {
 	@Autowired DebtService debtS;
 	@Autowired SpentService spentS;
 	@Autowired GroupService groupS;
+	@Autowired GroupController groupC;
 	
 	/*
 	@GetMapping("")
@@ -63,16 +68,24 @@ public class WUserController {
 	@PostMapping("/insert")
 	public ModelAndView insertUserW(User u) {
 		
-		ModelAndView mav;
-		Optional<User> us=userS.insert(u);
+		ModelAndView mav=new ModelAndView("users");
+		UserReg reg=new UserReg();
+		reg.setUsername(u.getUsername());
+		reg.setEmail(u.getEmail());
+		reg.setNameU(u.getNameU());
+		reg.setTelephone(u.getTelephone());
+		Optional<User> us=userS.register(reg);
 		
 		//Si se inserta correctamente me redirecciona a la pagina de ese usuario si no a la de usuarios
 		if(us.isPresent()) {
-			mav=new ModelAndView("seeUser");
-			mav.addObject("user", us.get());
-			mav.addObject("groups", debtS.findUserGroups(us.get()));
-		}else {
-			mav=new ModelAndView("users");
+			User user=us.get();
+			user.setWallet(u.getWallet());
+			us=userS.update(user);
+			if(us.isPresent()) {
+				mav=new ModelAndView("seeUser");
+				mav.addObject("user", us.get());
+				mav.addObject("groups", debtS.findUserGroups(us.get()));
+			}
 		}
 		
 		return mav;
@@ -124,24 +137,24 @@ public class WUserController {
 	}
 	
 	//other
-	/*
-	@PostMapping("deleteGroup")
-	public ModelAndView deleteUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("userId") Integer userid) {
-		
-		ModelAndView mav=new ModelAndView("redirect:/web/users");
-		groupS.deleteUserGroup(groupid, userid);
+	
+	@PostMapping("/deleteGroup")
+	public ModelAndView deleteUserGroup(@RequestParam("groupId") String groupid,@RequestParam("username") String username, HttpServletRequest request) {
+		ModelAndView mav=new ModelAndView("redirect:"+request.getHeader("Referer"));
+
+		groupC.removeUserFromGroup(Integer.parseInt(groupid), username);
 		
 		return mav;
 		
 	}
 	
-	@PostMapping("/user/addGroup")
-	public ModelAndView addUserGroup(@RequestParam("groupid") Integer groupid,@RequestParam("userId") Integer userid) {
-		
-		ModelAndView mav=new ModelAndView("redirect:/web/users");
-		groupS.addUserGroup(groupid, userid);
+	@PostMapping("/addGroup")
+	public ModelAndView addUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("username") String username,HttpServletRequest request) {
+		ModelAndView mav=new ModelAndView("redirect:"+request.getHeader("Referer"));
+
+		groupC.addUserToGroup(groupid, username);
 		
 		return mav;
 		
-	}*/
+	}
 }

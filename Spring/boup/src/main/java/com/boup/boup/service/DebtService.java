@@ -18,7 +18,6 @@ public interface DebtService {
 	public List<Debt> findByUser(User u);
 	public Optional<Debt> findByUserAndGroup(User u,Group g);
 	public Optional<Debt> findById(Integer id);
-	public Optional<Debt> addDebt(Debt d);
 	public List<User> findGroupUsers(Group g);
 	public List<Group> findUserGroups(User user);
 	public List<Debt> findGroupDebts(Group group);
