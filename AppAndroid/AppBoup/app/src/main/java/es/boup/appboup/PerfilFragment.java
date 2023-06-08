@@ -153,7 +153,7 @@ public class PerfilFragment extends Fragment {
         btRetirar.setOnClickListener(v->{
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
             View view2 = LayoutInflater.from(getActivity()).inflate(
-                    R.layout.layout_saldo,view.findViewById(R.id.layoutDialogContainer));
+                    R.layout.layout_retirar,view.findViewById(R.id.layoutDialogContainer));
             builder.setView(view2);
             final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
 
