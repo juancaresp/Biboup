@@ -28,7 +28,7 @@ public class WGroupController {
 	@Autowired UserService userS;
 	
 	@GetMapping("")
-	public ModelAndView hola() {
+	public ModelAndView groups() {
 		ModelAndView mav=new ModelAndView("groups");
 		List<Group> groups = groupS.findAll();
 
@@ -63,10 +63,9 @@ public class WGroupController {
 	
 	@PostMapping("/delete")
 	public ModelAndView deleteGroupW(Model model,Group g) {
-		ModelAndView mav=new ModelAndView("groups");
 		groupS.delete(g.getId());
 
-		return mav;
+		return new ModelAndView("groups").addObject("groups", groupS.findAll());
 	}
 	
 	@PostMapping("/update")
@@ -81,12 +80,9 @@ public class WGroupController {
 	
 	//Formularios
 	
-	@GetMapping("/formu")
+	@GetMapping("/form")
 	public ModelAndView getGroupFormEmpty() {
-		ModelAndView mav=new ModelAndView("seeGroup");
-
-		mav.addObject("group",new Group());
-		return mav;
+		return new ModelAndView("groupForm").addObject("group",new Group());
 	}
 	
 	@GetMapping("/form/{id}")

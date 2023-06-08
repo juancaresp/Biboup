@@ -47,7 +47,7 @@ public class SpentServiceImp implements SpentService {
 	public Optional<Spent> update(Spent s) {
 		Optional<Spent> op = Optional.empty();
 
-		if (!spentR.existsById(s.getId())) {
+		if (spentR.existsById(s.getId())) {
 			op = Optional.of(spentR.save(s));
 		}
 		return op;
@@ -79,32 +79,6 @@ public class SpentServiceImp implements SpentService {
 	public List<Spent> findByGroup(Integer id) {
 		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
-	}
-
-	
-
-	@Override
-	public void deleteUserSpent(Integer spentId, Integer userid) {
-		// TODO Auto-generated method stub
-		spentR.findById(spentId).ifPresent(s -> {
-			User u = userR.findById(userid).orElse(new User());
-			s.getUsers().remove(u);
-			spentR.save(s);
-		});
-		;
-
-	}
-
-	@Override
-	public void addUserSpent(Integer spentId, Integer userid) {
-		// TODO Auto-generated method stub
-		spentR.findById(spentId).ifPresent(s -> {
-			User u = userR.findById(userid).orElse(new User());
-			s.getUsers().add(u);
-			spentR.save(s);
-		});
-		;
-
 	}
 
 	@Override
@@ -140,14 +114,14 @@ public class SpentServiceImp implements SpentService {
 	public Optional<Spent> addSpent(Spent spent) {
 
 		Optional<Spent> spe = insert(spent);
-
+		System.out.println(spent);
 		spe.ifPresent((sp) -> {
+			sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
 			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
 				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
 				d.setAmount(d.getAmount() + sp.getQuantity() - part);
-				debtR.save(d);
-				sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
+				debtS.update(d);
 				sp.getUsers().forEach(u -> {
 					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
 					de.setAmount(de.getAmount() - part);

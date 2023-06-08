@@ -35,12 +35,12 @@ public class SpentController {
 	@PostMapping("/insert")
 	public ResponseEntity<Spent> insertSpent(@RequestBody Spent spent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Spent> opS=spentS.insert(spent);
 		if (opS.isPresent()) {
 			spent=opS.get();
-			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
+			rp = new ResponseEntity<>(spent, HttpStatus.OK);
 		}
 
 		return rp;
@@ -49,12 +49,12 @@ public class SpentController {
 	@PostMapping("/update")
 	public ResponseEntity<Spent> updateSpent(@RequestBody Spent spent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Spent> opS=spentS.update(spent);
 		if (opS.isPresent()) {
 			spent=opS.get();
-			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
+			rp = new ResponseEntity<>(spent, HttpStatus.OK);
 		}
 
 		return rp;
@@ -63,10 +63,10 @@ public class SpentController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<Spent> deletSpent(@RequestBody Spent spent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		if (spentS.delete(spent.getId())) {
-			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
+			rp = new ResponseEntity<>(spent, HttpStatus.OK);
 		}
 
 		return rp;
@@ -79,7 +79,7 @@ public class SpentController {
 
 		List<Spent> spents = spentS.findAll();
 
-		ResponseEntity<List<Spent>> rp = new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+		ResponseEntity<List<Spent>> rp = new ResponseEntity<>(spents, HttpStatus.OK);
 
 		return rp;
 	}
@@ -87,11 +87,11 @@ public class SpentController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Spent> getSpentById(@PathVariable Integer id) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		Optional<Spent> spent = spentS.findById(id);
 		if (spent.isPresent()) {
-			rp = new ResponseEntity<Spent>(spent.get(), HttpStatus.OK);
+			rp = new ResponseEntity<>(spent.get(), HttpStatus.OK);
 		}
 
 		return rp;
@@ -106,7 +106,7 @@ public class SpentController {
 		if(groupS.findById(Integer.parseInt(groupId)).isPresent()) {
 			List<Spent> spents = spentS.findByGroup(Integer.parseInt(groupId));
 
-			rp = new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+			rp = new ResponseEntity<>(spents, HttpStatus.OK);
 		}
 		return rp;
 	}
@@ -119,7 +119,7 @@ public class SpentController {
 		if(userS.findByNick(username).isPresent()) {
 			List<Spent> spents = spentS.findByUser(username);
 			
-			rp= new ResponseEntity<List<Spent>>(spents, HttpStatus.OK);
+			rp= new ResponseEntity<>(spents, HttpStatus.OK);
 		}
 		return rp;
 	}
@@ -129,12 +129,12 @@ public class SpentController {
 	@PostMapping("")
 	public ResponseEntity<Spent> addSpent(@RequestBody Spent spent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		Optional<Spent> opS=spentS.addSpent(spent);
 		if (opS.isPresent()) {
 			spent=opS.get();
-			rp = new ResponseEntity<Spent>(spent, HttpStatus.OK);
+			rp = new ResponseEntity<>(spent, HttpStatus.OK);
 		}
 
 		return rp;
@@ -143,10 +143,10 @@ public class SpentController {
 	@DeleteMapping("/{idSpent}")
 	public ResponseEntity<Spent> deleteSpent(@PathVariable String idSpent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		if (spentS.deleteSpent(Integer.parseInt(idSpent))) {
-			rp = new ResponseEntity<Spent>(HttpStatus.OK);
+			rp = new ResponseEntity<>(HttpStatus.OK);
 		}
 
 		return rp;
@@ -155,10 +155,10 @@ public class SpentController {
 	@PutMapping("")
 	public ResponseEntity<Spent> updatSpent(@RequestBody Spent spent) {
 
-		ResponseEntity<Spent> rp = new ResponseEntity<Spent>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		Optional<Spent> opS=spentS.updateSpent(spent);
 		if (opS.isPresent()) {
-			rp = new ResponseEntity<Spent>(opS.get(),HttpStatus.OK);
+			rp = new ResponseEntity<>(opS.get(),HttpStatus.OK);
 		}
 
 		return rp;

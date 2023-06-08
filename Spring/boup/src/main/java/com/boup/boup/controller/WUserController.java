@@ -32,14 +32,6 @@ public class WUserController {
 	@Autowired GroupService groupS;
 	@Autowired GroupController groupC;
 	
-	/*
-	@GetMapping("")
-	public ModelAndView getInicio() {
-		ModelAndView mav=new ModelAndView("start");
-		
-		return mav;
-	}*/
-	
 	@GetMapping("")
 	public ModelAndView getUsersW() {
 		ModelAndView mav=new ModelAndView("users");
@@ -151,7 +143,7 @@ public class WUserController {
 	@PostMapping("/addGroup")
 	public ModelAndView addUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("username") String username,HttpServletRequest request) {
 		ModelAndView mav=new ModelAndView("redirect:"+request.getHeader("Referer"));
-
+		System.out.println("redirect:"+request.getHeader("Referer"));
 		groupC.addUserToGroup(groupid, username);
 		
 		return mav;
