@@ -37,12 +37,12 @@ public class GroupController {
 	@PostMapping("/insert")
 	public ResponseEntity<Group> insertGroup(@RequestBody Group group) {
 
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Group> opG=groupS.insert(group);
 		if (opG.isPresent()) {
 			group=opG.get();
-			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
+			rp = new ResponseEntity<>(group, HttpStatus.OK);
 		}
 
 		return rp;
@@ -51,12 +51,12 @@ public class GroupController {
 	@PostMapping("/update")
 	public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
 
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Group> opG=groupS.update(group);
 		if (opG.isPresent()) {
 			group=opG.get();
-			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
+			rp = new ResponseEntity<>(group, HttpStatus.OK);
 		}
 
 		return rp;
@@ -69,7 +69,7 @@ public class GroupController {
 	
 		List<Group> groups = groupS.findAll();
 	
-		ResponseEntity<List<Group>> rp = new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+		ResponseEntity<List<Group>> rp = new ResponseEntity<>(groups, HttpStatus.OK);
 	
 		return rp;
 	}
@@ -77,10 +77,10 @@ public class GroupController {
 	@DeleteMapping("")
 	public ResponseEntity<Group> deleteGroup(@RequestBody Group group) {
 
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		if (groupS.delete(group.getId())) {
-			rp = new ResponseEntity<Group>(group, HttpStatus.OK);
+			rp = new ResponseEntity<>(group, HttpStatus.OK);
 		}
 
 		return rp;
@@ -91,11 +91,11 @@ public class GroupController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Group> getGroupById(@PathVariable String id) {
 
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		Optional<Group> group = groupS.findById(Integer.parseInt(id));
 		if (group.isPresent()) {
-			rp = new ResponseEntity<Group>(group.get(), HttpStatus.OK);
+			rp = new ResponseEntity<>(group.get(), HttpStatus.OK);
 		}
 
 		return rp;
@@ -106,14 +106,14 @@ public class GroupController {
 	@GetMapping("/{groupid}/users")
 	public ResponseEntity<List<User>> getGroupUsers(@PathVariable String groupid) {
 
-		ResponseEntity<List<User>> rp = new ResponseEntity<List<User>>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<List<User>> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Group> op=groupS.findById(Integer.parseInt(groupid));
 		
 		if(op.isPresent()) {
 			
 			List<User> users=debtS.findGroupUsers(op.get());	
-			rp= new ResponseEntity<List<User>>(users,HttpStatus.OK);
+			rp= new ResponseEntity<>(users,HttpStatus.OK);
 		}
 
 		return rp;
@@ -121,7 +121,7 @@ public class GroupController {
 	
 	@PostMapping("/{groupname}/user/{username}")
 	public ResponseEntity<Group> createGroup(@PathVariable String groupname,@PathVariable String username){
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Group group=new Group();
 		group.setGroupName(groupname);
@@ -139,7 +139,7 @@ public class GroupController {
 	
 	@PutMapping("/{idgroup}/addUser/{username}")
 	public ResponseEntity<Group> addUserToGroup(@PathVariable("idgroup") Integer idgroup, @PathVariable("username") String username){
-		ResponseEntity<Group> rp = new ResponseEntity<Group>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<Group> opG=groupS.findById(idgroup);
 		Optional<User> opU=userS.findByNick(username);
@@ -156,7 +156,7 @@ public class GroupController {
 				
 				debtS.insert(d);
 				
-				rp = new ResponseEntity<Group>(opG.get(), HttpStatus.OK);
+				rp = new ResponseEntity<>(opG.get(), HttpStatus.OK);
 			}
 		}
 		

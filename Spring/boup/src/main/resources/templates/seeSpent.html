@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Grupo</title>
+<title>Gasto</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
@@ -9,12 +10,10 @@
 	<div th:replace="~{header.html :: navbar}"></div>
 	<div class="container">
 		<div class="row">
-			<h2>
-				Grupo - <span th:text="${group.groupName}"></span>
-			</h2>
+			<h2>Gasto - <span th:text="${spent.spentName}"></span></h2>
 		</div>
 		<div class="row">
-			<a th:href="@{/web/groups/form/{id}(id=${group.id})}"
+			<a th:href="@{/web/spents/form/{id}(id=${spent.id})}"
 				class="waves-effect waves-light btn">Modificar</a>
 		</div>
 	</div>
@@ -22,18 +21,17 @@
 		<h2>Usuarios</h2>
 	</div>
 	<div>
-		<form method="POST" id="addUformulario" action='/web/users/addGroup'>
+		<form method="POST" id="addUformulario" action='/web/spents/addUser'>
 			<div>
 				<div class="input-field col s2">
-					<label for="username">Username</label> <input type="text"
-						id="username" name="username" />
+					<label for="username">Username del usuario</label>
+					<input type="text" id="username" name="username" />
 				</div>
 			</div>
-			<input type="hidden" name="groupId" th:value="${group.id}" /> <input
-				type="submit" value="Agregar" />
+			<input type="hidden" name="spentId" th:value="${spent.id}" /> 
+			<input type="submit" value="Agregar" />
 		</form>
 	</div>
-
 	<div class="row">
 		<table class="striped">
 			<thead>
@@ -43,6 +41,7 @@
 					<th>Nombre</th>
 					<th>Telefono</th>
 					<th>Monedero</th>
+					<th>Accion</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -55,8 +54,8 @@
 					<td th:text="${u.wallet}" />
 					<td>
 						<form method="POST" id="deleteGformulario"
-							action='/web/users/deleteGroup'>
-							<input type="hidden" name="groupId" th:value="${group.id}" /> <input
+							action='/web/spents/deleteUser'>
+							<input type="hidden" name="spentId" th:value="${spent.id}" /> <input
 								type="hidden" name="username" th:value="${u.username}" /> <input
 								type="submit" value="Borrar" />
 						</form>
