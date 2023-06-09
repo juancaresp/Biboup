@@ -2163,6 +2163,9 @@ html {
  */
 body {
   margin: 0;
+  background: linear-gradient(to top, #fff, #dfd, #9c9);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /**
