@@ -3,6 +3,7 @@ package com.boup.boup.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -71,7 +72,7 @@ public class Spent implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + users.stream().map(u-> u.getNameU()) + ", quantity="
+		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + users.stream().map(u-> u.getNameU()).collect(Collectors.toList()) + ", quantity="
 				+ quantity + ", date=" + date + ", group=" + group.getGroupName() + ", type="+type+"]";
 	}
 	

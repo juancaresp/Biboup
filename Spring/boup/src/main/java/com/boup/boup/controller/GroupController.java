@@ -34,21 +34,7 @@ public class GroupController {
 	
 	// CRUD
 
-	@PostMapping("/insert")
-	public ResponseEntity<Group> insertGroup(@RequestBody Group group) {
-
-		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
-		Optional<Group> opG=groupS.insert(group);
-		if (opG.isPresent()) {
-			group=opG.get();
-			rp = new ResponseEntity<>(group, HttpStatus.OK);
-		}
-
-		return rp;
-	}
-
-	@PostMapping("/update")
+	@PutMapping("")
 	public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
 
 		ResponseEntity<Group> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -69,9 +55,7 @@ public class GroupController {
 	
 		List<Group> groups = groupS.findAll();
 	
-		ResponseEntity<List<Group>> rp = new ResponseEntity<>(groups, HttpStatus.OK);
-	
-		return rp;
+		return new ResponseEntity<>(groups, HttpStatus.OK);
 	}
 
 	@DeleteMapping("")

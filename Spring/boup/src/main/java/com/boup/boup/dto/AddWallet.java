@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 
 public class AddWallet {
 
-	public String username;
-	public double amount;
+	private String username;
+	private double amount;
 }

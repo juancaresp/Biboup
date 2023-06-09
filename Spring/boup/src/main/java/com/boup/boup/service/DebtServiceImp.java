@@ -36,8 +36,7 @@ public class DebtServiceImp implements DebtService {
 	@Override
 	public Optional<Debt> insert(Debt d) {
 
-		Optional<Debt> op = Optional.of(debtR.save(d));
-		return op;
+		return Optional.of(debtR.save(d));
 	}
 
 	@Override

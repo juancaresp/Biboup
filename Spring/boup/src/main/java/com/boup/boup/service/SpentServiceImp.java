@@ -38,9 +38,7 @@ public class SpentServiceImp implements SpentService {
 	@Override
 	public Optional<Spent> insert(Spent s) {
 
-		Optional<Spent> op = Optional.of(spentR.save(s));
-
-		return op;
+		return Optional.of(spentR.save(s));
 	}
 
 	@Override
@@ -65,19 +63,16 @@ public class SpentServiceImp implements SpentService {
 
 	@Override
 	public List<Spent> findAll() {
-		// TODO Auto-generated method stub
-		return (List<Spent>) spentR.findAll();
+		return spentR.findAll();
 	}
 
 	@Override
 	public Optional<Spent> findById(Integer id) {
-		// TODO Auto-generated method stub
 		return spentR.findById(id);
 	}
 
 	@Override
 	public List<Spent> findByGroup(Integer id) {
-		// TODO Auto-generated method stub
 		return spentR.findByGroupId(id);
 	}
 
@@ -90,7 +85,7 @@ public class SpentServiceImp implements SpentService {
 	public boolean deleteSpent(int id) {
 		Optional<Spent> opS = spentR.findById(id);
 
-		opS.ifPresent((sp) -> {
+		opS.ifPresent(sp -> {
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
 			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
 				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
@@ -104,7 +99,6 @@ public class SpentServiceImp implements SpentService {
 				});
 				spentR.deleteById(id);
 			});
-			;
 		});
 
 		return !spentR.existsById(id);
@@ -114,8 +108,7 @@ public class SpentServiceImp implements SpentService {
 	public Optional<Spent> addSpent(Spent spent) {
 
 		Optional<Spent> spe = insert(spent);
-		System.out.println(spent);
-		spe.ifPresent((sp) -> {
+		spe.ifPresent(sp -> {
 			sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
 			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
@@ -128,9 +121,7 @@ public class SpentServiceImp implements SpentService {
 					debtR.save(de);
 					sendNotification(u, g,sp, part);
 				});
-
 			});
-			;
 		});
 
 		return spe;
@@ -140,10 +131,8 @@ public class SpentServiceImp implements SpentService {
 	public Optional<Spent> updateSpent(Spent spent) {
 		Optional<Spent> opS=spentR.findById(spent.getId());
 		
-		if(opS.isPresent()) {
-			if(deleteSpent(opS.get().getId())) {
-				opS=addSpent(spent);
-			}
+		if(opS.isPresent()&&deleteSpent(opS.get().getId())) {
+			opS=addSpent(spent);
 		}
 		
 		return opS;
