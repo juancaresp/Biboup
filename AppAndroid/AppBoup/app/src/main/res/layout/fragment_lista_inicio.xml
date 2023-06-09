@@ -9,7 +9,7 @@
     android:paddingLeft="15dp"
     android:paddingTop="10dp"
     android:paddingRight="15dp"
-    tools:context=".listaInicio">
+    tools:context=".ListaInicio">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,7 +253,7 @@ public class CaracteristicasGrupo extends Fragment {
                         if(response.code()==HttpURLConnection.HTTP_OK ){
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame,new listaInicio());
+                            fragmentTransaction.replace(R.id.frame,new ListaInicio());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }

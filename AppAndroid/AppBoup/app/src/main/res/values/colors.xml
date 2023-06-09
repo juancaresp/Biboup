@@ -12,4 +12,8 @@
     <color name="edit">#333</color>
     <color name="hintedit">#ff818181</color>
     <color name="principal">#1b7161</color>
+    <color name="fondo">#9c9</color>
+    <color name="centro_degradado">#dfd</color>
+    <color name="fin_degradado">#9c9</color>
+    <color name="inicio_degradado">#fafaef</color>
 </resources>

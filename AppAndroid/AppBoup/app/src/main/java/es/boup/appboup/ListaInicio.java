@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class listaInicio extends Fragment {
+public class ListaInicio extends Fragment {
 
     private Button btnCrearGrupo,btCobrar,btDeber;
     private TextView tvSaldo;
@@ -67,7 +67,7 @@ public class listaInicio extends Fragment {
 
 
 
-    public listaInicio() {
+    public ListaInicio() {
         // Required empty public constructor
     }
 
