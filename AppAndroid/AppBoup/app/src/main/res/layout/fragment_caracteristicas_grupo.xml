@@ -65,7 +65,7 @@
             android:text="Ver participantes"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:cornerRadius="50dp" />
     </LinearLayout>
 
@@ -176,7 +176,7 @@
             android:fontFamily="@font/baloo_da"
             android:gravity="center"
             android:text="Añadir gasto"
-            android:textSize="13sp"
+            android:textSize="14sp"
             app:cornerRadius="50dp" />
     </LinearLayout>
 
@@ -227,7 +227,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Liquidar deudas"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:cornerRadius="50dp" />
         </LinearLayout>
 
     </LinearLayout>
