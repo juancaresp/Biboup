@@ -103,7 +103,6 @@
         android:backgroundTint="#45b39d"
         android:fontFamily="@font/baloo_da"
         android:text="Siguiente"
-        android:textColor="@color/black"
         app:cornerRadius="50dp" />
 
 </LinearLayout>

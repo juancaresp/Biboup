@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity{
                     cambiarFragmento(new PerfilFragment());
                     break;
                 case R.id.navLista:
-                    cambiarFragmento(new listaInicio());
+                    cambiarFragmento(new ListaInicio());
                     break;
                 case R.id.navAdd:
                     cambiarFragmento(new HistoricoFragment());
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity{
                 binding.bottomNavM.getMenu().getItem(2).setChecked(true);
             else if (fragment instanceof  AniadirGasto)
                 binding.bottomNavM.getMenu().getItem(1).setChecked(true);
-            else if (fragment instanceof  listaInicio)
+            else if (fragment instanceof ListaInicio)
                 binding.bottomNavM.getMenu().getItem(0).setChecked(true);
             getSupportFragmentManager().popBackStack();
         } else {
