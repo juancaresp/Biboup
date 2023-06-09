@@ -30,7 +30,7 @@
             android:padding="10dp"
             android:text="Crear grupo"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
             android:inputType="text"
             android:textColor="#333"
             android:textColorHint="#888"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/btEliminar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_saldo"
             android:text="Confirmar"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/layoutDialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

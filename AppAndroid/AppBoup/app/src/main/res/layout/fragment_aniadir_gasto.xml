@@ -34,7 +34,7 @@
             android:gravity="bottom|center"
             android:text="Añadir un gasto"
             android:textColor="#0C0000"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <Button
             android:id="@+id/btnGuardarGasto"
@@ -58,7 +58,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Titulo"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/etDescripcion"
@@ -70,7 +71,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Descripción"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/etCantidad"
@@ -82,7 +84,8 @@
         android:ems="10"
         android:hint="0,00€"
         android:inputType="numberDecimal"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,6 +102,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo_da"
             android:text="Pagado por:    "
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <Button
@@ -109,6 +113,7 @@
             android:backgroundTint="@color/principal"
             android:fontFamily="@font/baloo_da"
             android:text="Alguien"
+            android:textSize="16sp"
             app:cornerRadius="50dp" />
 
     </LinearLayout>
@@ -135,6 +140,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo_da"
             android:text="Dividido:    "
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <Button
@@ -145,6 +151,7 @@
             android:backgroundTint="@color/principal"
             android:fontFamily="@font/baloo_da"
             android:text="entre todos"
+            android:textSize="16sp"
             app:cornerRadius="50dp" />
 
     </LinearLayout>

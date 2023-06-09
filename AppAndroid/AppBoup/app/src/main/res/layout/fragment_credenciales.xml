@@ -30,8 +30,8 @@
         android:text="Por favor introduzca sus credenciales de usuario"
         android:textColor="#333333"
         android:textColorHint="#0fc3e8"
-        android:textSize="16sp"
-        android:translationY="-100dp" />
+        android:textSize="20sp"
+        android:translationY="-80dp" />
 
     <LinearLayout
         android:layout_width="250dp"
@@ -49,7 +49,7 @@
             android:text="Nombre Personal"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etNombreC"
@@ -65,7 +65,7 @@
             android:textColor="#333333"
             android:textColorHighlight="#0fc3e8"
             android:textColorHint="#0fc3e8"
-            android:textSize="16dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvTelefonoC"
@@ -78,7 +78,7 @@
             android:text="Teléfono"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etTelefonoC"
@@ -92,7 +92,7 @@
             android:inputType="phone"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="16dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -103,6 +103,7 @@
         android:backgroundTint="#45b39d"
         android:fontFamily="@font/baloo_da"
         android:text="Siguiente"
+        android:textSize="16sp"
         app:cornerRadius="50dp" />
 
 </LinearLayout>
