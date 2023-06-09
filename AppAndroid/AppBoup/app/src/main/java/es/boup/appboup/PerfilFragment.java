@@ -53,7 +53,7 @@ public class PerfilFragment extends Fragment {
     private TextView tvUsername,tvSaldo,tvCorreo;
     private DecimalFormat formato ;
     private EditText etNombre,etUsername,etTelefono;
-    private Button btConfirmar,btAlert;
+    private Button btConfirmar,btRetirar;
     private AppViewModel appViewModel;
     private User user;
     private boolean cerrar,edit;
@@ -91,6 +91,7 @@ public class PerfilFragment extends Fragment {
         etNombre = view.findViewById(R.id.etNombreP);
         etTelefono = view.findViewById(R.id.etTelefonoP);
         tvSaldo = view.findViewById(R.id.tvSaldoP);
+        btRetirar = view.findViewById(R.id.btRetirarDinero);
         btConfirmar = view.findViewById(R.id.btConfirmar);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
@@ -149,6 +150,55 @@ public class PerfilFragment extends Fragment {
         });
         btNotis.setOnClickListener(view1 -> abrirNotificaciones());
 
+        btRetirar.setOnClickListener(v->{
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
+            View view2 = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.layout_retirar,view.findViewById(R.id.layoutDialogContainer));
+            builder.setView(view2);
+            final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+            //funcion add saldo del alert dialog
+            view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
+
+                //recoger el saldo a añadir
+                EditText etSaldo = view2.findViewById(R.id.etNombreG);
+                if (!etSaldo.getText().toString().isEmpty()) {
+                    double saldo = Double.parseDouble(etSaldo.getText().toString());
+                    if (saldo > 0d && user.getWallet() >= saldo) {
+                        AddWallet addWallet = new AddWallet(user.getUsername(), -saldo);
+                        userService = retrofit.create(IUserService.class);
+                        Call<User> retirarSaldo = userService.addSaldo(addWallet);
+                        retirarSaldo.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                Log.d("alertDialog", "codigo de error: " + response.code());
+                                if (HttpURLConnection.HTTP_OK == response.code()) {
+                                    alertDialog.dismiss();
+                                    user.setWallet(user.getWallet()-saldo);
+                                    tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
+                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            if (alertDialog.getWindow() != null){
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            alertDialog.show();
+        });
+
     }
 
     private void abrirNotificaciones() {
@@ -197,37 +247,58 @@ public class PerfilFragment extends Fragment {
         if (telefono.length() == 9 && !nombre.isEmpty() && !username.isEmpty()){
             userService = retrofit.create(IUserService.class);
             Log.d("llamadaApi","Haciendo llamada a la api para insertar");
-            Call<User> comprobarUsername = userService.obtenerUsuarioUsername(username);
-            comprobarUsername.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.code() == HttpURLConnection.HTTP_OK){
-                        Toast.makeText(getActivity(), "Username ya existente "+response.code(), Toast.LENGTH_SHORT).show();
-                    }else{
-                        EditUserDTO usu = new EditUserDTO(username,nombre,telefono);
-                        Call<User> editarUsuario = userService.modificarUsuario(user.getEmail(),usu);
-                        editarUsuario.enqueue(new Callback<User>() {
-                            @Override
-                            public void onResponse(Call<User> call, Response<User> response) {
-                                if (response.code() == HttpURLConnection.HTTP_OK){
-                                    Toast.makeText(getActivity(), "Usuario modificado correctamente", Toast.LENGTH_SHORT).show();
-                                    appViewModel.setUser(response.body());
-                                }else{
-                                    Toast.makeText(getActivity(), "Error modificando el usuario "+response.code(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<User> call, Throwable t) {
-
-                            }
-                        });
+            if (user.getUsername().equalsIgnoreCase(username)){
+                EditUserDTO usu = new EditUserDTO(username,nombre,telefono);
+                Call<User> editarUsuario = userService.modificarUsuario(user.getEmail(),usu);
+                editarUsuario.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code() == HttpURLConnection.HTTP_OK){
+                            Toast.makeText(getActivity(), "Usuario modificado correctamente", Toast.LENGTH_SHORT).show();
+                            appViewModel.setUser(response.body());
+                        }else{
+                            Toast.makeText(getActivity(), "Error modificando el usuario "+response.code(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
 
-                }
-            });
+                    }
+                });
+            }else{
+                Call<User> comprobarUsername = userService.obtenerUsuarioUsername(username);
+                comprobarUsername.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code() == HttpURLConnection.HTTP_OK){
+                            Toast.makeText(getActivity(), "Username ya existente "+response.code(), Toast.LENGTH_SHORT).show();
+                        }else{
+                            EditUserDTO usu = new EditUserDTO(username,nombre,telefono);
+                            Call<User> editarUsuario = userService.modificarUsuario(user.getEmail(),usu);
+                            editarUsuario.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    if (response.code() == HttpURLConnection.HTTP_OK){
+                                        Toast.makeText(getActivity(), "Usuario modificado correctamente", Toast.LENGTH_SHORT).show();
+                                        appViewModel.setUser(response.body());
+                                    }else{
+                                        Toast.makeText(getActivity(), "Error modificando el usuario "+response.code(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+            }
+
         }else{
             Toast.makeText(getActivity(), "Rellena los campos que quieras modificar", Toast.LENGTH_SHORT).show();
         }

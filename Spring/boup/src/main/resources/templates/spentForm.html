@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Formulario de Usuario</title>
+<title>Formulario de Gasto</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
@@ -16,45 +16,44 @@
 	<div th:replace="~{header.html :: navbar}"></div>
 	<div class="container">
 		<div class="row">
-			<h2>Usuario</h2>
+			<h2>Gasto</h2>
 		</div>
 		<div class="row">
-			<form id="formulario" th:object="${user}" method="POST">
+			<form id="formulario" th:object="${spent}" method="POST">
+
 				<input type="submit" value="Insertar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/insert')">
+					onclick="enviarPeticion('/web/spents/insert')">
 				<input type="submit" value="Modificar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/update')">
+					onclick="enviarPeticion('/web/spents/update')">
 				<input type="submit" value="Borrar"
 					class="waves-effect waves-light btn-large"
-					onclick="enviarPeticion('/web/users/delete')">
+					onclick="enviarPeticion('/web/spents/delete')">
 
 				<input type="hidden" th:field="*{id}" id="id" />
 				<div>
 					<div class="input-field col s12">
-						<label for="username">Username</label>
-						<input type="text" th:field="*{username}" id="username" name="username" />
+						<label for="spentName">Nombre</label>
+						<input type="text" th:field="*{spentName}" id="spentName" name="spentName" />
 					</div>
 					<div class="input-field col s12">
-						<label for="email">Email</label>
-						<input th:field="*{email}" id="email" type="email" name="email"
-							class="validate" />
+						<label for="paye">Pagador</label> 
+						<input type="text" id="paye" name="paye" th:field="*{payer.username}">
 					</div>
 					<div class="input-field col s12">
-						<label for="nameU">Nombre de Usuario</label>
-						<input type="text" th:field="*{nameU}" id="nameU" name="nameU" />
+						<label for="quantity">Quantity</label>
+						<input type="text" th:field="*{quantity}" id="quantity" name="quantity" />
 					</div>
-					<div class="input-field col s6">
-						<label for="telephone">Teléfono</label>
-						<input type="text" th:field="*{telephone}" id="telephone" name="telephone" />
+					<div class="input-field col s2">
+						<label for="date">Fecha (DD/MM/YYYY)</label>
+						<input type="date" id="date" name="date" th:field="*{date}" />
 					</div>
-					<div class="input-field col s3">
-						<label for="wallet">Monedero</label>
-						<input type="text" th:field="*{wallet}" id="wallet" name="wallet" />
+					<div class="input-field col s12">
+						<label for="groupId">ID del Grupo</label>
+						<input type="text" id="groupId" name="groupId" th:field="*{group.id}" />
 					</div>
 				</div>
-
 			</form>
 		</div>
 	</div>

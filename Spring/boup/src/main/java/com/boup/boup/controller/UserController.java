@@ -149,13 +149,13 @@ public class UserController {
 	@GetMapping("/{username}/groups")
 	public ResponseEntity<List<Group>> getUserGroups(@PathVariable String username) {
 		
-		ResponseEntity<List<Group>> rp=new ResponseEntity<List<Group>>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<List<Group>> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Group> groups=debtS.findUserGroups(user.get());
 			
-			rp=new ResponseEntity<List<Group>>(groups,HttpStatus.OK);
+			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -164,11 +164,11 @@ public class UserController {
 	@GetMapping("/{username}/debts")
 	public ResponseEntity<List<Debt>> getUserDebts(@PathVariable String username) {
 		
-		ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<List<Debt>> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
-			rp=new ResponseEntity<List<Debt>>(debtS.findUserDebts(user.get()),HttpStatus.OK);
+			rp=new ResponseEntity<>(debtS.findUserDebts(user.get()),HttpStatus.OK);
 		}
 		
 		return rp;
@@ -177,13 +177,13 @@ public class UserController {
 	@GetMapping("/{username}/debts/win")
 	public ResponseEntity<List<Debt>> getUserDebtsPositive(@PathVariable String username) {
 		
-		ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<List<Debt>> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Debt> groups=debtS.findUserDebts(user.get());
 			groups.removeIf(d->d.getAmount()<0);
-			rp=new ResponseEntity<List<Debt>>(groups,HttpStatus.OK);
+			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -192,13 +192,13 @@ public class UserController {
 	@GetMapping("/{username}/debts/lose")
 	public ResponseEntity<List<Debt>> getUserDebtsNegative(@PathVariable String username) {
 		
-		ResponseEntity<List<Debt>> rp=new ResponseEntity<List<Debt>>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<List<Debt>> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Debt> groups=debtS.findUserDebts(user.get());
 			groups.removeIf(d->d.getAmount()>=0);
-			rp=new ResponseEntity<List<Debt>>(groups,HttpStatus.OK);
+			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -207,14 +207,14 @@ public class UserController {
 	@PatchMapping("/email/{mail}/token/{token}")
 	public ResponseEntity<User> getUpdateToken(@PathVariable String mail,@PathVariable String token) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByEmail(mail);
 		if(user.isPresent()) {
 			User u=user.get();
 			u.setToken(token);
 			userS.update(u);
-			rp=new ResponseEntity<User>(u,HttpStatus.OK);
+			rp=new ResponseEntity<>(u,HttpStatus.OK);
 		}
 		
 		return rp;

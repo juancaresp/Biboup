@@ -2,16 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Usuario - ${user.username}</title>
+<title >Usuario</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
 </head>
-<script>
-	function enviarPeticion(accion) {
-		let formuario = document.getElementById("formulario")
-		formulario.action = accion;
-	}
-</script>
 <body>
 	<div th:replace="~{header.html :: navbar}"></div>
 	<div class="container">
