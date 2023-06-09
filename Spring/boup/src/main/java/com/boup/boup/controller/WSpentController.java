@@ -31,11 +31,15 @@ public class WSpentController {
 	@Autowired DebtService debtS;
 	@Autowired GroupService groupS;
 	
+	private static final String SPENTS_VAR="spents";
+	private static final String SPENT="spent";
+	private static final String USERS_VAR="users";
+	
 	@GetMapping("")
 	public ModelAndView getSpents() {
-		ModelAndView mav=new ModelAndView("spents");
+		ModelAndView mav=new ModelAndView(SPENTS_VAR);
 
-		mav.addObject("spents", spentS.findAll());
+		mav.addObject(SPENTS_VAR, spentS.findAll());
 		
 		return mav;
 	}
@@ -47,8 +51,8 @@ public class WSpentController {
 		ModelAndView mav=new ModelAndView("seeSpent");
 		Spent spent= spentS.findById(id).orElse(new Spent());
 		
-		mav.addObject("spent",spent);
-		mav.addObject("users",spent.getUsers());
+		mav.addObject(SPENT,spent);
+		mav.addObject(USERS_VAR,spent.getUsers());
 		return mav;
 	}
 	
@@ -57,22 +61,22 @@ public class WSpentController {
 	@PostMapping("/insert")
 	public ModelAndView insertSpentW(@ModelAttribute Spent s) {
 		
-		ModelAndView mav=new ModelAndView("spents");
+		ModelAndView mav=new ModelAndView(SPENTS_VAR);
 		try {
 			userS.findByNick(s.getPayer().getUsername())
-				.ifPresent(payer -> {
+				.ifPresent(payer -> 
 					groupS.findById(s.getGroup().getId()).ifPresent(g ->{
 						s.setPayer(payer);
 						s.setGroup(g);
 						spentS.addSpent(s);
-					});
-				});
+					})
+				);
 			mav=new ModelAndView("seeSpent");
 			
-			mav.addObject("spent",s);
-			mav.addObject("users",s.getUsers());
+			mav.addObject(SPENT,s);
+			mav.addObject(USERS_VAR,s.getUsers());
 		}catch (Exception e) {
-			System.out.println(e.getStackTrace());
+			//standar mav
 		}
 		
 		return mav;
@@ -83,7 +87,7 @@ public class WSpentController {
 		
 		spentS.delete(s.getId());
 
-		return new ModelAndView("spents").addObject("spents",spentS.findAll());
+		return new ModelAndView(SPENTS_VAR).addObject(SPENTS_VAR,spentS.findAll());
 	}
 	
 	@PostMapping("/update")
@@ -93,19 +97,19 @@ public class WSpentController {
 		
 		try {
 			userS.findByNick(s.getPayer().getUsername())
-				.ifPresent(payer -> {
+				.ifPresent(payer -> 
 					groupS.findById(s.getGroup().getId()).ifPresent(g ->{
 						s.setPayer(payer);
 						s.setGroup(g);
 						spentS.update(s);
-					});
-				});
+					})
+				);
 		}catch (Exception e) {
-			System.out.println(e.getStackTrace());
+			//standar mav
 		}
 		
-		mav.addObject("spent",s);
-		mav.addObject("users",s.getUsers());
+		mav.addObject(SPENT,s);
+		mav.addObject(USERS_VAR,s.getUsers());
 		
 		return mav;
 	}
@@ -115,16 +119,16 @@ public class WSpentController {
 	@GetMapping("/form")
 	public ModelAndView getSpentFormEmpty() {
 		//Devuelve spentForm vacio
-		return new ModelAndView("spentForm").addObject("spent", new Spent());
+		return new ModelAndView("spentForm").addObject(SPENT, new Spent());
 	}
 	
 	@GetMapping("/form/{id}")
 	public ModelAndView getSpentForm(@PathVariable("id") Integer id) {
 		//Devuelve spentForm de algun usuario
-		return new ModelAndView("spentForm").addObject("spent", spentS.findById(id).orElse(new Spent()));
+		return new ModelAndView("spentForm").addObject(SPENT, spentS.findById(id).orElse(new Spent()));
 	}
 	
-	//ADD Y DELETE USERS
+	//ADD Y DELETE USERS_VAR
 	@PostMapping("/deleteUser")
 	public ModelAndView deleteUserGroup(@RequestParam("spentId") Integer spentId,@RequestParam("username") String username, HttpServletRequest request) {
 		ModelAndView mav=new ModelAndView("seeSpent");
@@ -135,10 +139,10 @@ public class WSpentController {
 			spentS.deleteSpent(s.getId());
 			s.getUsers().removeIf(u-> u.getUsername().equals(username));
 			spentS.addSpent(s);
-			mav.addObject("spent",s);
-			mav.addObject("users",s.getUsers());
+			mav.addObject(SPENT,s);
+			mav.addObject(USERS_VAR,s.getUsers());
 		}else {
-			mav=new ModelAndView("spents").addObject("spents", spentS.findAll());
+			mav=new ModelAndView(SPENTS_VAR).addObject(SPENTS_VAR, spentS.findAll());
 		}
 		
 		
@@ -158,10 +162,10 @@ public class WSpentController {
 			spentS.deleteSpent(s.getId());
 			s.getUsers().add(opU.get());
 			spentS.addSpent(s);
-			mav.addObject("spent",s);
-			mav.addObject("users",s.getUsers());
+			mav.addObject(SPENT,s);
+			mav.addObject(USERS_VAR,s.getUsers());
 		}else {
-			mav=new ModelAndView("seeSpent").addObject("spents", spentS.findAll());
+			mav=new ModelAndView("seeSpent").addObject(SPENTS_VAR, spentS.findAll());
 		}
 		
 		return mav;

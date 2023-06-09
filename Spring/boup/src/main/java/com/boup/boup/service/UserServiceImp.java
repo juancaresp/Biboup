@@ -54,7 +54,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public List<User> findAll() {
 
-		return (List<User>) userR.findAll();
+		return userR.findAll();
 	}
 
 	@Override
@@ -119,11 +119,10 @@ public class UserServiceImp implements UserService {
 		if(op.isPresent()) {
 			u=op.get();
 			u.setWallet(u.getWallet()+add.getAmount());
-			Optional.of(userR.save(u));
+			op=Optional.of(userR.save(u));
 		}else {
 			op=Optional.empty();
 		}
-		
 		
 		return op;
 	}

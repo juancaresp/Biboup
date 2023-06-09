@@ -32,11 +32,15 @@ public class WUserController {
 	@Autowired GroupService groupS;
 	@Autowired GroupController groupC;
 	
+	private static final String USERS_VAR="users";
+	private static final String USER="user";
+	private static final String GROUPS_VAR="groups";
+	
 	@GetMapping("")
 	public ModelAndView getUsersW() {
-		ModelAndView mav=new ModelAndView("users");
+		ModelAndView mav=new ModelAndView(USERS_VAR);
 
-		mav.addObject("users", userS.findAll());
+		mav.addObject(USERS_VAR, userS.findAll());
 		
 		return mav;
 	}
@@ -49,8 +53,8 @@ public class WUserController {
 		User user= userS.findById(id).orElse(new User());
 		
 		//Meter grupos a los que pertenece 
-		mav.addObject("user",user);
-		mav.addObject("groups", debtS.findUserGroups(user));
+		mav.addObject(USER,user);
+		mav.addObject(GROUPS_VAR, debtS.findUserGroups(user));
 		
 		return mav;
 	}
@@ -60,7 +64,7 @@ public class WUserController {
 	@PostMapping("/insert")
 	public ModelAndView insertUserW(User u) {
 		
-		ModelAndView mav=new ModelAndView("users");
+		ModelAndView mav=new ModelAndView(USERS_VAR);
 		UserReg reg=new UserReg();
 		reg.setUsername(u.getUsername());
 		reg.setEmail(u.getEmail());
@@ -75,8 +79,8 @@ public class WUserController {
 			us=userS.update(user);
 			if(us.isPresent()) {
 				mav=new ModelAndView("seeUser");
-				mav.addObject("user", us.get());
-				mav.addObject("groups", debtS.findUserGroups(us.get()));
+				mav.addObject(USER, us.get());
+				mav.addObject(GROUPS_VAR, debtS.findUserGroups(us.get()));
 			}
 		}
 		
@@ -88,8 +92,8 @@ public class WUserController {
 		
 		userS.delete(u.getId());
 		
-		ModelAndView mav=new ModelAndView("users");
-		mav.addObject("users", userS.findAll());
+		ModelAndView mav=new ModelAndView(USERS_VAR);
+		mav.addObject(USERS_VAR, userS.findAll());
 		
 		return mav;
 	}
@@ -101,10 +105,10 @@ public class WUserController {
 		Optional<User> us=userS.update(u);
 		if(us.isPresent()) {
 			mav= new ModelAndView("seeUser");
-			mav.addObject("user", us.get());
-			mav.addObject("groups", debtS.findUserGroups(us.get()));
+			mav.addObject(USER, us.get());
+			mav.addObject(GROUPS_VAR, debtS.findUserGroups(us.get()));
 		}else {
-			mav=new ModelAndView("users");
+			mav=new ModelAndView(USERS_VAR);
 		}
 
 		return mav;
@@ -116,7 +120,7 @@ public class WUserController {
 	public ModelAndView getUserFormEmpty() {
 		//Devuelve userForm vacio
 		ModelAndView mav=new ModelAndView("userForm");
-		mav.addObject("user", new User());
+		mav.addObject(USER, new User());
 		return mav;
 	}
 	
@@ -124,7 +128,7 @@ public class WUserController {
 	public ModelAndView getUserForm(@PathVariable("id") Integer id) {
 		//Devuelve userForm de algun usuario
 		ModelAndView mav=new ModelAndView("userForm");
-		mav.addObject("user", userS.findById(id).orElse(new User()));
+		mav.addObject(USER, userS.findById(id).orElse(new User()));
 		return mav;
 	}
 	
@@ -137,16 +141,14 @@ public class WUserController {
 		groupC.removeUserFromGroup(Integer.parseInt(groupid), username);
 		
 		return mav;
-		
 	}
 	
 	@PostMapping("/addGroup")
 	public ModelAndView addUserGroup(@RequestParam("groupId") Integer groupid,@RequestParam("username") String username,HttpServletRequest request) {
 		ModelAndView mav=new ModelAndView("redirect:"+request.getHeader("Referer"));
-		System.out.println("redirect:"+request.getHeader("Referer"));
+		
 		groupC.addUserToGroup(groupid, username);
 		
 		return mav;
-		
 	}
 }

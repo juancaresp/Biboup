@@ -84,9 +84,7 @@ public class DebtController {
 
 		List<Debt> debts = debtS.findAll();
 
-		ResponseEntity<List<Debt>> rp = new ResponseEntity<>(debts, HttpStatus.OK);
-
-		return rp;
+		return new ResponseEntity<>(debts, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -96,7 +94,7 @@ public class DebtController {
 
 		Optional<Debt> debt = debtS.findById(id);
 		if (debt.isPresent()) {
-			rp = new ResponseEntity<Debt>(debt.get(), HttpStatus.OK);
+			rp = new ResponseEntity<>(debt.get(), HttpStatus.OK);
 		}
 
 		return rp;
