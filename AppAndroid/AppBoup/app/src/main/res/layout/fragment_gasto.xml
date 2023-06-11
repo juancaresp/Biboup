@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".GastoFragment" >
+    tools:context=".Fragments.GastoFragment" >
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -39,6 +39,7 @@ import es.boup.appboup.Model.Debt;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IDebtService;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
@@ -50,7 +51,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class CaracteristicasGrupo extends Fragment {
+public class CaracteristicasGrupoFragment extends Fragment {
 
     public Button btnAniadirParticipante,btnAniadirGasto,btnLiquidarDeuda,btnVerPart;
     private List<User> users;
@@ -76,7 +77,7 @@ public class CaracteristicasGrupo extends Fragment {
     private TextView tvDeuda,tvDeudaText;
 
 
-    public CaracteristicasGrupo() {
+    public CaracteristicasGrupoFragment() {
         // Required empty public constructor
     }
 
@@ -133,39 +134,33 @@ public class CaracteristicasGrupo extends Fragment {
 
             }
         });
-        atrasVerPart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layoutVerPart.setVisibility(View.GONE);
-                layoutInicial.setVisibility(View.VISIBLE);
-            }
+        atrasVerPart.setOnClickListener(v -> {
+            layoutVerPart.setVisibility(View.GONE);
+            layoutInicial.setVisibility(View.VISIBLE);
         });
-        btnVerPart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                groupService = retrofit.create(IGroupService.class);
-                Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
-                peticionUsers.enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        if(response.code()==HttpURLConnection.HTTP_OK){
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                users=response.body();
-                            }
-                            layoutVerPart.setVisibility(View.VISIBLE);
-                            layoutInicial.setVisibility(View.GONE);
-                            LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
-                            rvUsuarios.setLayoutManager(linearLayoutManager);
-                            rvUsuarios.setAdapter(new GrupoAdapter());
+        btnVerPart.setOnClickListener(v -> {
+            groupService = retrofit.create(IGroupService.class);
+            Call<List<User>> peticionUsers = groupService.getGroupUsers(appViewModel.getGroup().getId().toString());
+            peticionUsers.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if(response.code()==HttpURLConnection.HTTP_OK){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            users=response.body();
                         }
+                        layoutVerPart.setVisibility(View.VISIBLE);
+                        layoutInicial.setVisibility(View.GONE);
+                        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+                        rvUsuarios.setLayoutManager(linearLayoutManager);
+                        rvUsuarios.setAdapter(new GrupoAdapter());
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
 
-                    }
-                });
-            }
+                }
+            });
         });
 
         btnAniadirParticipante.setOnClickListener(v -> {
@@ -232,39 +227,33 @@ public class CaracteristicasGrupo extends Fragment {
             alertDialog.show();
         });
 
-        btnAniadirGasto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame,new AniadirGasto());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+        btnAniadirGasto.setOnClickListener(v -> {
+            fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frame,new AniadirGastoFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
-        btnLiquidarDeuda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                debtService=retrofit.create(IDebtService.class);
-                Call<Debt> peticionLiquidar = debtService.closeDebt(appViewModel.getUser().getUsername(),appViewModel.getGroup().getId().toString());
-                peticionLiquidar.enqueue(new Callback<Debt>() {
-                    @Override
-                    public void onResponse(Call<Debt> call, Response<Debt> response) {
-                        if(response.code()==HttpURLConnection.HTTP_OK ){
-                            fragmentManager = getParentFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame,new ListaInicio());
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
+        btnLiquidarDeuda.setOnClickListener(v -> {
+            debtService=retrofit.create(IDebtService.class);
+            Call<Debt> peticionLiquidar = debtService.closeDebt(appViewModel.getUser().getUsername(),appViewModel.getGroup().getId().toString());
+            peticionLiquidar.enqueue(new Callback<Debt>() {
+                @Override
+                public void onResponse(Call<Debt> call, Response<Debt> response) {
+                    if(response.code()==HttpURLConnection.HTTP_OK ){
+                        fragmentManager = getParentFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.frame,new ListaInicioFragment());
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<Debt> call, Throwable t) {
+                @Override
+                public void onFailure(Call<Debt> call, Throwable t) {
 
-                    }
-                });
-            }
+                }
+            });
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 

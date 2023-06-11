@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".PerfilFragment">
+    tools:context=".Fragments.PerfilFragment">
 
     <LinearLayout
         android:id="@+id/Cabecera"

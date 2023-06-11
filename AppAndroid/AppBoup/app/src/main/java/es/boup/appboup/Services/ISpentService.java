@@ -19,7 +19,7 @@ public interface ISpentService {
     @GET("api/spents/users/{username}")
     Call<List<Spent>> getSpentsUser(@Path("username") String username);
 
-    @PUT("api/spents/")
+    @PUT("api/spents")
     Call<Spent> updateSpent(@Body Spent spent);
 
     @DELETE("api/spents/{idSpent}")

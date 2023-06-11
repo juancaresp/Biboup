@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RegistroFragment">
+    tools:context=".Fragments.RegistroFragment">
 
     <TextView
         android:id="@+id/tvRegistrar"

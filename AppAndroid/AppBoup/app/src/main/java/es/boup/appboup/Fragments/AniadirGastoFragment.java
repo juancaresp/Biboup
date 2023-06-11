@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -33,6 +33,7 @@ import java.util.List;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
 import retrofit2.Call;
@@ -41,7 +42,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AniadirGasto extends Fragment {
+public class AniadirGastoFragment extends Fragment {
     private RecyclerView recyclerViewElegirPagador,recyclerViewElegirDeudores;
     private EditText etTitulo,etDescripcion, etCantidad;
     private Button btnElegirPagador,btnElegirDeudores,btnGuardarLista,btnGuardarGasto;
@@ -59,7 +60,7 @@ public class AniadirGasto extends Fragment {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public AniadirGasto() {
+    public AniadirGastoFragment() {
         // Required empty public constructor
     }
 
@@ -120,7 +121,7 @@ public class AniadirGasto extends Fragment {
         btnAtras.setOnClickListener(v -> {
             fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
@@ -143,7 +144,7 @@ public class AniadirGasto extends Fragment {
                     if(response.code()==HttpURLConnection.HTTP_OK){
                         fragmentManager = getParentFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                        fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }
@@ -210,16 +211,16 @@ public class AniadirGasto extends Fragment {
             }
         });
     }
-    class GrupoAdapter extends RecyclerView.Adapter<AniadirGasto.GrupoAdapter.GrupoHolder>{
+    class GrupoAdapter extends RecyclerView.Adapter<AniadirGastoFragment.GrupoAdapter.GrupoHolder>{
 
         @NonNull
         @Override
-        public AniadirGasto.GrupoAdapter.GrupoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new AniadirGasto.GrupoAdapter.GrupoHolder(getLayoutInflater().inflate(R.layout.itemusuario,parent, false));
+        public AniadirGastoFragment.GrupoAdapter.GrupoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new AniadirGastoFragment.GrupoAdapter.GrupoHolder(getLayoutInflater().inflate(R.layout.itemusuario,parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull AniadirGasto.GrupoAdapter.GrupoHolder holder, int position) {
+        public void onBindViewHolder(@NonNull AniadirGastoFragment.GrupoAdapter.GrupoHolder holder, int position) {
             holder.imprimir(users.get(position));
         }
 
@@ -256,16 +257,16 @@ public class AniadirGasto extends Fragment {
             }
         }
     }
-    class GrupoAdapter2 extends RecyclerView.Adapter<AniadirGasto.GrupoAdapter2.GrupoHolder2>{
+    class GrupoAdapter2 extends RecyclerView.Adapter<AniadirGastoFragment.GrupoAdapter2.GrupoHolder2>{
 
         @NonNull
         @Override
-        public AniadirGasto.GrupoAdapter2.GrupoHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new AniadirGasto.GrupoAdapter2.GrupoHolder2(getLayoutInflater().inflate(R.layout.item_usuario_checkbox,parent, false));
+        public AniadirGastoFragment.GrupoAdapter2.GrupoHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new AniadirGastoFragment.GrupoAdapter2.GrupoHolder2(getLayoutInflater().inflate(R.layout.item_usuario_checkbox,parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull AniadirGasto.GrupoAdapter2.GrupoHolder2 holder, int position) {
+        public void onBindViewHolder(@NonNull AniadirGastoFragment.GrupoAdapter2.GrupoHolder2 holder, int position) {
             holder.imprimir(deudores.get(position));
         }
 

@@ -18,6 +18,9 @@ import retrofit2.http.Path;
 
 public interface IUserService {
 
+    @PUT("api/users/{email}")
+    Call<User> modificarUsuario(@Path("email")String email,@Body EditUserDTO user);
+
     //llamada para obtener un usuario por su correo
     @GET("api/users/email/{mail}")
     Call<User> obtenerUsuarioEmail(@Path("mail") String mail);
@@ -41,9 +44,6 @@ public interface IUserService {
     //llamada para insertar un usuario
     @POST("api/users")
     Call<User> insertarUsuario(@Body CreateUserDTO user);
-
-    @PUT("api/users/{email}")
-    Call<User> modificarUsuario(@Path("email")String email,@Body EditUserDTO user);
 
     //llamada para obtener un usuario a traves del email y el token
     @PATCH("api/users/email/{mail}/token/{token}")

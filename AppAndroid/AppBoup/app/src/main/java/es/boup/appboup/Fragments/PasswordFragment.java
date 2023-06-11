@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import android.os.Bundle;
 
@@ -15,17 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Fragment_password extends Fragment {
+import es.boup.appboup.R;
+
+public class PasswordFragment extends Fragment {
 
     private EditText etCorreo;
     private TextView tvRegistrar;
     private Button recuperar;
 
-    public Fragment_password() {
+    public PasswordFragment() {
         // Required empty public constructor
     }
 

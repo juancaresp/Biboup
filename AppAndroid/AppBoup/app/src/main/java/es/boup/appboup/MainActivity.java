@@ -19,6 +19,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
 
+import es.boup.appboup.Fragments.AniadirGastoFragment;
+import es.boup.appboup.Fragments.HistoricoFragment;
+import es.boup.appboup.Fragments.ListaInicioFragment;
+import es.boup.appboup.Fragments.LoginFragment;
+import es.boup.appboup.Fragments.PerfilFragment;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Services.IUserService;
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity{
                     cambiarFragmento(new PerfilFragment());
                     break;
                 case R.id.navLista:
-                    cambiarFragmento(new ListaInicio());
+                    cambiarFragmento(new ListaInicioFragment());
                     break;
                 case R.id.navAdd:
                     cambiarFragmento(new HistoricoFragment());
@@ -186,9 +191,9 @@ public class MainActivity extends AppCompatActivity{
             // Si hay fragmentos en la pila, retroceder al fragmento anterior
             if (fragment instanceof PerfilFragment)
                 binding.bottomNavM.getMenu().getItem(2).setChecked(true);
-            else if (fragment instanceof  AniadirGasto)
+            else if (fragment instanceof AniadirGastoFragment)
                 binding.bottomNavM.getMenu().getItem(1).setChecked(true);
-            else if (fragment instanceof ListaInicio)
+            else if (fragment instanceof ListaInicioFragment)
                 binding.bottomNavM.getMenu().getItem(0).setChecked(true);
             getSupportFragmentManager().popBackStack();
         } else {

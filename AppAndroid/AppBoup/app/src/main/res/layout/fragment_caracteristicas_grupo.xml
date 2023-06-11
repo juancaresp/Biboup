@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".CaracteristicasGrupo">
+    tools:context=".Fragments.CaracteristicasGrupoFragment">
 
     <LinearLayout
         android:id="@+id/layoutInicial"
