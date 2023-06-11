@@ -150,6 +150,7 @@ public class PerfilFragment extends Fragment {
         btNotis.setOnClickListener(view1 -> abrirNotificaciones());
 
         btRetirar.setOnClickListener(v->{
+            user = appViewModel.getUser();
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
             View view2 = LayoutInflater.from(getActivity()).inflate(
                     R.layout.layout_retirar,view.findViewById(R.id.layoutDialogContainer));
@@ -175,9 +176,9 @@ public class PerfilFragment extends Fragment {
                                     alertDialog.dismiss();
                                     user.setWallet(user.getWallet()-saldo);
                                     tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
-                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Saldo retirado", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Error retirando saldo", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -187,7 +188,7 @@ public class PerfilFragment extends Fragment {
                             }
                         });
                     } else {
-                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "El saldo no puede quedar negativo", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
