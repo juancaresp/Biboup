@@ -64,7 +64,7 @@ public class WUserController {
 	@PostMapping("/insert")
 	public ModelAndView insertUserW(User u) {
 		
-		ModelAndView mav=new ModelAndView(USERS_VAR);
+		ModelAndView mav=new ModelAndView(USERS_VAR).addObject(USERS_VAR, userS.findAll());
 		UserReg reg=new UserReg();
 		reg.setUsername(u.getUsername());
 		reg.setEmail(u.getEmail());
@@ -108,7 +108,7 @@ public class WUserController {
 			mav.addObject(USER, us.get());
 			mav.addObject(GROUPS_VAR, debtS.findUserGroups(us.get()));
 		}else {
-			mav=new ModelAndView(USERS_VAR);
+			mav=new ModelAndView(USERS_VAR).addObject(USERS_VAR, userS.findAll());
 		}
 
 		return mav;
