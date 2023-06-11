@@ -107,18 +107,31 @@ public class SpentServiceImp implements SpentService {
 	@Override
 	public Optional<Spent> addSpent(Spent spent) {
 
+		//Intentamos introducir el gasto en la BBDD
 		Optional<Spent> spe = insert(spent);
+		//si se ha introducido bien el spent
 		spe.ifPresent(sp -> {
+			//Borramos el pagador si es que viene en el array de usuarios
 			sp.getUsers().removeIf(u-> u.equals(sp.getPayer()));
+			//Calculamos la parte de cada persona
 			Double part = sp.getQuantity() / (sp.getUsers().size() + 1);
+			//Si el grupo que viene en el gasto existe 
 			groupS.findById(sp.getGroup().getId()).ifPresent(g -> {
+				//Buscamos la debt del que ha pagado el gasto
 				Debt d = debtS.findByUserAndGroup(sp.getPayer(), g).orElse(new Debt());
+				//Le sumamos a el debt la cantidad que ha pagado menos su parte del gasto
 				d.setAmount(d.getAmount() + sp.getQuantity() - part);
+				//Lo guardamos en la BBDD
 				debtS.update(d);
+				//Por cada usuario que ha participado en el gasto
 				sp.getUsers().forEach(u -> {
+					//buscamos su debt
 					Debt de = debtS.findByUserAndGroup(u, g).orElse(new Debt());
+					//Le restamos su parte
 					de.setAmount(de.getAmount() - part);
+					//Lo guardamos en la BBDD
 					debtR.save(de);
+					//Y enviamos una notificacion
 					sendNotification(u, g,sp, part);
 				});
 			});
