@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
 
@@ -12,7 +12,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,6 +37,7 @@ import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.EditUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,7 +95,6 @@ public class PerfilFragment extends Fragment {
         btConfirmar = view.findViewById(R.id.btConfirmar);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
-        Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");
         user = appViewModel.getUser();
         if (user !=null){
             tvCorreo.setText(user.getEmail());

@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -38,6 +38,7 @@ import java.net.HttpURLConnection;
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -137,7 +138,7 @@ public class LoginFragment extends Fragment {
         tvRecuperar.setOnClickListener(v->{
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.frame, new Fragment_password())
+                    .replace(R.id.frame, new PasswordFragment())
                     .addToBackStack(null)
                     .commit();
         });

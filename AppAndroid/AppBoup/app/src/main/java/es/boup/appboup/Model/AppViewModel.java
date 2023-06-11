@@ -21,7 +21,6 @@ public class AppViewModel extends ViewModel {
 
     private User user;
     private Group group;
-    //variable para cerrar tras login y registro
     private boolean cerrar;
     private Spent spent;
 

@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".CredencialesFragment">
+    tools:context=".Fragments.CredencialesFragment">
 
     <TextView
         android:id="@+id/tvBienvenido"

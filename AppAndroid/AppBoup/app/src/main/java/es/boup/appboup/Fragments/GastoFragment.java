@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -35,6 +35,7 @@ import java.util.List;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
 import retrofit2.Call;
@@ -172,7 +173,7 @@ public class GastoFragment extends Fragment {
 
         btGuardar.setOnClickListener(view1 -> {
             if(!etCantidad.getText().toString().equals("")){
-                gasto.setQuantity(Integer.parseInt(etCantidad.getText().toString()));
+                gasto.setQuantity(Double.parseDouble(etCantidad.getText().toString()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     gasto.setDate(LocalDate.now().toString());
                 }
@@ -190,12 +191,12 @@ public class GastoFragment extends Fragment {
                             Toast.makeText(getActivity(), "Gasto modificado", Toast.LENGTH_SHORT).show();
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
 
                         }else{
-                            Toast.makeText(getActivity(), "Error modificando", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error modificando"+response.code(), Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -232,7 +233,7 @@ public class GastoFragment extends Fragment {
                     alertDialog.dismiss();
                     fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -243,7 +244,7 @@ public class GastoFragment extends Fragment {
                     alertDialog.dismiss();
                     fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                    fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }

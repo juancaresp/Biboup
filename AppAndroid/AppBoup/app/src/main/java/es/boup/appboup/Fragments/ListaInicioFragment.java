@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -35,6 +35,7 @@ import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Debt;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
@@ -44,7 +45,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ListaInicio extends Fragment {
+public class ListaInicioFragment extends Fragment {
 
     private Button btnCrearGrupo,btCobrar,btDeber;
     private TextView tvSaldo;
@@ -67,7 +68,7 @@ public class ListaInicio extends Fragment {
 
 
 
-    public ListaInicio() {
+    public ListaInicioFragment() {
         // Required empty public constructor
     }
 
@@ -309,14 +310,12 @@ public class ListaInicio extends Fragment {
 
             public GrupoHolder(@NonNull View itemView) {
                 super(itemView);
-                tvDni=itemView.findViewById(R.id.tvId);
                 tvNombre=itemView.findViewById(R.id.tvTitulo);
                 tvResumen=itemView.findViewById(R.id.tvGasto);
                 itemView.setOnClickListener(this);
             }
 
             public void imprimir(Debt debt){
-                tvDni.setText(debt.getGroup().getId().toString());
                 tvNombre.setText(debt.getGroup().getGroupName());
                 if (debt.getAmount() >= 0){
                     tvResumen.setTextColor(getResources().getColor(R.color.principal));
@@ -340,7 +339,7 @@ public class ListaInicio extends Fragment {
                             Toast.makeText(getActivity(), ""+group.getGroupName(), Toast.LENGTH_SHORT).show();
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }else{
