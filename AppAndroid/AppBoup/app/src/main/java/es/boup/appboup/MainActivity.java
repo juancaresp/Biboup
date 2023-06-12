@@ -2,6 +2,7 @@ package es.boup.appboup;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity{
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
             fragmentTransaction.commit();
-
+            navi.setVisibility(View.GONE);
         }
 
     }
