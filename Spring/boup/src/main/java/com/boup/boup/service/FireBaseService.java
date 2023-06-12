@@ -30,7 +30,7 @@ public class FireBaseService {
 			fireBase.send(mes);
 			exit=true;
 		}catch (FirebaseMessagingException e) {
-			e.printStackTrace();
+			//not sended
 		}
 		return exit;
 	}

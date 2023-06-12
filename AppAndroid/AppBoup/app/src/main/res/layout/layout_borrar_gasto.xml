@@ -30,7 +30,7 @@
             android:padding="10dp"
             android:text="Eliminar Gasto"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,7 +80,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_gasto"
             android:text="Eliminar"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/layoutDialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -30,13 +30,15 @@ public class WDebtController {
 	@Autowired DebtService debtS;
 	@Autowired SpentService spentS;
 	@Autowired GroupService groupS;
+	private static final String DEBT="debt";
+	private static final String DEBTS_VAR="debts";
 	
 	@GetMapping("")
 	public ModelAndView getDebts() {
-		ModelAndView mav=new ModelAndView("debts");
+		ModelAndView mav=new ModelAndView(DEBTS_VAR);
 		List<Debt> debts=debtS.findAll();
 
-		mav.addObject("debts", debts);
+		mav.addObject(DEBTS_VAR, debts);
 		
 		return mav;
 	}
@@ -48,7 +50,7 @@ public class WDebtController {
 		ModelAndView mav=new ModelAndView("seeDebt");
 		Debt debt= debtS.findById(Integer.parseInt(id)).orElse(new Debt());
 		
-		mav.addObject("debt",debt);
+		mav.addObject(DEBT,debt);
 		
 		return mav;
 	}
@@ -61,14 +63,13 @@ public class WDebtController {
 		Optional<Group> opG=groupS.findById(d.getGroup().getId());
 		
 		if(opU.isPresent()&&opG.isPresent()) {
-			System.out.println("llego?");
 			d.setUser(opU.get());
 			d.setGroup(opG.get());
 			d=debtS.insert(d).orElse(new Debt());
-			model.addAttribute("debt", d);
+			model.addAttribute(DEBT, d);
 		}
 		
-		return new ModelAndView("debts").addObject("debts", debtS.findAll());
+		return new ModelAndView(DEBTS_VAR).addObject(DEBTS_VAR, debtS.findAll());
 	}
 	
 	@PostMapping("/delete")
@@ -76,7 +77,7 @@ public class WDebtController {
 		
 		debtS.delete(d.getId());
 
-		return new ModelAndView("debts").addObject("debts", debtS.findAll());
+		return new ModelAndView(DEBTS_VAR).addObject(DEBTS_VAR, debtS.findAll());
 	}
 	
 	@PostMapping("/update")
@@ -89,9 +90,9 @@ public class WDebtController {
 			d.setUser(opU.get());
 			d.setGroup(opG.get());
 			d=debtS.update(d).orElse(new Debt());
-			model.addAttribute("debt", d);
+			model.addAttribute(DEBT, d);
 		}
-		return new ModelAndView("debts").addObject("debts", debtS.findAll());
+		return new ModelAndView(DEBTS_VAR).addObject(DEBTS_VAR, debtS.findAll());
 	}
 	
 	//Formularios
@@ -100,7 +101,7 @@ public class WDebtController {
 	public ModelAndView getDebtFormEmpty(Model model) {
 		//Devuelve debtForm vacio
 		ModelAndView mav=new ModelAndView("debtForm");
-		mav.addObject("debt", new Debt());
+		mav.addObject(DEBT, new Debt());
 		return mav;
 	}
 	
@@ -108,7 +109,7 @@ public class WDebtController {
 	public ModelAndView getDebtForm(Model model,@PathVariable("id") String id ) {
 		//Devuelve debtForm
 		ModelAndView mav=new ModelAndView("debtForm");
-		mav.addObject("debt", debtS.findById(Integer.parseInt(id)).orElse(new Debt()));
+		mav.addObject(DEBT, debtS.findById(Integer.parseInt(id)).orElse(new Debt()));
 		return mav;
 	}
 }

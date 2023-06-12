@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,6 +38,7 @@ import java.net.HttpURLConnection;
 import es.boup.appboup.Model.CreateUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,6 +69,9 @@ public class LoginFragment extends Fragment {
     //edit texts
     private EditText etCorreo, etContra;
     private Button btnSign, btnLog;
+
+    //recuperar contraseña
+    private TextView tvRecuperar;
 
     //conexion api
     private Retrofit retrofit = new Retrofit.Builder()
@@ -127,6 +132,16 @@ public class LoginFragment extends Fragment {
 
         //boton log In correo
         btnLog.setOnClickListener(view1 -> logInCorreo());
+
+        //recuperar contraseña
+        tvRecuperar = view.findViewById(R.id.tvRecuperar);
+        tvRecuperar.setOnClickListener(v->{
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame, new PasswordFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
     }
 
@@ -232,6 +247,9 @@ public class LoginFragment extends Fragment {
 
                     }
                 });
+
+
+
     }
 
     //función de registro con correo electronico

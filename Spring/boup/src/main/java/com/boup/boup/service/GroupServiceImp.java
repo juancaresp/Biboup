@@ -26,9 +26,7 @@ public class GroupServiceImp implements GroupService{
 	@Override
 	public Optional<Group> insert(Group g) {
 		
-		Optional<Group> op=Optional.of(groupR.save(g));
-		
-		return op;
+		return Optional.of(groupR.save(g));
 	}
 
 	@Override
@@ -67,19 +65,16 @@ public class GroupServiceImp implements GroupService{
 
 	@Override
 	public List<Group> findAll() {
-		// TODO Auto-generated method stub
-		return (List<Group>) groupR.findAll();
+		return groupR.findAll();
 	}
 
 	@Override
 	public Optional<Group> findByGroupName(String name) {
-		// TODO Auto-generated method stub
 		return groupR.findByGroupName(name);
 	}
 
 	@Override
 	public Optional<Group> findById(Integer groupID) {
-		// TODO Auto-generated method stub
 		return groupR.findById(groupID);
 	}
 

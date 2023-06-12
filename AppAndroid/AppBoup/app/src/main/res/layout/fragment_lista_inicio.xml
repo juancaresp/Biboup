@@ -9,7 +9,7 @@
     android:paddingLeft="15dp"
     android:paddingTop="10dp"
     android:paddingRight="15dp"
-    tools:context=".listaInicio">
+    tools:context=".Fragments.ListaInicioFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="5"
+            android:layout_weight="2"
             android:orientation="horizontal">
 
             <TextView
@@ -56,14 +56,16 @@
             android:id="@+id/btVerP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="center|right"
+            android:layout_weight="1"
             android:backgroundTint="#069e8c"
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="@font/baloo_da"
             android:gravity="center_horizontal|center_vertical"
             android:onClick="visibilizarGrupo"
             android:text="Crear grupo "
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
+            android:textSize="16sp"
             app:cornerRadius="20dp" />
     </LinearLayout>
 
@@ -97,9 +99,11 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:backgroundTint="#069e8c"
+            android:fontFamily="@font/baloo_da"
             android:padding="5dp"
             android:paddingEnd="5dp"
             android:text="Cobrar"
+            android:textSize="16sp"
             app:cornerRadius="50dp" />
 
         <Button
@@ -109,8 +113,10 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:backgroundTint="@color/error"
+            android:fontFamily="@font/baloo_da"
             android:padding="5dp"
             android:text="deber"
+            android:textSize="16sp"
             app:cornerRadius="50dp" />
     </LinearLayout>
 

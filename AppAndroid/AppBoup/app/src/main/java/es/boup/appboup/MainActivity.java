@@ -2,6 +2,7 @@ package es.boup.appboup;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
 
+import es.boup.appboup.Fragments.AniadirGastoFragment;
+import es.boup.appboup.Fragments.HistoricoFragment;
+import es.boup.appboup.Fragments.ListaInicioFragment;
+import es.boup.appboup.Fragments.LoginFragment;
+import es.boup.appboup.Fragments.PerfilFragment;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Services.IUserService;
@@ -32,7 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://192.168.0.20:8080/";
+    public static String CONEXION_API = "http://app.biboup.me/";
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
@@ -94,7 +100,7 @@ public class MainActivity extends AppCompatActivity{
                     cambiarFragmento(new PerfilFragment());
                     break;
                 case R.id.navLista:
-                    cambiarFragmento(new listaInicio());
+                    cambiarFragmento(new ListaInicioFragment());
                     break;
                 case R.id.navAdd:
                     cambiarFragmento(new HistoricoFragment());
@@ -169,7 +175,7 @@ public class MainActivity extends AppCompatActivity{
         }else{
             fragmentTransaction.add(R.id.frame,new LoginFragment());
             fragmentTransaction.commit();
-
+            navi.setVisibility(View.GONE);
         }
 
     }
@@ -186,9 +192,9 @@ public class MainActivity extends AppCompatActivity{
             // Si hay fragmentos en la pila, retroceder al fragmento anterior
             if (fragment instanceof PerfilFragment)
                 binding.bottomNavM.getMenu().getItem(2).setChecked(true);
-            else if (fragment instanceof  AniadirGasto)
+            else if (fragment instanceof AniadirGastoFragment)
                 binding.bottomNavM.getMenu().getItem(1).setChecked(true);
-            else if (fragment instanceof  listaInicio)
+            else if (fragment instanceof ListaInicioFragment)
                 binding.bottomNavM.getMenu().getItem(0).setChecked(true);
             getSupportFragmentManager().popBackStack();
         } else {

@@ -5,8 +5,49 @@
 <title>Inicio</title>
 <link th:href="@{/materialize.css}" rel="stylesheet" />
 <script src="/materialize.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 	<div th:replace="~{header.html :: navbar}"></div>
+	<div class="row">
+		<h1 class="center">Biboup</h1>
+	</div>
+	<div class="row">
+		<img src="logo2.png" alt="logo" style=" display: block;margin-left: auto;margin-right: auto;width:200px;height:200px;">
+	</div>
+	<div class="row">
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">account_circle</i></h2>
+            <h5 class="center"><a href="/web/users">Usuarios</a></h5>
+
+            <p class="light center">Gestion de usuarios,ver usuarios, modificarlos, grupos a los que pertenece...</p>
+          </div>
+        </div>
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">groups</i></h2>
+            <h5 class="center"><a href="/web/groups">Groups</a></h5>
+            <p class="light center">Gestion de grupos,creacion y modificacion de grupos, insercion y eliminacion de usuarios... </p>
+          </div>
+        </div>
+
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">account_balance_wallet</i></h2>
+            <h5 class="center"><a href="/web/spents">Gastos</a></h5>
+            <p class="light center">Gestion de Gastos, insercion, eliminacion, modificacion</p>
+          </div>
+        </div>
+        
+        <div class="col s12 m3">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">attach_money</i></h2>
+            <h5 class="center"><a href="/web/debts">Debts</a></h5>
+            <p class="light center">Gestion de deudas, insercion, eliminacion, modificacion</p>
+          </div>
+        </div>
+      </div>
+	
 </body>
 </html>

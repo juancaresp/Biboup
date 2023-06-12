@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,17 +36,15 @@ public class UserController {
 	@Autowired SpentService spentS;
 	@Autowired GroupService groupS;
 	
-	
-	//CRUD
+	//delete
 
-
-	@PostMapping("/delete")
+	@DeleteMapping("")
 	public ResponseEntity<User> deleteUser(@RequestBody User user) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		if(userS.delete(user.getId())) {
-			rp=new ResponseEntity<User>(user,HttpStatus.OK);
+			rp=new ResponseEntity<>(user,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -58,9 +57,7 @@ public class UserController {
 		
 		List<User> users=userS.findAll();
 		
-		ResponseEntity<List<User>> rp=new ResponseEntity<List<User>>(users,HttpStatus.OK);
-		
-		return rp;
+		return new ResponseEntity<>(users,HttpStatus.OK);
 	}
 	
 	//LLamadas pedidas
@@ -68,11 +65,11 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUser(@PathVariable Integer id) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findById(id);
 		if(user.isPresent()) {
-			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+			rp=new ResponseEntity<>(user.get(),HttpStatus.OK);
 		}
 		
 		return rp;
@@ -81,11 +78,11 @@ public class UserController {
 	@GetMapping("/username/{username}")
 	public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
-			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+			rp=new ResponseEntity<>(user.get(),HttpStatus.OK);
 		}
 		
 		return rp;
@@ -94,11 +91,11 @@ public class UserController {
 	@GetMapping("/email/{mail}")
 	public ResponseEntity<User> getUserByMail(@PathVariable String mail) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByEmail(mail);
 		if(user.isPresent()) {
-			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+			rp=new ResponseEntity<>(user.get(),HttpStatus.OK);
 		}
 		
 		return rp;
@@ -107,12 +104,12 @@ public class UserController {
 	@PostMapping("")
 	public ResponseEntity<User> registerUser(@RequestBody UserReg userReg) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		
 		Optional<User> user=userS.register(userReg);
 		if(user.isPresent()) {
-			rp=new ResponseEntity<User>(user.get(),HttpStatus.OK);
+			rp=new ResponseEntity<>(user.get(),HttpStatus.OK);
 		}
 		
 		return rp;
@@ -121,12 +118,12 @@ public class UserController {
 	@PutMapping("/{email}")
 	public ResponseEntity<User> updateUser(@RequestBody UserUpd reg,@PathVariable String email) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		Optional<User> opU=userS.updateU(reg,email);
 		
 		if(opU.isPresent()) {
 			User u =opU.get();
-			rp=new ResponseEntity<User>(u,HttpStatus.OK);
+			rp=new ResponseEntity<>(u,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -135,12 +132,12 @@ public class UserController {
 	@PatchMapping("/wallet/add")
 	public ResponseEntity<User> addWallet(@RequestBody AddWallet add) {
 		
-		ResponseEntity<User> rp=new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		ResponseEntity<User> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		Optional<User> opU=userS.addWallet(add);
 		
 		if(opU.isPresent()) {
 			User u =opU.get();
-			rp=new ResponseEntity<User>(u,HttpStatus.OK);
+			rp=new ResponseEntity<>(u,HttpStatus.OK);
 		}
 		
 		return rp;

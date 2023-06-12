@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +39,7 @@ public class DebtController {
 
 	// CRUD
 
-	@PostMapping("/insert")
+	@PostMapping("")
 	public ResponseEntity<Debt> insertDebt(@RequestBody Debt debt) {
 
 		ResponseEntity<Debt> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -51,7 +53,7 @@ public class DebtController {
 		return rp;
 	}
 
-	@PostMapping("/update")
+	@PutMapping("")
 	public ResponseEntity<Debt> updateDebt(@RequestBody Debt debt) {
 
 		ResponseEntity<Debt> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -65,7 +67,7 @@ public class DebtController {
 		return rp;
 	}
 
-	@PostMapping("/delete")
+	@DeleteMapping("")
 	public ResponseEntity<Debt> deleteDebt(@RequestBody Debt debt) {
 
 		ResponseEntity<Debt> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,9 +86,7 @@ public class DebtController {
 
 		List<Debt> debts = debtS.findAll();
 
-		ResponseEntity<List<Debt>> rp = new ResponseEntity<>(debts, HttpStatus.OK);
-
-		return rp;
+		return new ResponseEntity<>(debts, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -96,7 +96,7 @@ public class DebtController {
 
 		Optional<Debt> debt = debtS.findById(id);
 		if (debt.isPresent()) {
-			rp = new ResponseEntity<Debt>(debt.get(), HttpStatus.OK);
+			rp = new ResponseEntity<>(debt.get(), HttpStatus.OK);
 		}
 
 		return rp;
@@ -119,7 +119,7 @@ public class DebtController {
 
 			if (debt.isPresent()) {
 				debtS.pay(debt.get());
-				
+				u=userS.findById(u.getId()).orElse(new User());
 				rp = new ResponseEntity<>(u, HttpStatus.OK);
 			} else {
 				rp = new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

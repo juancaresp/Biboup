@@ -7,7 +7,7 @@
     android:background="@drawable/bg_color"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RegistroFragment">
+    tools:context=".Fragments.RegistroFragment">
 
     <TextView
         android:id="@+id/tvRegistrar"
@@ -18,7 +18,7 @@
         android:text="Registrate"
         android:textColor="#333333"
         android:textSize="34sp"
-        android:translationY="-70dp" />
+        android:translationY="-60dp" />
 
     <LinearLayout
         android:layout_width="250dp"
@@ -35,7 +35,7 @@
             android:text="Username"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etUsernameR"
@@ -52,7 +52,7 @@
             android:textColor="#333333"
             android:textColorHighlight="#0fc3e8"
             android:textColorHint="#888"
-            android:textSize="16dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvCorreoR"
@@ -64,7 +64,7 @@
             android:text="Correo electronico"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etCorreoR"
@@ -81,7 +81,7 @@
             android:textColor="#333333"
             android:textColorHighlight="#0fc3e8"
             android:textColorHint="#888"
-            android:textSize="16dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvContraR"
@@ -94,7 +94,7 @@
             android:text="Contraseña"
             android:textColor="#333333"
             android:textColorHint="#0fc3e8"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etContraR"
@@ -109,7 +109,7 @@
             android:inputType="textPassword"
             android:textColor="#333333"
             android:textColorHint="#888"
-            android:textSize="16dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <Button
@@ -120,7 +120,7 @@
         android:backgroundTint="#45b39d"
         android:fontFamily="@font/baloo_da"
         android:text="Confirmar"
-        android:textColor="@color/black"
+        android:textSize="16sp"
         app:cornerRadius="50dp" />
 
 </LinearLayout>

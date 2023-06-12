@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
 
@@ -12,7 +12,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,6 +37,7 @@ import es.boup.appboup.Model.AddWallet;
 import es.boup.appboup.Model.EditUserDTO;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.Model.AppViewModel;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IUserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,7 +95,6 @@ public class PerfilFragment extends Fragment {
         btConfirmar = view.findViewById(R.id.btConfirmar);
         btConfirmar.setVisibility(View.GONE);
         edit = false;
-        Log.d("llamadaApi","antes de recoger el usuario desde el fragmento");
         user = appViewModel.getUser();
         if (user !=null){
             tvCorreo.setText(user.getEmail());
@@ -151,6 +150,7 @@ public class PerfilFragment extends Fragment {
         btNotis.setOnClickListener(view1 -> abrirNotificaciones());
 
         btRetirar.setOnClickListener(v->{
+            user = appViewModel.getUser();
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity(),R.style.AlerDialogTheme);
             View view2 = LayoutInflater.from(getActivity()).inflate(
                     R.layout.layout_retirar,view.findViewById(R.id.layoutDialogContainer));
@@ -176,9 +176,9 @@ public class PerfilFragment extends Fragment {
                                     alertDialog.dismiss();
                                     user.setWallet(user.getWallet()-saldo);
                                     tvSaldo.setText("saldo: " + formato.format(user.getWallet()) + "€");
-                                    Toast.makeText(getActivity(), "Saldo añadido", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Saldo retirado", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getActivity(), "Error añadiendo saldo", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Error retirando saldo", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -188,7 +188,7 @@ public class PerfilFragment extends Fragment {
                             }
                         });
                     } else {
-                        Toast.makeText(getActivity(), "El saldo no puede ser negativo", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "El saldo no puede quedar negativo", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

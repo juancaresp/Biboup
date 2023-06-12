@@ -27,12 +27,15 @@ public class WGroupController {
 	@Autowired SpentService spentS;
 	@Autowired UserService userS;
 	
+	private static final String GROUPS_VAR="groups";
+	private static final String GROUP="group";
+	
 	@GetMapping("")
 	public ModelAndView groups() {
-		ModelAndView mav=new ModelAndView("groups");
+		ModelAndView mav=new ModelAndView(GROUPS_VAR);
 		List<Group> groups = groupS.findAll();
 
-		mav.addObject("groups", groups);
+		mav.addObject(GROUPS_VAR, groups);
 		return mav;
 	}
 	
@@ -43,7 +46,7 @@ public class WGroupController {
 		ModelAndView mav=new ModelAndView("seeGroup");
 		Group group= groupS.findById(Integer.parseInt(id)).orElse(new Group());
 		
-		mav.addObject("group",group);
+		mav.addObject(GROUP,group);
 		mav.addObject("users", debtS.findGroupUsers(group));
 		
 		return mav;
@@ -56,7 +59,7 @@ public class WGroupController {
 		ModelAndView mav=new ModelAndView("seeGroup");
 
 		g=groupS.insert(g).orElse(new Group());
-		mav.addObject("group", g);
+		mav.addObject(GROUP, g);
 		
 		return mav;
 	}
@@ -65,7 +68,7 @@ public class WGroupController {
 	public ModelAndView deleteGroupW(Model model,Group g) {
 		groupS.delete(g.getId());
 
-		return new ModelAndView("groups").addObject("groups", groupS.findAll());
+		return new ModelAndView(GROUPS_VAR).addObject(GROUPS_VAR, groupS.findAll());
 	}
 	
 	@PostMapping("/update")
@@ -73,7 +76,7 @@ public class WGroupController {
 		ModelAndView mav=new ModelAndView("seeGroup");
 
 		g=groupS.update(g).orElse(new Group());
-		mav.addObject("group",g);
+		mav.addObject(GROUP,g);
 		
 		return mav;
 	}
@@ -82,14 +85,14 @@ public class WGroupController {
 	
 	@GetMapping("/form")
 	public ModelAndView getGroupFormEmpty() {
-		return new ModelAndView("groupForm").addObject("group",new Group());
+		return new ModelAndView("groupForm").addObject(GROUP,new Group());
 	}
 	
 	@GetMapping("/form/{id}")
 	public ModelAndView getGroupForm(@PathVariable("id") String id) {
 		//Devuelve groupForm de algun usuario
 		ModelAndView mav=new ModelAndView("groupForm");
-		mav.addObject("group", groupS.findById(Integer.parseInt(id)).orElse(new Group()));
+		mav.addObject(GROUP, groupS.findById(Integer.parseInt(id)).orElse(new Group()));
 		return mav;
 	}
 }

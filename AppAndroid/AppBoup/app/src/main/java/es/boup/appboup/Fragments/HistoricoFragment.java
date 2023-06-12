@@ -1,4 +1,4 @@
-package es.boup.appboup;
+package es.boup.appboup.Fragments;
 
 import static es.boup.appboup.MainActivity.CONEXION_API;
 
@@ -34,6 +34,7 @@ import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Group;
 import es.boup.appboup.Model.Spent;
 import es.boup.appboup.Model.User;
+import es.boup.appboup.R;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
 import es.boup.appboup.Services.IUserService;
@@ -220,7 +221,7 @@ public class HistoricoFragment extends Fragment {
                             appViewModel.setGroup(response.body());
                             fragmentManager = getParentFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupo());
+                            fragmentTransaction.replace(R.id.frame,new CaracteristicasGrupoFragment());
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }

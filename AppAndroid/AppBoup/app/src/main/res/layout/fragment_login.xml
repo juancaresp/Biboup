@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginFragment">
+    tools:context=".Fragments.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,9 +16,9 @@
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="30dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="60dp"
             android:src="@drawable/logo2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +57,7 @@
                     android:textColorHighlight="#888888"
                     android:textColorHint="#888888"
                     android:textColorLink="#888888"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/space2"
                     app:layout_constraintEnd_toEndOf="@+id/space2"
                     app:layout_constraintStart_toStartOf="@+id/space2"
@@ -91,6 +92,7 @@
                     android:textColorHighlight="#888888"
                     android:textColorHint="#888888"
                     android:textColorLink="#888888"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/fBtnLogIn"
                     app:layout_constraintEnd_toEndOf="@+id/space4"
                     app:layout_constraintStart_toStartOf="@+id/fBtnSign"
@@ -102,12 +104,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="29dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="20dp"
                     android:backgroundTint="#069e8c"
                     android:fontFamily="@font/baloo_da"
                     android:onClick="SignIn"
-                    android:text="Sign In"
+                    android:text="Registrarse"
+                    android:textSize="15sp"
                     app:cornerRadius="50dp"
                     app:layout_constraintEnd_toStartOf="@+id/fBtnLogIn"
                     app:layout_constraintStart_toStartOf="parent"
@@ -127,18 +130,34 @@
                     android:id="@+id/fBtnLogIn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginRight="10dp"
                     android:backgroundTint="#0a516d"
                     android:fontFamily="@font/baloo_da"
                     android:onClick="LogIn"
-                    android:text="Log In"
+                    android:text="Iniciar sesión"
+                    android:textSize="15sp"
                     app:cornerRadius="50dp"
                     app:layout_constraintBottom_toTopOf="@+id/space3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fBtnSign"
                     app:layout_constraintTop_toBottomOf="@+id/fEtContra" />
 
+
+                <TextView
+                    android:id="@+id/tvRecuperar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    android:fontFamily="@font/baloo_da"
+                    android:text="Olvidaste tu contraseña?"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/fBtnGoggle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.918"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fBtnLogIn"
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <Space
                     android:id="@+id/space4"

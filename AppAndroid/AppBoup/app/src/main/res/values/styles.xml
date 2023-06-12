@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AlerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AlerDialogTheme" parent="Theme.MaterialComponents.Light">
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
     </style>
 </resources>

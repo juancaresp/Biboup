@@ -30,58 +30,14 @@ public class SpentController {
 	@Autowired SpentService spentS;
 	@Autowired GroupService groupS;
 	
-	// CRUD
-
-	@PostMapping("/insert")
-	public ResponseEntity<Spent> insertSpent(@RequestBody Spent spent) {
-
-		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
-		Optional<Spent> opS=spentS.insert(spent);
-		if (opS.isPresent()) {
-			spent=opS.get();
-			rp = new ResponseEntity<>(spent, HttpStatus.OK);
-		}
-
-		return rp;
-	}
-
-	@PostMapping("/update")
-	public ResponseEntity<Spent> updateSpent(@RequestBody Spent spent) {
-
-		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
-		Optional<Spent> opS=spentS.update(spent);
-		if (opS.isPresent()) {
-			spent=opS.get();
-			rp = new ResponseEntity<>(spent, HttpStatus.OK);
-		}
-
-		return rp;
-	}
-
-	@DeleteMapping("/delete")
-	public ResponseEntity<Spent> deletSpent(@RequestBody Spent spent) {
-
-		ResponseEntity<Spent> rp = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-		if (spentS.delete(spent.getId())) {
-			rp = new ResponseEntity<>(spent, HttpStatus.OK);
-		}
-
-		return rp;
-	}
-
 	// List,getspent
 
 	@GetMapping("")
 	public ResponseEntity<List<Spent>> getSpents() {
 
 		List<Spent> spents = spentS.findAll();
-
-		ResponseEntity<List<Spent>> rp = new ResponseEntity<>(spents, HttpStatus.OK);
-
-		return rp;
+		
+		return new ResponseEntity<>(spents, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")

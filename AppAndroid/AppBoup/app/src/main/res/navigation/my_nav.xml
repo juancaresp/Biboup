@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listaInicio"
-        android:name="es.boup.appboup.listaInicio"
+        android:name="es.boup.appboup.Fragments.ListaInicioFragment"
         android:label="fragment_lista_inicio"
         tools:layout="@layout/fragment_lista_inicio">
         <action
@@ -16,17 +16,17 @@
     </fragment>
     <fragment
         android:id="@+id/perfilFragment"
-        android:name="es.boup.appboup.PerfilFragment"
+        android:name="es.boup.appboup.Fragments.PerfilFragment"
         android:label="fragment_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
         android:id="@+id/aniadirGasto"
-        android:name="es.boup.appboup.AniadirGasto"
+        android:name="es.boup.appboup.Fragments.AniadirGastoFragment"
         android:label="fragment_aniadir_gasto"
         tools:layout="@layout/fragment_aniadir_gasto" />
     <fragment
         android:id="@+id/caracteristicasGrupo"
-        android:name="es.boup.appboup.CaracteristicasGrupo"
+        android:name="es.boup.appboup.Fragments.CaracteristicasGrupoFragment"
         android:label="fragment_caracteristicas_grupo"
         tools:layout="@layout/fragment_caracteristicas_grupo">
         <action
@@ -38,17 +38,54 @@
     </fragment>
     <fragment
         android:id="@+id/gastoFragment2"
-        android:name="es.boup.appboup.GastoFragment"
+        android:name="es.boup.appboup.Fragments.GastoFragment"
         android:label="fragment_gasto"
         tools:layout="@layout/fragment_gasto" />
     <fragment
-        android:id="@+id/pagardeuda"
-        android:name="es.boup.appboup.pagardeuda"
-        android:label="fragment_pagardeuda"
-        tools:layout="@layout/fragment_pagardeuda" />
-    <fragment
         android:id="@+id/historicoFragment"
-        android:name="es.boup.appboup.HistoricoFragment"
+        android:name="es.boup.appboup.Fragments.HistoricoFragment"
         android:label="fragment_historico"
-        tools:layout="@layout/fragment_historico" />
+        tools:layout="@layout/fragment_historico" >
+        <action
+            android:id="@+id/action_historicoFragment_to_caracteristicasGrupo"
+            app:destination="@id/caracteristicasGrupo" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="es.boup.appboup.Fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_credencialesFragment"
+            app:destination="@id/credencialesFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_passwordFragment"
+            app:destination="@id/passwordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/credencialesFragment"
+        android:name="es.boup.appboup.Fragments.CredencialesFragment"
+        android:label="fragment_credenciales"
+        tools:layout="@layout/fragment_credenciales" >
+        <action
+            android:id="@+id/action_credencialesFragment_to_registroFragment"
+            app:destination="@id/registroFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordFragment"
+        android:name="es.boup.appboup.Fragments.PasswordFragment"
+        android:label="fragment_password"
+        tools:layout="@layout/fragment_password" >
+        <action
+            android:id="@+id/action_passwordFragment_to_credencialesFragment"
+            app:destination="@id/credencialesFragment" />
+        <action
+            android:id="@+id/action_passwordFragment_to_loginFragment2"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registroFragment"
+        android:name="es.boup.appboup.Fragments.RegistroFragment"
+        android:label="fragment_registro"
+        tools:layout="@layout/fragment_registro" />
 </navigation>
