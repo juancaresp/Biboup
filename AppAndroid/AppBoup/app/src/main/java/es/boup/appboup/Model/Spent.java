@@ -53,6 +53,10 @@ public class Spent implements Serializable {
     @Expose
     private Group group;
 
+    @SerializedName("type")
+    @Expose
+    private SpentTypes type;
+
     public Integer getId() {
         return id;
     }
@@ -107,5 +111,13 @@ public class Spent implements Serializable {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public SpentTypes getType() {
+        return type;
+    }
+
+    public void setType(SpentTypes type) {
+        this.type = type;
     }
 }
