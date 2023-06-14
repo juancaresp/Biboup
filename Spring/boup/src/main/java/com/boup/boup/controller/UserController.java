@@ -165,7 +165,7 @@ public class UserController {
 		
 		Optional<User> user=userS.findByNick(username);
 		List<Debt> l=debtS.findUserDebts(user.get());
-		l.sort((d1,d2)-> d2.getGroup().getGroupName().compareTo(d1.getGroup().getGroupName()));
+		l.sort((d1,d2)-> d1.getGroup().getGroupName().toLowerCase().compareTo(d2.getGroup().getGroupName().toLowerCase()));
 		if(user.isPresent()) {
 			rp=new ResponseEntity<>(l,HttpStatus.OK);
 		}
