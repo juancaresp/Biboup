@@ -151,7 +151,7 @@ public class UserController {
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Group> groups=debtS.findUserGroups(user.get());
-			
+			groups.sort((d1,d2)-> d1.getGroupName().toLowerCase().compareTo(d2.getGroupName().toLowerCase()));
 			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
 		
