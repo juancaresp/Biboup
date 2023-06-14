@@ -164,8 +164,10 @@ public class UserController {
 		ResponseEntity<List<Debt>> rp=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Optional<User> user=userS.findByNick(username);
+		List<Debt> l=debtS.findUserDebts(user.get());
+		l.sort((d1,d2)-> d2.getGroup().getGroupName().compareTo(d1.getGroup().getGroupName()));
 		if(user.isPresent()) {
-			rp=new ResponseEntity<>(debtS.findUserDebts(user.get()),HttpStatus.OK);
+			rp=new ResponseEntity<>(l,HttpStatus.OK);
 		}
 		
 		return rp;
@@ -179,6 +181,7 @@ public class UserController {
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Debt> groups=debtS.findUserDebts(user.get());
+			groups.sort((d1,d2)-> Double.compare(d2.getAmount(), d1.getAmount()));
 			groups.removeIf(d->d.getAmount()<0);
 			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
@@ -194,6 +197,7 @@ public class UserController {
 		Optional<User> user=userS.findByNick(username);
 		if(user.isPresent()) {
 			List<Debt> groups=debtS.findUserDebts(user.get());
+			groups.sort((d1,d2)-> Double.compare(d1.getAmount(), d2.getAmount()));
 			groups.removeIf(d->d.getAmount()>=0);
 			rp=new ResponseEntity<>(groups,HttpStatus.OK);
 		}
