@@ -79,6 +79,7 @@ public class ListaInicioFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_lista_inicio, container, false);
 
+
     }
 
     @Override
@@ -329,7 +330,7 @@ public class ListaInicioFragment extends Fragment {
                 Bundle bundle= new Bundle();
                 bundle.putInt("group",groups.get(getAdapterPosition()).getId());
                 groupService = retrofit.create(IGroupService.class);
-                Call<Group> peticionGrupo = groupService.getGroupById(""+groups.get(getAdapterPosition()).getId());
+                Call<Group> peticionGrupo = groupService.getGroupById(""+debts.get(getAdapterPosition()).getGroup().getId());
                 peticionGrupo.enqueue(new Callback<Group>() {
                     @Override
                     public void onResponse(Call<Group> call, Response<Group> response) {
@@ -353,12 +354,6 @@ public class ListaInicioFragment extends Fragment {
                         Toast.makeText(getActivity(), "fallo", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-
-
-
             }
         }
     }

@@ -243,10 +243,31 @@ public class CaracteristicasGrupoFragment extends Fragment {
                 public void onResponse(Call<Debt> call, Response<Debt> response) {
                     if(response.code()==HttpURLConnection.HTTP_OK ){
                         fragmentManager = getParentFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frame,new ListaInicioFragment());
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        Call<User> peticionObtenerUsuario = userService.obtenerUsuarioEmail(user.getEmail());
+                        peticionObtenerUsuario.enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.code() == HttpURLConnection.HTTP_OK){
+                                    appViewModel.setUser(response.body());
+                                    user = appViewModel.getUser();
+                                    tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
+                                    Log.e("llamadaApi","Usuario obtenido");
+                                    FragmentManager fragmentManager = getParentFragmentManager();
+                                    fragmentManager.beginTransaction()
+                                            .replace(R.id.frame, new ListaInicioFragment())
+                                            .addToBackStack(null)
+                                            .commit();
+                                }else{
+                                    Log.e("llamadaApi","Usuario no obtenido");
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                Log.e("llamadaApi","Error de conexion obteniendo"  + t.getMessage());
+                            }
+                        });
+
+
                     }
                 }
 
