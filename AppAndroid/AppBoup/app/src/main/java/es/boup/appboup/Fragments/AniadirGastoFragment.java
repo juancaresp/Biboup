@@ -18,20 +18,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.boup.appboup.Model.AppViewModel;
 import es.boup.appboup.Model.Spent;
+import es.boup.appboup.Model.SpentTypes;
 import es.boup.appboup.Model.User;
 import es.boup.appboup.R;
 import es.boup.appboup.Services.IGroupService;
@@ -54,6 +59,11 @@ public class AniadirGastoFragment extends Fragment {
     private List<User> deudores;
     private User pagador;
     private Spent spent;
+    //enum
+    Spinner spiner;
+    private String [] tiposGasto;
+    private TextView tvTipo;
+
     private FragmentManager fragmentManager;
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(CONEXION_API)
@@ -85,6 +95,7 @@ public class AniadirGastoFragment extends Fragment {
         btnGuardarLista=view.findViewById(R.id.btnGuardarLista);
         recyclerViewElegirPagador=view.findViewById(R.id.rvPagadores);
         recyclerViewElegirDeudores=view.findViewById(R.id.rvDeudores);
+        tvTipo = view.findViewById(R.id.tvTipo2);
 
         appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
@@ -95,6 +106,31 @@ public class AniadirGastoFragment extends Fragment {
         spent= new Spent();
         deudores=new ArrayList<>();
 
+        //enumerado
+        spiner = view.findViewById(R.id.dropTipos2);
+        tiposGasto = Arrays.stream(SpentTypes.values()).
+                map(Enum::name).
+                toArray(String[]::new);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, tiposGasto);
+
+        // Especificar el diseño a utilizar cuando aparece la lista de opciones
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Aplicar el adaptador al Spinner
+        spiner.setAdapter(adapter);
+
+        spiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Realiza la acción correspondiente al elemento seleccionado
+                spent.setType(SpentTypes.valueOf(tiposGasto[position]));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Acción cuando no se selecciona ningún elemento
+            }
+        });
 
         spent.setGroup(appViewModel.getGroup());
 
@@ -165,6 +201,9 @@ public class AniadirGastoFragment extends Fragment {
                 etTitulo.setVisibility(View.GONE);
                 etDescripcion.setVisibility(View.GONE);
                 etCantidad.setVisibility(View.GONE);
+                spiner.setVisibility(View.GONE);
+                tvTipo.setVisibility(View.GONE);
+
                 recyclerViewElegirPagador.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
                 recyclerViewElegirPagador.setLayoutManager(linearLayoutManager);
@@ -180,6 +219,9 @@ public class AniadirGastoFragment extends Fragment {
                 etTitulo.setVisibility(View.GONE);
                 etDescripcion.setVisibility(View.GONE);
                 etCantidad.setVisibility(View.GONE);
+                spiner.setVisibility(View.GONE);
+                tvTipo.setVisibility(View.GONE);
+
                 recyclerViewElegirDeudores.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
                 recyclerViewElegirDeudores.setLayoutManager(linearLayoutManager);
@@ -206,6 +248,9 @@ public class AniadirGastoFragment extends Fragment {
                 etTitulo.setVisibility(View.VISIBLE);
                 etDescripcion.setVisibility(View.VISIBLE);
                 etCantidad.setVisibility(View.VISIBLE);
+                spiner.setVisibility(View.VISIBLE);
+                tvTipo.setVisibility(View.GONE);
+
                 Log.d("llamadaApi",deudores.toString());
                 spent.setPayer(pagador);
             }
@@ -254,6 +299,9 @@ public class AniadirGastoFragment extends Fragment {
                 etTitulo.setVisibility(View.VISIBLE);
                 etDescripcion.setVisibility(View.VISIBLE);
                 etCantidad.setVisibility(View.VISIBLE);
+                spiner.setVisibility(View.VISIBLE);
+                tvTipo.setVisibility(View.VISIBLE);
+
             }
         }
     }
