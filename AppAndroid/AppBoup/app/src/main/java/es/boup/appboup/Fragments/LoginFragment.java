@@ -177,12 +177,11 @@ public class LoginFragment extends Fragment {
                         if (response.code() == HttpURLConnection.HTTP_OK){
                             appViewModel.setUser(response.body());
                             Log.e("llamadaApi","Usuario obtenido");
-                            appViewModel.setCerrar(true);
+                            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             Toast.makeText(getActivity(), "Sesion iniciada correctamente ", Toast.LENGTH_SHORT).show();
                             getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                             fragmentManager.beginTransaction()
                                     .replace(R.id.frame, new PerfilFragment())
-                                    .addToBackStack(null)
                                     .commit();
                         }else{
                             Log.e("llamadaApi","Usuario no obtenido");
@@ -336,13 +335,13 @@ public class LoginFragment extends Fragment {
                                 //establecer el usuario en la app
                                 appViewModel.setUser(response.body());
                                 //hacer que se cierre la app cuando pulsan atras
-                                appViewModel.setCerrar(true);
+
                                 getActivity().findViewById(R.id.bottomNavM).setVisibility(View.VISIBLE);
                                 //cambiar de fragmento
                                 FragmentManager fragmentManager = getParentFragmentManager();
+                                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.frame, new PerfilFragment())
-                                        .addToBackStack(null)
                                         .commit();
 
                             }else{

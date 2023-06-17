@@ -65,7 +65,7 @@
             android:text="Crear grupo "
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="15sp"
             app:cornerRadius="20dp" />
     </LinearLayout>
 

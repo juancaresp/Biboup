@@ -38,7 +38,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity{
 
     //conexion api
-    public static String CONEXION_API = "http://app.biboup.me";
+    public static String CONEXION_API = "http://app.biboup.me/";
+
 
     private FrameLayout frameLayout;
     //variable sesion del usuario
