@@ -25,6 +25,9 @@ public interface IUserService {
     @GET("api/users/email/{mail}")
     Call<User> obtenerUsuarioEmail(@Path("mail") String mail);
 
+    @GET("api/users")
+    Call<List<User>> obtenerUsuarios();
+
     //llamada para obtener un usuario por su correo
     @GET("api/users/username/{username}")
     Call<User> obtenerUsuarioUsername(@Path("username") String username);

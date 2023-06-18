@@ -228,12 +228,12 @@ public class PerfilFragment extends Fragment {
         //cerrar sesion
         mAuth.signOut();
         //evitar que vuelvan aqui
-        appViewModel.setCerrar(true);
+
         //cambiar de fragmento al de inicio de sesion
         FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentManager.beginTransaction()
                 .replace(R.id.frame, new LoginFragment())
-                .addToBackStack(null)
                 .commit();
         getActivity().findViewById(R.id.bottomNavM).setVisibility(View.GONE);
 

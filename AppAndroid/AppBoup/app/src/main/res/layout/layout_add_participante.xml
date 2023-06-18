@@ -58,14 +58,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@id/textTitle" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/etNombreG"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/baloo_da"
             android:hint="Username"
-            android:inputType="text"
             android:textColor="#333"
             android:textColorHint="#888"
             android:textSize="18sp"

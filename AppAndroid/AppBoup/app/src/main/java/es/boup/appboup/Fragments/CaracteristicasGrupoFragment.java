@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -45,6 +48,8 @@ import es.boup.appboup.Services.IDebtService;
 import es.boup.appboup.Services.IGroupService;
 import es.boup.appboup.Services.ISpentService;
 import es.boup.appboup.Services.IUserService;
+import okhttp3.Request;
+import okio.Timeout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +81,7 @@ public class CaracteristicasGrupoFragment extends Fragment {
     private RecyclerView recyclerView,rvUsuarios;
     public List<Spent> gastos;
     private TextView tvDeuda,tvDeudaText;
+    private String[] usuarios;
 
 
     public CaracteristicasGrupoFragment() {
@@ -112,6 +118,7 @@ public class CaracteristicasGrupoFragment extends Fragment {
         tvSaldo.setText("Saldo: "+formato.format(user.getWallet())+"€");
         userService = retrofit.create(IUserService.class);
         gastos = new ArrayList<>();
+        obtenerUsuarios();
         addSaldo=view.findViewById(R.id.llAddSaldoCG);
         tvNombreGrupo.setText(appViewModel.getGroup().getGroupName());
         debtService=retrofit.create(IDebtService.class);
@@ -172,11 +179,13 @@ public class CaracteristicasGrupoFragment extends Fragment {
                     R.layout.layout_add_participante,view.findViewById(R.id.layoutDialogContainer));
             builder.setView(view2);
             final AlertDialog alertDialog = builder.create();
-
+            AutoCompleteTextView etNombre = view2.findViewById(R.id.etNombreG);
+            etNombre.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,usuarios));
+            Log.d("llamadaApi","usuarios : "+usuarios);
             //funcion add saldo del alert dialog
             view2.findViewById(R.id.btEliminar).setOnClickListener(view3 -> {
                 //recoger el saldo a a単adir
-                EditText etNombre = view2.findViewById(R.id.etNombreG);
+
                 if (!etNombre.getText().toString().isEmpty()) {
                     String nombre = etNombre.getText().toString();
                     groupService = retrofit.create(IGroupService.class);
@@ -353,6 +362,25 @@ public class CaracteristicasGrupoFragment extends Fragment {
                 }
                 alertDialog.show();
             });
+    }
+
+    private void obtenerUsuarios() {
+
+        userService = retrofit.create(IUserService.class);
+        Call<List<User>> peticionObtenerSpentsGrupo = userService.obtenerUsuarios();
+        peticionObtenerSpentsGrupo.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.code() == HttpURLConnection.HTTP_OK){
+                    usuarios =response.body().stream().map(u->u.getUsername()).toArray(String[]::new);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+        });
     }
 
     class GastoAdapter extends RecyclerView.Adapter<GastoAdapter.GastoHolder>{
