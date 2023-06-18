@@ -207,7 +207,26 @@ public class HistoricoFragment extends Fragment {
 
                 //Fix me
                 //cuando se añada el enumerado aqui poner un if o un switch
-                tipoGasto.setImageResource(R.drawable.ic_baseline_airplanemode_active_24);
+                switch (spent.getType()){
+                    case TAXI:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_local_taxi_24);
+                        break;
+                    case VIAJE:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_airplanemode_active_24);
+                        break;
+                    case COMIDA:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_restaurant_24);
+                        break;
+                    case ESTANCIA:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_home_24);
+                        break;
+                    case GASOLINA:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_local_gas_station_24);
+                        break;
+                    case ENTRETENIMIENTO:
+                        tipoGasto.setImageResource(R.drawable.ic_baseline_videogame_asset_24);
+                        break;
+                }
             }
 
             @Override
