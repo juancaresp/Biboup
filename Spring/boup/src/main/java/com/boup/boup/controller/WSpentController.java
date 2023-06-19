@@ -60,9 +60,10 @@ public class WSpentController {
 	
 	@PostMapping("/insert")
 	public ModelAndView insertSpentW(@ModelAttribute Spent s) {
-		
+		System.out.println(s.getPayer().getUsername());
 		ModelAndView mav=new ModelAndView(SPENTS_VAR).addObject(SPENTS_VAR, spentS.findAll());
 		try {
+			
 			userS.findByNick(s.getPayer().getUsername())
 				.ifPresent(payer -> 
 					groupS.findById(s.getGroup().getId()).ifPresent(g ->{

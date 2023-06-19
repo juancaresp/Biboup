@@ -72,7 +72,7 @@ public class Spent implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + users.stream().map(u-> u.getNameU()).collect(Collectors.toList()) + ", quantity="
+		return "Spent [id=" + id + ", spentName=" + spentName + ", payer=" + payer.getNameU() + ", users=" + (users!=null?users.stream().map(u-> u.getNameU()).collect(Collectors.toList()).toString():"Empty")+ ", quantity="
 				+ quantity + ", date=" + date + ", group=" + group.getGroupName() + ", type="+type+"]";
 	}
 	
